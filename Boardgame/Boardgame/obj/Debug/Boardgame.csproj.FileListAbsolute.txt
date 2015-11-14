@@ -4,3 +4,4 @@ C:\c#\Boardgame\Boardgame\bin\Debug\Boardgame.exe
 C:\c#\Boardgame\Boardgame\bin\Debug\Boardgame.pdb
 C:\c#\Boardgame\Boardgame\obj\Debug\Boardgame.exe
 C:\c#\Boardgame\Boardgame\obj\Debug\Boardgame.pdb
+C:\c#\Boardgame\Boardgame\obj\Debug\Boardgame.csprojResolveAssemblyReference.cache

@@ -12,7 +12,7 @@ namespace Boardgame
         {
             PlayerWhite pw = new PlayerWhite();
             PlayerBlack bp = new PlayerBlack();
-           
+          //
             pw.Colour = 1;
             bp.Colour = 2;
             pw.printColour();

@@ -26,5 +26,15 @@ namespace Boardgame
             this.board = board;
 
         }
+
+
+
+        private void placePlayerInitial(int i,int j)
+        {
+            setBoard[3][3] = i;
+            setBoard[4][4] = i;
+            setBoard[3][4] = j;
+            setBoard[4][3] = j;
+        }
     }
 }
