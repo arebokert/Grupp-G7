@@ -13,11 +13,6 @@ namespace Boardgame
         {
     
         }
-        public void printColour()
-        {
-            Console.WriteLine(Colour);
-           
-        }
  
         public int Colour
         {

@@ -9,32 +9,30 @@ namespace Boardgame
     class Map
     {
 
-        private int[,] board = new int[8, 8];
+        public int[,] board  = new int[8,8];
 
-        Map()
+        public   Map()
         {
 
         }
 
-        public int[,] getBoard()
+        public int[,] Board
         {
-            return this.board;
+            get
+            {
+                return board;
+            }
+
+            set
+            {
+                board = value;
+            }
         }
 
-        public void setBoard(int[,] board)
+        public void placePlayerInitial(int i, int j)
         {
-            this.board = board;
-
-        }
-
-
-
-        private void placePlayerInitial(int i,int j)
-        {
-            setBoard[3][3] = i;
-            setBoard[4][4] = i;
-            setBoard[3][4] = j;
-            setBoard[4][3] = j;
+           
+            
         }
     }
 }
