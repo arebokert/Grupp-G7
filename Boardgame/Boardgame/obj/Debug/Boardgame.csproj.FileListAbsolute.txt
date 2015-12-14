@@ -1,7 +1,0 @@
-C:\Users\Erik\Documents\C#\Grupp-G7\Boardgame\Boardgame\bin\Debug\Boardgame.exe.config
-C:\c#\Boardgame\Boardgame\bin\Debug\Boardgame.exe.config
-C:\c#\Boardgame\Boardgame\bin\Debug\Boardgame.exe
-C:\c#\Boardgame\Boardgame\bin\Debug\Boardgame.pdb
-C:\c#\Boardgame\Boardgame\obj\Debug\Boardgame.exe
-C:\c#\Boardgame\Boardgame\obj\Debug\Boardgame.pdb
-C:\c#\Boardgame\Boardgame\obj\Debug\Boardgame.csprojResolveAssemblyReference.cache
