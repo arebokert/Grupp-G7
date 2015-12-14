@@ -13,7 +13,7 @@ namespace Othello
 {
     public partial class View : Form
     {
-        string[] lines = System.IO.File.ReadAllLines(@"C:\\tddd49\\Othello\\Othello\\Resources\\mapInitial.txt");
+        string[] lines = System.IO.File.ReadAllLines(@"..\\..\\Resources\\mapInitial.txt");
         List<PictureBox> boxes = new List<PictureBox>();
         Rectangle rect = new Rectangle(0,0,600,600);
         Rectangle small = new Rectangle(0, 0, 66, 66);

@@ -12,7 +12,7 @@ namespace Othello
         private Image whiteMarker;
         public PlayerWhite()
         {
-             WhiteMarker = Image.FromFile("C:\\Users\\tomtom\\Pictures\\C\\whiteMarker.png");
+             WhiteMarker = Image.FromFile(@"..\\..\\Resources\\Images\\whiteMarker.png");
         }
 
         public Image WhiteMarker

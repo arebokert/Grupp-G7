@@ -17,7 +17,7 @@ namespace Othello
 
         public Map(PlayerBlack p, PlayerWhite w)
         {
-            green = Image.FromFile("C:\\Users\\tomtom\\Pictures\\C\\NoMarker.png");
+            green = Image.FromFile(@"..\\..\\Resources\\Images\\NoMarker.png");
             pb = p;
             pw = w;
             initializeBoard();

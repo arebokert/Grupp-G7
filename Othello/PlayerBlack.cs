@@ -12,7 +12,7 @@ namespace Othello
        private Image blackMarker;
         public PlayerBlack()
         {
-            BlackMarker = Image.FromFile("C:\\Users\\tomtom\\Pictures\\C\\BlackMarker.png");
+            BlackMarker = Image.FromFile(@"..\\..\\Resources\\Images\\BlackMarker.png");
         }
 
         public Image BlackMarker
