@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Othello.Model;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -15,8 +16,8 @@ namespace Othello
         [STAThread]
         static void Main()
         {
-  
-            View v = new View();
+            GameRules g = new GameRules();
+            View v = new View(g);
             PlayerWhite pw = new PlayerWhite();
             PlayerBlack pb = new PlayerBlack();
             Map mp = new Map(pb,pw);
@@ -24,10 +25,7 @@ namespace Othello
             pb.Colour = 2;
             v.paint(mp.Green,pw.WhiteMarker, pb.BlackMarker);
             
-
-            
-            //Application.EnableVisualStyles();
-            //Application.SetCompatibleTextRenderingDefault(false);
+    
             Application.Run(v);
         }
     }

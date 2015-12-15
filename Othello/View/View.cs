@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Othello.Model;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -13,24 +14,27 @@ namespace Othello
 {
     public partial class View : Form
     {
+        private GameRules gameRule;
         string[] lines = System.IO.File.ReadAllLines(@"..\\..\\Resources\\mapInitial.txt");
         List<PictureBox> boxes = new List<PictureBox>();
         Rectangle rect = new Rectangle(0,0,600,600);
         Rectangle small = new Rectangle(0, 0, 66, 66);
-        public View()
-        {
-           
-            
-            InitializeComponent();
-             populatePicArray(this.Controls);
-            Console.WriteLine(boxes.Count);
 
+   
+
+        public View(GameRules g)
+        { 
+            InitializeComponent();
+            populatePicArray(this.Controls);
+            Console.WriteLine(boxes.Count);
+            GameRule = g;
         }
 
         private void pictureBox1_Paint(object sender, PaintEventArgs e)
         {
             e.Graphics.FillRectangle(new SolidBrush(Color.Black), rect);
         }
+
         public void paint(Image g, Image w, Image b)
         {
             for (int j = 0; j < boxes.Count; j++)
@@ -44,11 +48,20 @@ namespace Othello
                     boxes[j].Image = b;
 
                 }
-
             }
-          
+        }
 
+        internal GameRules GameRule
+        {
+            get
+            {
+                return gameRule;
+            }
 
+            set
+            {
+                gameRule = value;
+            }
         }
 
         private void a3_Click(object sender, EventArgs e)
@@ -71,6 +84,7 @@ namespace Othello
 
         }
 
+        //Adds all PicturBoxes to the List boxes by matching Tags with content of the stringArray Lines
         private void populatePicArray(Control.ControlCollection controls)
         {
             foreach (Control c in controls)
@@ -78,15 +92,13 @@ namespace Othello
                 if (lines.Contains(c.Tag))
                 {
                     boxes.Add((PictureBox)c);
-                }
-                    //logic
-
-              /*      if (c.HasChildren)
-                {
-                    FindTag(c.Controls); //Recursively check all children controls as well; ie groupboxes or tabpages
-                }*/
-                       
+                }           
             }
+        }
+
+        private void tile_MouseClick(object sender, MouseEventArgs e)
+        {
+            GameRule.checkIfAllowed();
         }
 
     }

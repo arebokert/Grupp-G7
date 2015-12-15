@@ -178,6 +178,7 @@
             this.a1.TabIndex = 1;
             this.a1.TabStop = false;
             this.a1.Tag = "a1";
+            this.a1.MouseClick += new System.Windows.Forms.MouseEventHandler(this.tile_MouseClick);
             // 
             // b1
             // 
@@ -188,6 +189,7 @@
             this.b1.TabIndex = 3;
             this.b1.TabStop = false;
             this.b1.Tag = "b1";
+            this.b1.MouseClick += new System.Windows.Forms.MouseEventHandler(this.tile_MouseClick);
             // 
             // c1
             // 
@@ -198,6 +200,7 @@
             this.c1.TabIndex = 4;
             this.c1.TabStop = false;
             this.c1.Tag = "c1";
+            this.c1.MouseClick += new System.Windows.Forms.MouseEventHandler(this.tile_MouseClick);
             // 
             // d1
             // 
@@ -218,6 +221,7 @@
             this.e1.TabIndex = 6;
             this.e1.TabStop = false;
             this.e1.Tag = "e1";
+            this.e1.MouseClick += new System.Windows.Forms.MouseEventHandler(this.tile_MouseClick);
             // 
             // f1
             // 
@@ -228,6 +232,7 @@
             this.f1.TabIndex = 7;
             this.f1.TabStop = false;
             this.f1.Tag = "f1";
+            this.f1.MouseClick += new System.Windows.Forms.MouseEventHandler(this.tile_MouseClick);
             // 
             // g1
             // 
@@ -239,6 +244,7 @@
             this.g1.TabStop = false;
             this.g1.Tag = "g1";
             this.g1.Click += new System.EventHandler(this.g1_Click);
+            this.g1.MouseClick += new System.Windows.Forms.MouseEventHandler(this.tile_MouseClick);
             // 
             // h1
             // 
@@ -249,6 +255,7 @@
             this.h1.TabIndex = 9;
             this.h1.TabStop = false;
             this.h1.Tag = "h1";
+            this.h1.MouseClick += new System.Windows.Forms.MouseEventHandler(this.tile_MouseClick);
             // 
             // h2
             // 
@@ -259,6 +266,7 @@
             this.h2.TabIndex = 17;
             this.h2.TabStop = false;
             this.h2.Tag = "h2";
+            this.h2.MouseClick += new System.Windows.Forms.MouseEventHandler(this.tile_MouseClick);
             // 
             // g2
             // 
@@ -269,6 +277,7 @@
             this.g2.TabIndex = 16;
             this.g2.TabStop = false;
             this.g2.Tag = "g2";
+            this.g2.MouseClick += new System.Windows.Forms.MouseEventHandler(this.tile_MouseClick);
             // 
             // f2
             // 
@@ -279,6 +288,7 @@
             this.f2.TabIndex = 15;
             this.f2.TabStop = false;
             this.f2.Tag = "f2";
+            this.f2.MouseClick += new System.Windows.Forms.MouseEventHandler(this.tile_MouseClick);
             // 
             // e2
             // 
@@ -289,6 +299,7 @@
             this.e2.TabIndex = 14;
             this.e2.TabStop = false;
             this.e2.Tag = "e2";
+            this.e2.MouseClick += new System.Windows.Forms.MouseEventHandler(this.tile_MouseClick);
             // 
             // d2
             // 
@@ -299,6 +310,7 @@
             this.d2.TabIndex = 13;
             this.d2.TabStop = false;
             this.d2.Tag = "d2";
+            this.d2.MouseClick += new System.Windows.Forms.MouseEventHandler(this.tile_MouseClick);
             // 
             // c2
             // 
@@ -309,6 +321,7 @@
             this.c2.TabIndex = 12;
             this.c2.TabStop = false;
             this.c2.Tag = "c2";
+            this.c2.MouseClick += new System.Windows.Forms.MouseEventHandler(this.tile_MouseClick);
             // 
             // b2
             // 
@@ -319,6 +332,7 @@
             this.b2.TabIndex = 11;
             this.b2.TabStop = false;
             this.b2.Tag = "b2";
+            this.b2.MouseClick += new System.Windows.Forms.MouseEventHandler(this.tile_MouseClick);
             // 
             // a2
             // 
@@ -329,6 +343,7 @@
             this.a2.TabIndex = 10;
             this.a2.TabStop = false;
             this.a2.Tag = "a2";
+            this.a2.MouseClick += new System.Windows.Forms.MouseEventHandler(this.tile_MouseClick);
             // 
             // h3
             // 
@@ -339,6 +354,7 @@
             this.h3.TabIndex = 25;
             this.h3.TabStop = false;
             this.h3.Tag = "h3";
+            this.h3.MouseClick += new System.Windows.Forms.MouseEventHandler(this.tile_MouseClick);
             // 
             // g3
             // 
@@ -349,6 +365,7 @@
             this.g3.TabIndex = 24;
             this.g3.TabStop = false;
             this.g3.Tag = "g3";
+            this.g3.MouseClick += new System.Windows.Forms.MouseEventHandler(this.tile_MouseClick);
             // 
             // f3
             // 
@@ -359,6 +376,7 @@
             this.f3.TabIndex = 23;
             this.f3.TabStop = false;
             this.f3.Tag = "f3";
+            this.f3.MouseClick += new System.Windows.Forms.MouseEventHandler(this.tile_MouseClick);
             // 
             // e3
             // 
@@ -369,6 +387,7 @@
             this.e3.TabIndex = 22;
             this.e3.TabStop = false;
             this.e3.Tag = "e3";
+            this.e3.MouseClick += new System.Windows.Forms.MouseEventHandler(this.tile_MouseClick);
             // 
             // d3
             // 
@@ -379,6 +398,7 @@
             this.d3.TabIndex = 21;
             this.d3.TabStop = false;
             this.d3.Tag = "d3";
+            this.d3.MouseClick += new System.Windows.Forms.MouseEventHandler(this.tile_MouseClick);
             // 
             // c3
             // 
@@ -389,6 +409,7 @@
             this.c3.TabIndex = 20;
             this.c3.TabStop = false;
             this.c3.Tag = "c3";
+            this.c3.MouseClick += new System.Windows.Forms.MouseEventHandler(this.tile_MouseClick);
             // 
             // b3
             // 
@@ -399,6 +420,7 @@
             this.b3.TabIndex = 19;
             this.b3.TabStop = false;
             this.b3.Tag = "b3";
+            this.b3.MouseClick += new System.Windows.Forms.MouseEventHandler(this.tile_MouseClick);
             // 
             // a3
             // 
@@ -409,7 +431,7 @@
             this.a3.TabIndex = 18;
             this.a3.TabStop = false;
             this.a3.Tag = "a3";
-            this.a3.Click += new System.EventHandler(this.a3_Click);
+            this.a3.MouseClick += new System.Windows.Forms.MouseEventHandler(this.tile_MouseClick);
             // 
             // h4
             // 
@@ -420,6 +442,7 @@
             this.h4.TabIndex = 33;
             this.h4.TabStop = false;
             this.h4.Tag = "h4";
+            this.h4.MouseClick += new System.Windows.Forms.MouseEventHandler(this.tile_MouseClick);
             // 
             // g4
             // 
@@ -430,6 +453,7 @@
             this.g4.TabIndex = 32;
             this.g4.TabStop = false;
             this.g4.Tag = "g4";
+            this.g4.MouseClick += new System.Windows.Forms.MouseEventHandler(this.tile_MouseClick);
             // 
             // f4
             // 
@@ -440,6 +464,7 @@
             this.f4.TabIndex = 31;
             this.f4.TabStop = false;
             this.f4.Tag = "f4";
+            this.f4.MouseClick += new System.Windows.Forms.MouseEventHandler(this.tile_MouseClick);
             // 
             // e4
             // 
@@ -450,6 +475,7 @@
             this.e4.TabIndex = 30;
             this.e4.TabStop = false;
             this.e4.Tag = "e4";
+            this.e4.MouseClick += new System.Windows.Forms.MouseEventHandler(this.tile_MouseClick);
             // 
             // d4
             // 
@@ -460,6 +486,7 @@
             this.d4.TabIndex = 29;
             this.d4.TabStop = false;
             this.d4.Tag = "d4";
+            this.d4.MouseClick += new System.Windows.Forms.MouseEventHandler(this.tile_MouseClick);
             // 
             // c4
             // 
@@ -470,6 +497,7 @@
             this.c4.TabIndex = 28;
             this.c4.TabStop = false;
             this.c4.Tag = "c4";
+            this.c4.MouseClick += new System.Windows.Forms.MouseEventHandler(this.tile_MouseClick);
             // 
             // b4
             // 
@@ -480,6 +508,7 @@
             this.b4.TabIndex = 27;
             this.b4.TabStop = false;
             this.b4.Tag = "b4";
+            this.b4.MouseClick += new System.Windows.Forms.MouseEventHandler(this.tile_MouseClick);
             // 
             // a4
             // 
@@ -490,6 +519,7 @@
             this.a4.TabIndex = 26;
             this.a4.TabStop = false;
             this.a4.Tag = "a4";
+            this.a4.MouseClick += new System.Windows.Forms.MouseEventHandler(this.tile_MouseClick);
             // 
             // h5
             // 
@@ -500,6 +530,7 @@
             this.h5.TabIndex = 41;
             this.h5.TabStop = false;
             this.h5.Tag = "h5";
+            this.h5.MouseClick += new System.Windows.Forms.MouseEventHandler(this.tile_MouseClick);
             // 
             // g5
             // 
@@ -510,6 +541,7 @@
             this.g5.TabIndex = 40;
             this.g5.TabStop = false;
             this.g5.Tag = "g5";
+            this.g5.MouseClick += new System.Windows.Forms.MouseEventHandler(this.tile_MouseClick);
             // 
             // f5
             // 
@@ -520,6 +552,7 @@
             this.f5.TabIndex = 39;
             this.f5.TabStop = false;
             this.f5.Tag = "f5";
+            this.f5.MouseClick += new System.Windows.Forms.MouseEventHandler(this.tile_MouseClick);
             // 
             // e5
             // 
@@ -530,6 +563,7 @@
             this.e5.TabIndex = 38;
             this.e5.TabStop = false;
             this.e5.Tag = "e5";
+            this.e5.MouseClick += new System.Windows.Forms.MouseEventHandler(this.tile_MouseClick);
             // 
             // d5
             // 
@@ -540,6 +574,7 @@
             this.d5.TabIndex = 37;
             this.d5.TabStop = false;
             this.d5.Tag = "d5";
+            this.d5.MouseClick += new System.Windows.Forms.MouseEventHandler(this.tile_MouseClick);
             // 
             // c5
             // 
@@ -550,6 +585,7 @@
             this.c5.TabIndex = 36;
             this.c5.TabStop = false;
             this.c5.Tag = "c5";
+            this.c5.MouseClick += new System.Windows.Forms.MouseEventHandler(this.tile_MouseClick);
             // 
             // b5
             // 
@@ -560,6 +596,7 @@
             this.b5.TabIndex = 35;
             this.b5.TabStop = false;
             this.b5.Tag = "b5";
+            this.b5.MouseClick += new System.Windows.Forms.MouseEventHandler(this.tile_MouseClick);
             // 
             // a5
             // 
@@ -570,6 +607,7 @@
             this.a5.TabIndex = 34;
             this.a5.TabStop = false;
             this.a5.Tag = "a5";
+            this.a5.MouseClick += new System.Windows.Forms.MouseEventHandler(this.tile_MouseClick);
             // 
             // h6
             // 
@@ -580,6 +618,7 @@
             this.h6.TabIndex = 49;
             this.h6.TabStop = false;
             this.h6.Tag = "h6";
+            this.h6.MouseClick += new System.Windows.Forms.MouseEventHandler(this.tile_MouseClick);
             // 
             // g6
             // 
@@ -590,6 +629,7 @@
             this.g6.TabIndex = 48;
             this.g6.TabStop = false;
             this.g6.Tag = "g6";
+            this.g6.MouseClick += new System.Windows.Forms.MouseEventHandler(this.tile_MouseClick);
             // 
             // f6
             // 
@@ -600,6 +640,7 @@
             this.f6.TabIndex = 47;
             this.f6.TabStop = false;
             this.f6.Tag = "f6";
+            this.f6.MouseClick += new System.Windows.Forms.MouseEventHandler(this.tile_MouseClick);
             // 
             // e6
             // 
@@ -610,6 +651,7 @@
             this.e6.TabIndex = 46;
             this.e6.TabStop = false;
             this.e6.Tag = "e6";
+            this.e6.MouseClick += new System.Windows.Forms.MouseEventHandler(this.tile_MouseClick);
             // 
             // d6
             // 
@@ -620,6 +662,7 @@
             this.d6.TabIndex = 45;
             this.d6.TabStop = false;
             this.d6.Tag = "d6";
+            this.d6.MouseClick += new System.Windows.Forms.MouseEventHandler(this.tile_MouseClick);
             // 
             // c6
             // 
@@ -630,6 +673,7 @@
             this.c6.TabIndex = 44;
             this.c6.TabStop = false;
             this.c6.Tag = "c6";
+            this.c6.MouseClick += new System.Windows.Forms.MouseEventHandler(this.tile_MouseClick);
             // 
             // b6
             // 
@@ -640,6 +684,7 @@
             this.b6.TabIndex = 43;
             this.b6.TabStop = false;
             this.b6.Tag = "b6";
+            this.b6.MouseClick += new System.Windows.Forms.MouseEventHandler(this.tile_MouseClick);
             // 
             // a6
             // 
@@ -650,6 +695,7 @@
             this.a6.TabIndex = 42;
             this.a6.TabStop = false;
             this.a6.Tag = "a6";
+            this.a6.MouseClick += new System.Windows.Forms.MouseEventHandler(this.tile_MouseClick);
             // 
             // h7
             // 
@@ -660,6 +706,7 @@
             this.h7.TabIndex = 57;
             this.h7.TabStop = false;
             this.h7.Tag = "h7";
+            this.h7.MouseClick += new System.Windows.Forms.MouseEventHandler(this.tile_MouseClick);
             // 
             // g7
             // 
@@ -670,6 +717,7 @@
             this.g7.TabIndex = 56;
             this.g7.TabStop = false;
             this.g7.Tag = "g7";
+            this.g7.MouseClick += new System.Windows.Forms.MouseEventHandler(this.tile_MouseClick);
             // 
             // f7
             // 
@@ -680,6 +728,7 @@
             this.f7.TabIndex = 55;
             this.f7.TabStop = false;
             this.f7.Tag = "f7";
+            this.f7.MouseClick += new System.Windows.Forms.MouseEventHandler(this.tile_MouseClick);
             // 
             // e7
             // 
@@ -690,6 +739,7 @@
             this.e7.TabIndex = 54;
             this.e7.TabStop = false;
             this.e7.Tag = "e7";
+            this.e7.MouseClick += new System.Windows.Forms.MouseEventHandler(this.tile_MouseClick);
             // 
             // d7
             // 
@@ -700,6 +750,7 @@
             this.d7.TabIndex = 53;
             this.d7.TabStop = false;
             this.d7.Tag = "d7";
+            this.d7.MouseClick += new System.Windows.Forms.MouseEventHandler(this.tile_MouseClick);
             // 
             // c7
             // 
@@ -710,6 +761,7 @@
             this.c7.TabIndex = 52;
             this.c7.TabStop = false;
             this.c7.Tag = "c7";
+            this.c7.MouseClick += new System.Windows.Forms.MouseEventHandler(this.tile_MouseClick);
             // 
             // b7
             // 
@@ -720,6 +772,7 @@
             this.b7.TabIndex = 51;
             this.b7.TabStop = false;
             this.b7.Tag = "b7";
+            this.b7.MouseClick += new System.Windows.Forms.MouseEventHandler(this.tile_MouseClick);
             // 
             // a7
             // 
@@ -731,6 +784,7 @@
             this.a7.TabStop = false;
             this.a7.Tag = "a7";
             this.a7.Click += new System.EventHandler(this.a7_Click);
+            this.a7.MouseClick += new System.Windows.Forms.MouseEventHandler(this.tile_MouseClick);
             // 
             // h8
             // 
@@ -742,6 +796,7 @@
             this.h8.TabStop = false;
             this.h8.Tag = "h8";
             this.h8.Click += new System.EventHandler(this.h8_Click);
+            this.h8.MouseClick += new System.Windows.Forms.MouseEventHandler(this.tile_MouseClick);
             // 
             // g8
             // 
@@ -752,6 +807,7 @@
             this.g8.TabIndex = 64;
             this.g8.TabStop = false;
             this.g8.Tag = "g8";
+            this.g8.MouseClick += new System.Windows.Forms.MouseEventHandler(this.tile_MouseClick);
             // 
             // f8
             // 
@@ -762,6 +818,7 @@
             this.f8.TabIndex = 63;
             this.f8.TabStop = false;
             this.f8.Tag = "f8";
+            this.f8.MouseClick += new System.Windows.Forms.MouseEventHandler(this.tile_MouseClick);
             // 
             // e8
             // 
@@ -772,6 +829,7 @@
             this.e8.TabIndex = 62;
             this.e8.TabStop = false;
             this.e8.Tag = "e8";
+            this.e8.MouseClick += new System.Windows.Forms.MouseEventHandler(this.tile_MouseClick);
             // 
             // d8
             // 
@@ -782,6 +840,7 @@
             this.d8.TabIndex = 61;
             this.d8.TabStop = false;
             this.d8.Tag = "d8";
+            this.d8.MouseClick += new System.Windows.Forms.MouseEventHandler(this.tile_MouseClick);
             // 
             // c8
             // 
@@ -792,6 +851,7 @@
             this.c8.TabIndex = 60;
             this.c8.TabStop = false;
             this.c8.Tag = "c8";
+            this.c8.MouseClick += new System.Windows.Forms.MouseEventHandler(this.tile_MouseClick);
             // 
             // b8
             // 
@@ -802,6 +862,7 @@
             this.b8.TabIndex = 59;
             this.b8.TabStop = false;
             this.b8.Tag = "b8";
+            this.b8.MouseClick += new System.Windows.Forms.MouseEventHandler(this.tile_MouseClick);
             // 
             // a8
             // 
@@ -812,6 +873,7 @@
             this.a8.TabIndex = 58;
             this.a8.TabStop = false;
             this.a8.Tag = "a8";
+            this.a8.MouseClick += new System.Windows.Forms.MouseEventHandler(this.tile_MouseClick);
             // 
             // View
             // 
