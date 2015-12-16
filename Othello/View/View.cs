@@ -26,7 +26,7 @@ namespace Othello
         { 
             InitializeComponent();
             populatePicArray(this.Controls);
-            Console.WriteLine(boxes.Count);
+            boxes.Reverse();
             GameRule = g;
         }
 
@@ -40,12 +40,17 @@ namespace Othello
             for (int j = 0; j < boxes.Count; j++)
             {
                 boxes[j].Image = g;
+                boxes[j].Tag = "green";
+
                 if (boxes[j] == d4 || boxes[j] == e5)
                 {
                     boxes[j].Image = w;
-                }else if (boxes[j] == d5|| boxes[j]== e4)
+                    boxes[j].Tag = "white";
+                }
+                else if (boxes[j] == d5|| boxes[j]== e4)
                 {
                     boxes[j].Image = b;
+                    boxes[j].Tag = "black";
 
                 }
             }
@@ -89,16 +94,24 @@ namespace Othello
         {
             foreach (Control c in controls)
             {
-                if (lines.Contains(c.Tag))
+                if (lines.Contains(c.Name))
                 {
+                   
+
                     boxes.Add((PictureBox)c);
+                   
                 }           
             }
         }
 
         private void tile_MouseClick(object sender, MouseEventArgs e)
         {
-            GameRule.checkIfAllowed();
+            PictureBox p = (PictureBox)sender;
+            gameRule.checkIfAllowed(boxes,p);
+           foreach(PictureBox s in gameRule.ChangePictureBoxColor)
+            {
+                s.Image = Image.FromFile(@"..\\..\\Resources\\Images\\BlackMarker.png");
+            }
         }
 
     }
