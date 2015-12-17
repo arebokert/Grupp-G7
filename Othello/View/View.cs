@@ -19,7 +19,9 @@ namespace Othello
         List<PictureBox> boxes = new List<PictureBox>();
         Rectangle rect = new Rectangle(0,0,600,600);
         Rectangle small = new Rectangle(0, 0, 66, 66);
-
+        Image white;
+        Image green;
+        Image black;
    
 
         public View(GameRules g)
@@ -37,6 +39,9 @@ namespace Othello
 
         public void paint(Image g, Image w, Image b)
         {
+            white = w;
+            green = g;
+            black = b;
             for (int j = 0; j < boxes.Count; j++)
             {
                 boxes[j].Image = g;
@@ -47,7 +52,7 @@ namespace Othello
                     boxes[j].Image = w;
                     boxes[j].Tag = "white";
                 }
-                else if (boxes[j] == d5|| boxes[j]== e4)
+                else if (boxes[j] == d5 || boxes[j] == e4)
                 {
                     boxes[j].Image = b;
                     boxes[j].Tag = "black";
@@ -96,8 +101,6 @@ namespace Othello
             {
                 if (lines.Contains(c.Name))
                 {
-                   
-
                     boxes.Add((PictureBox)c);
                    
                 }           
@@ -107,11 +110,10 @@ namespace Othello
         private void tile_MouseClick(object sender, MouseEventArgs e)
         {
             PictureBox p = (PictureBox)sender;
-            gameRule.checkIfAllowed(boxes,p);
-           foreach(PictureBox s in gameRule.ChangePictureBoxColor)
-            {
-                s.Image = Image.FromFile(@"..\\..\\Resources\\Images\\BlackMarker.png");
-            }
+            Console.WriteLine(p.Name);
+            gameRule.checkIfAllowed(boxes,p, green, white, black);
+           // Console.WriteLine(boxes.ElementAt(35).Tag);
+          //  boxes = gameRule.ChangePictureBoxColor;
         }
 
     }

@@ -214,6 +214,7 @@
             this.d1.TabIndex = 5;
             this.d1.TabStop = false;
             this.d1.Tag = "d1";
+            this.d1.MouseClick += new System.Windows.Forms.MouseEventHandler(this.tile_MouseClick);
             // 
             // e1
             // 
