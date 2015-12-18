@@ -110,7 +110,7 @@ namespace Othello
         private void tile_MouseClick(object sender, MouseEventArgs e)
         {
             PictureBox p = (PictureBox)sender;
-            Console.WriteLine(p.Name);
+            Console.WriteLine("CLICKED:  "+p.Name);
             gameRule.checkIfAllowed(boxes,p, green, white, black);
            // Console.WriteLine(boxes.ElementAt(35).Tag);
           //  boxes = gameRule.ChangePictureBoxColor;

@@ -16,6 +16,7 @@ namespace Othello.Model
         private int tileValue;
         private int nextTileValue;
         private List<PictureBox> temp = new List<PictureBox>();
+        private List<int> storedTiles = new List<int>();
         private string tempColor = "";
         private string playerTurn;
         private int counter = 1;
@@ -30,7 +31,7 @@ namespace Othello.Model
 
         private string changeTurn(int counter)
         {
-            if (counter % 2 == 1)
+            if (counter % 2 == 0)
             {
                 playerTurn = "white";
             }
@@ -51,7 +52,8 @@ namespace Othello.Model
             black.Tag = "black";
             white = w;
             white.Tag = "white";
-            // extractValues(p.Name.First(), p.Name.Last());
+
+
             checkLeft(boxes, p);
             checkRight(boxes, p);
             checkUp(boxes, p);
@@ -60,37 +62,62 @@ namespace Othello.Model
             checkDown(boxes, p);
             checkDownRight(boxes, p);
             checkDownLeft(boxes, p);
-            paint(tempColor, temp, boxes, p);
-            //  paint();
- 
+
         }
-        private void paint(string tempColor, List<PictureBox> temp, List<PictureBox> boxes, PictureBox p)
+        private Boolean paint(string tempColor, List<PictureBox> tempList, List<PictureBox> boxes, PictureBox p)
         {
-            if (temp.Any())
+            Console.WriteLine((boxes.ElementAt(tileValue).Tag));
+            if (tempList.Any() && !tempList.First().Tag.Equals(boxes.ElementAt(tileValue).Tag))
             {
-                temp.Insert(0, p);
-                if (!temp.First().Tag.Equals(boxes.ElementAt(tileValue).Tag))
+                switch (changeTurn(counter))
                 {
-                    switch (changeTurn(counter))
-                    {
-                        case "white":
-                            foreach (PictureBox pb in temp)
-                            {
-                                pb.Tag = "white";
-                                pb.Image = white;
-                              
-                            }
-                            break;
-                        case "black":
-                            foreach (PictureBox pb in temp)
-                            {
-                                pb.Tag = "black";
-                                pb.Image = black;
-                               
-                            }
-                            break;
-                    }
+                    case "white":
+                        foreach (PictureBox pb in tempList)
+                        {
+                            pb.Tag = "white";
+                            pb.Image = white;
+
+
+                        }
+                        break;
+                    case "black":
+                        foreach (PictureBox pb in tempList)
+                        {
+                            pb.Tag = "black";
+                            pb.Image = black;
+
+                        }
+                        break;
                 }
+                setPressedTileColor(p);
+                temp.Clear();
+                //tempList.Insert(0, p);
+                //setPressedTileColor(p);
+                return true;
+            }
+            return false;
+        }
+
+
+        private void setPressedTileColor(PictureBox pressed)
+        {
+            if (changeTurn(counter).Equals("black"))
+            {
+                pressed.Image = black;
+                pressed.Tag = "black";
+            }
+            else if (changeTurn(counter).Equals("white"))
+            {
+
+                pressed.Image = white;
+                pressed.Tag = "white";
+            }
+        }
+        private void changeTag()
+        {
+            for (int i = 0; i < temp.Count(); i++)
+            {
+                temp.ElementAt(i).Tag = tempColor;
             }
         }
 
@@ -128,24 +155,12 @@ namespace Othello.Model
             tileValue = (8 * tileMultiple) - (8 - letterValue) - 1;
             nextTileValue = tileValue;
         }
-        private Boolean checkDiagonal(List<PictureBox> boxes, PictureBox p)
-        {
-
-            //(8*y)-(8-x)-10 LEFT UP
-            //(8*y)-(8-x)-6 RIGHT UP
-            //(8*y)-(8-x)+10 RIGHT DOWN
-            //(8*y)-(8-x)+6 LEFT DOWN
-
-            return true;
-        }
-
 
         private void checkLeft(List<PictureBox> boxes, PictureBox p)
         {
             tempColor = changeTurn(counter);
+            List<PictureBox> tempLeft = new List<PictureBox>();
             extractValues(p.Name.First(), p.Name.Last());
-            Console.WriteLine(tileValue);
-            List<PictureBox> temp = new List<PictureBox>();
             while (p.Tag.Equals("green") && !boxes.ElementAt(tileValue).Tag.Equals(changeTurn(counter)) && p.Name.Last().Equals(boxes.ElementAt(tileValue).Name.Last()))
             {
                 tileValue--;
@@ -153,51 +168,51 @@ namespace Othello.Model
                 {
                     break;
                 }
-                temp.Add(boxes.ElementAt(tileValue));
+                tempLeft.Add(boxes.ElementAt(tileValue));
             }
-            paint(tempColor, temp, boxes, p);
+            paint(tempColor, tempLeft, boxes, p);
         }
 
         private void checkRight(List<PictureBox> boxes, PictureBox p)
         {
-            string tempColor = changeTurn(counter);
+            tempColor = changeTurn(counter);
+            List<PictureBox> tempRight = new List<PictureBox>();
             extractValues(p.Name.First(), p.Name.Last());
-            List<PictureBox> temp = new List<PictureBox>();
             while (p.Tag.Equals("green") && !boxes.ElementAt(tileValue).Tag.Equals(changeTurn(counter)) && p.Name.Last().Equals(boxes.ElementAt(tileValue).Name.Last()))
             {
+
                 tileValue++;
                 if (tileValue >= 64 || boxes.ElementAt(tileValue).Tag.Equals("green") || boxes.ElementAt(tileValue).Tag.Equals(changeTurn(counter)))
                 {
                     break;
                 }
-                temp.Add(boxes.ElementAt(tileValue));
+                tempRight.Add(boxes.ElementAt(tileValue));
             }
-            paint(tempColor, temp, boxes, p);
-
+            paint(tempColor, tempRight, boxes, p);
         }
+
         private void checkUp(List<PictureBox> boxes, PictureBox p)
         {
-            string tempColor = changeTurn(counter);
+            tempColor = changeTurn(counter);
+            List<PictureBox> tempUp = new List<PictureBox>();
             extractValues(p.Name.First(), p.Name.Last());
-            List<PictureBox> temp = new List<PictureBox>();
             while (p.Tag.Equals("green") && !boxes.ElementAt(tileValue).Tag.Equals(changeTurn(counter)) && (p.Name.First().Equals(boxes.ElementAt(tileValue).Name.First())))
             {
                 tileValue = tileValue - 8;
-                if (tileValue < 8 || boxes.ElementAt(tileValue).Tag.Equals("green") ||  boxes.ElementAt(tileValue).Tag.Equals(changeTurn(counter)))
+                if (tileValue < 8 || boxes.ElementAt(tileValue).Tag.Equals("green") || boxes.ElementAt(tileValue).Tag.Equals(changeTurn(counter)))
                 {
                     break;
                 }
-                temp.Add(boxes.ElementAt(tileValue));
+                tempUp.Add(boxes.ElementAt(tileValue));
             }
-           paint(tempColor, temp, boxes, p);
+            paint(tempColor, tempUp, boxes, p);
         }
-
 
         private void checkUpRight(List<PictureBox> boxes, PictureBox p)
         {
-            string tempColor = changeTurn(counter);
+            tempColor = changeTurn(counter);
+            List<PictureBox> tempUpRight = new List<PictureBox>();
             extractValues(p.Name.First(), p.Name.Last());
-            List<PictureBox> temp = new List<PictureBox>();
             while (p.Tag.Equals("green") && !boxes.ElementAt(tileValue).Tag.Equals(changeTurn(counter)))
             {
                 tileValue = tileValue - 7;
@@ -205,15 +220,16 @@ namespace Othello.Model
                 {
                     break;
                 }
-                temp.Add(boxes.ElementAt(tileValue));
+                tempUpRight.Add(boxes.ElementAt(tileValue));
             }
-           paint(tempColor, temp, boxes, p);
+            paint(tempColor, tempUpRight, boxes, p);
         }
+
         private void checkUpLeft(List<PictureBox> boxes, PictureBox p)
         {
-            string tempColor = changeTurn(counter);
+            tempColor = changeTurn(counter);
+            List<PictureBox> tempUpLeft = new List<PictureBox>();
             extractValues(p.Name.First(), p.Name.Last());
-            List<PictureBox> temp = new List<PictureBox>();
             while (p.Tag.Equals("green") && !boxes.ElementAt(tileValue).Tag.Equals(changeTurn(counter)))
             {
                 tileValue = tileValue - 9;
@@ -221,18 +237,16 @@ namespace Othello.Model
                 {
                     break;
                 }
-                temp.Add(boxes.ElementAt(tileValue));
+                tempUpLeft.Add(boxes.ElementAt(tileValue));
             }
-            paint(tempColor, temp, boxes, p);
+            paint(tempColor, tempUpLeft, boxes, p);
         }
-
-
 
         private void checkDown(List<PictureBox> boxes, PictureBox p)
         {
-            string tempColor = changeTurn(counter);
+            tempColor = changeTurn(counter);
+            List<PictureBox> tempDown = new List<PictureBox>();
             extractValues(p.Name.First(), p.Name.Last());
-            List<PictureBox> temp = new List<PictureBox>();
             while (p.Tag.Equals("green") && !boxes.ElementAt(tileValue).Tag.Equals(changeTurn(counter)) && (p.Name.First().Equals(boxes.ElementAt(tileValue).Name.First())))
             {
                 tileValue = tileValue + 8;
@@ -241,15 +255,16 @@ namespace Othello.Model
                 {
                     break;
                 }
-                temp.Add(boxes.ElementAt(tileValue));
+                tempDown.Add(boxes.ElementAt(tileValue));
             }
-           paint(tempColor, temp, boxes, p);
+            paint(tempColor, tempDown, boxes, p);
         }
+
         private void checkDownRight(List<PictureBox> boxes, PictureBox p)
         {
-            string tempColor = changeTurn(counter);
+            tempColor = changeTurn(counter);
+            List<PictureBox> tempDownRight = new List<PictureBox>();
             extractValues(p.Name.First(), p.Name.Last());
-            List<PictureBox> temp = new List<PictureBox>();
             while (p.Tag.Equals("green") && !boxes.ElementAt(tileValue).Tag.Equals(changeTurn(counter)))
             {
                 tileValue = tileValue + 9;
@@ -258,16 +273,16 @@ namespace Othello.Model
                 {
                     break;
                 }
-                temp.Add(boxes.ElementAt(tileValue));
+                tempDownRight.Add(boxes.ElementAt(tileValue));
             }
-           paint(tempColor, temp, boxes, p);
+            paint(tempColor, tempDownRight, boxes, p);
         }
 
         private void checkDownLeft(List<PictureBox> boxes, PictureBox p)
         {
-            string tempColor = changeTurn(counter);
+            tempColor = changeTurn(counter);
+            List<PictureBox> tempDownLeft = new List<PictureBox>();
             extractValues(p.Name.First(), p.Name.Last());
-            List<PictureBox> temp = new List<PictureBox>();
             while (p.Tag.Equals("green") && !boxes.ElementAt(tileValue).Tag.Equals(changeTurn(counter)))
             {
                 tileValue = tileValue + 7;
@@ -276,9 +291,9 @@ namespace Othello.Model
                 {
                     break;
                 }
-                temp.Add(boxes.ElementAt(tileValue));
+                tempDownLeft.Add(boxes.ElementAt(tileValue));
             }
-            paint(tempColor, temp, boxes, p);
+            paint(tempColor, tempDownLeft, boxes, p);
         }
 
         public bool Allowed
