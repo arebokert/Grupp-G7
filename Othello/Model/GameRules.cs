@@ -80,8 +80,6 @@ namespace Othello.Model
                 playerTurnInt = 2;
             }
         }
-
-
         public void checkIfAllowed(PictureBox p)
         {
             extractValues(p.Name.First(), p.Name.Last());
@@ -99,28 +97,20 @@ namespace Othello.Model
                 setPressedTileColor(p);
                 counter++;
             }
-            //temp.Clear();
         }
         private Boolean paint()
         {
-            Console.WriteLine(temp.Any() + " LIST NOT EMPTY");
-            // Console.WriteLine(!temp.First().Tag.Equals(boxes.ElementAt(tileValue).Tag));
-
-            Console.WriteLine("1");
             switch (playerTurn)
             {
 
                 case "white":
-                    Console.WriteLine("2");
                     foreach (PictureBox pb in temp)
                     {
-                        //    Console.WriteLine(pb.Name);
                         pb.Tag = "white";
                         pb.Image = white;
                     }
                     break;
                 case "black":
-                    Console.WriteLine("3");
                     foreach (PictureBox pb in temp)
                     {
                         pb.Tag = "black";
@@ -130,9 +120,6 @@ namespace Othello.Model
 
                     break;
             }
-            // setPressedTileColor(p);
-            //   this.temp.Clear();
-            //tempList.Insert(0, p);
             setPressed = true;
             temp.Clear();
             return true;
