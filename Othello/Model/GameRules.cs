@@ -29,11 +29,9 @@ namespace Othello.Model
 
         private Boolean setPressed = false;
         private int playerTurnInt = 0;
-        // private List<string> board = new List<string>();
         private int[] t = new int[64];
         private List<PictureBox> temp = new List<PictureBox>();
         private List<PictureBox> board;
-        //   private List<PictureBox> board = new List<PictureBox>();
 
         public GameRules()
         {
