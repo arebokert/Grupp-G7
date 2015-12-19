@@ -7,3 +7,12 @@ C:\tddd49\Othello\Othello\bin\Debug\Othello.pdb
 C:\tddd49\Othello\Othello\obj\Debug\Othello.exe
 C:\tddd49\Othello\Othello\obj\Debug\Othello.pdb
 C:\tddd49\Othello\Othello\obj\Debug\Othello.View.resources
+C:\tddd49\OthelloGIT\Grupp-G7\Othello\bin\Debug\Othello.exe.config
+C:\tddd49\OthelloGIT\Grupp-G7\Othello\obj\Debug\Othello.exe
+C:\tddd49\OthelloGIT\Grupp-G7\Othello\obj\Debug\Othello.pdb
+C:\tddd49\OthelloGIT\Grupp-G7\Othello\bin\Debug\Othello.exe
+C:\tddd49\OthelloGIT\Grupp-G7\Othello\bin\Debug\Othello.pdb
+C:\tddd49\OthelloGIT\Grupp-G7\Othello\obj\Debug\Othello.Properties.Resources.resources
+C:\tddd49\OthelloGIT\Grupp-G7\Othello\obj\Debug\Othello.View.resources
+C:\tddd49\OthelloGIT\Grupp-G7\Othello\obj\Debug\Othello.csproj.GenerateResource.Cache
+C:\tddd49\OthelloGIT\Grupp-G7\Othello\obj\Debug\Othello.csprojResolveAssemblyReference.cache

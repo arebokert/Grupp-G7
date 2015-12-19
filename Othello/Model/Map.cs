@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace Othello
 {
@@ -11,14 +12,16 @@ namespace Othello
     {
 
         private Image green;
-        private PlayerWhite pw;
-        private PlayerBlack pb ;
+        private Image white;
+        private Image black;
+        
+        private List<PictureBox> board = new List<PictureBox>();
 
         public Map(PlayerBlack p, PlayerWhite w)
         {
             green = Image.FromFile(@"..\\..\\Resources\\Images\\NoMarker.png");
-            pb = p;
-            pw = w; 
+            White = Image.FromFile(@"..\\..\\Resources\\Images\\whiteMarker.png");
+            Black = Image.FromFile(@"..\\..\\Resources\\Images\\BlackMarker.png");
         }
         public Image Green
         {
@@ -33,5 +36,30 @@ namespace Othello
             }
         }
 
+        public Image Black
+        {
+            get
+            {
+                return black;
+            }
+
+            set
+            {
+                black = value;
+            }
+        }
+
+        public Image White
+        {
+            get
+            {
+                return white;
+            }
+
+            set
+            {
+                white = value;
+            }
+        }
     }
 }

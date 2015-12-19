@@ -16,20 +16,21 @@ namespace Othello
     {
         private GameRules gameRule;
         string[] lines = System.IO.File.ReadAllLines(@"..\\..\\Resources\\mapInitial.txt");
-        List<PictureBox> boxes = new List<PictureBox>();
+        List<PictureBox> board = new List<PictureBox>();
         Rectangle rect = new Rectangle(0,0,600,600);
         Rectangle small = new Rectangle(0, 0, 66, 66);
-        Image white;
-        Image green;
-        Image black;
-   
+        GameRules gameRules;
 
         public View(GameRules g)
         { 
             InitializeComponent();
-            populatePicArray(this.Controls);
-            boxes.Reverse();
-            GameRule = g;
+            populatePicArray(Controls);
+            board.Reverse();
+            gameRules = g;
+            g.Board = board;
+            g.initialLoad();
+            board = gameRules.Board;
+
         }
 
         private void pictureBox1_Paint(object sender, PaintEventArgs e)
@@ -37,30 +38,7 @@ namespace Othello
             e.Graphics.FillRectangle(new SolidBrush(Color.Black), rect);
         }
 
-        public void paint(Image g, Image w, Image b)
-        {
-            white = w;
-            green = g;
-            black = b;
-            for (int j = 0; j < boxes.Count; j++)
-            {
-                boxes[j].Image = g;
-                boxes[j].Tag = "green";
-
-                if (boxes[j] == d4 || boxes[j] == e5)
-                {
-                    boxes[j].Image = w;
-                    boxes[j].Tag = "white";
-                }
-                else if (boxes[j] == d5 || boxes[j] == e4)
-                {
-                    boxes[j].Image = b;
-                    boxes[j].Tag = "black";
-
-                }
-            }
-        }
-
+ 
         internal GameRules GameRule
         {
             get
@@ -101,7 +79,7 @@ namespace Othello
             {
                 if (lines.Contains(c.Name))
                 {
-                    boxes.Add((PictureBox)c);
+                    board.Add((PictureBox)c);
                    
                 }           
             }
@@ -111,9 +89,7 @@ namespace Othello
         {
             PictureBox p = (PictureBox)sender;
             Console.WriteLine("CLICKED:  "+p.Name);
-            gameRule.checkIfAllowed(boxes,p, green, white, black);
-           // Console.WriteLine(boxes.ElementAt(35).Tag);
-          //  boxes = gameRule.ChangePictureBoxColor;
+            gameRules.checkIfAllowed(p); 
         }
 
     }

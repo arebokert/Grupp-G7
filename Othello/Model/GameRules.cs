@@ -15,83 +15,110 @@ namespace Othello.Model
         private int tileMultiple;
         private int tileValue;
         private int nextTileValue;
-        private List<PictureBox> temp = new List<PictureBox>();
-        private List<int> storedTiles = new List<int>();
-        private string tempColor = "";
-        private string playerTurn;
-        private int counter = 1;
+
         private Image green;
         private Image white;
         private Image black;
-        private Boolean setPressed = false;
 
+        private List<int> storedTiles = new List<int>();
+        private string playerTurn;
+        private string notPlayerTurn;
+        private int counter = 1;
+
+        Form boardForm = new Form();
+
+        private Boolean setPressed = false;
+        private int playerTurnInt = 0;
+        // private List<string> board = new List<string>();
+        private int[] t = new int[64];
+        private List<PictureBox> temp = new List<PictureBox>();
+        private List<PictureBox> board;
+        //   private List<PictureBox> board = new List<PictureBox>();
 
         public GameRules()
         {
+            green = Image.FromFile(@"..\\..\\Resources\\Images\\NoMarker.png");
+            white = Image.FromFile(@"..\\..\\Resources\\Images\\whiteMarker.png");
+            black = Image.FromFile(@"..\\..\\Resources\\Images\\BlackMarker.png");
             Allowed = false;
+
         }
 
-        private string changeTurn(int counter)
+        public void initialLoad()
+        {
+            foreach (PictureBox pb in board)
+            {
+                if (pb.Name.Equals("d4") || pb.Name.Equals("e5"))
+                {
+                    pb.Image = white;
+                    pb.Tag = "white";
+                }
+                else if (pb.Name.Contains("d5") || pb.Name.Equals("e4"))
+                {
+                    pb.Image = black;
+                    pb.Tag = "black";
+                }
+                else
+                {
+                    pb.Image = green;
+                    pb.Tag = "green";
+                }
+
+            }
+        }
+
+        private void changeTurn(int counter)
         {
             if (counter % 2 == 1)
             {
                 playerTurn = "white";
-
+                notPlayerTurn = "black";
+                playerTurnInt = 1;
             }
             else
             {
                 playerTurn = "black";
-
+                notPlayerTurn = "white";
+                playerTurnInt = 2;
             }
-            return playerTurn;
         }
 
 
-        public void checkIfAllowed(List<PictureBox> boxes, PictureBox p, Image g, Image w, Image b)
+        public void checkIfAllowed(PictureBox p)
         {
-
-           
-            green = g;
-            green.Tag = "green";
-            black = b;
-            black.Tag = "black";
-            white = w;
-            white.Tag = "white";
-
-            checkLeft(boxes, p);
-            checkRight(boxes, p);
-            checkUp(boxes, p);
-            checkUpRight(boxes, p);
-            checkUpLeft(boxes, p);
-            checkDown(boxes, p);
-            checkDownRight(boxes, p);
-            checkDownLeft(boxes, p);
+            extractValues(p.Name.First(), p.Name.Last());
+            changeTurn(counter);
+            checkLeft(p, tileValue);
+            checkRight(p, tileValue);
+            checkUp(p, tileValue);
+            checkUpRight(p, tileValue);
+            checkUpLeft(p, tileValue);
+            checkDown(p, tileValue);
+            checkDownRight(p, tileValue);
+            checkDownLeft(p, tileValue);
             if (setPressed)
             {
                 setPressedTileColor(p);
                 counter++;
             }
-             
-          
             //temp.Clear();
         }
-        private Boolean paint(List<PictureBox> temp, List<PictureBox> boxes, PictureBox p)
+        private Boolean paint()
         {
             Console.WriteLine(temp.Any() + " LIST NOT EMPTY");
             // Console.WriteLine(!temp.First().Tag.Equals(boxes.ElementAt(tileValue).Tag));
 
             Console.WriteLine("1");
-            switch (changeTurn(counter))
+            switch (playerTurn)
             {
 
                 case "white":
                     Console.WriteLine("2");
                     foreach (PictureBox pb in temp)
                     {
+                        //    Console.WriteLine(pb.Name);
                         pb.Tag = "white";
                         pb.Image = white;
-
-
                     }
                     break;
                 case "black":
@@ -102,41 +129,34 @@ namespace Othello.Model
                         pb.Image = black;
 
                     }
+
                     break;
             }
             // setPressedTileColor(p);
             //   this.temp.Clear();
             //tempList.Insert(0, p);
-
+            setPressed = true;
+            temp.Clear();
             return true;
         }
 
-
-
-
         private void setPressedTileColor(PictureBox pressed)
         {
-            if (changeTurn(counter).Equals("black"))
+            if (playerTurn.Equals("black"))
             {
                 pressed.Image = black;
                 pressed.Tag = "black";
             }
-            else if (changeTurn(counter).Equals("white"))
+            else if (playerTurn.Equals("white"))
             {
 
                 pressed.Image = white;
                 pressed.Tag = "white";
             }
             setPressed = false;
-            temp.Clear();
+
         }
-        private void changeTag()
-        {
-            for (int i = 0; i < temp.Count(); i++)
-            {
-                temp.ElementAt(i).Tag = tempColor;
-            }
-        }
+
 
         private void extractValues(char f, char l)
         {
@@ -173,189 +193,217 @@ namespace Othello.Model
             nextTileValue = tileValue;
         }
 
-        private void checkLeft(List<PictureBox> boxes, PictureBox p)
+        private void checkLeft(PictureBox p, int tileValue)
         {
-            tempColor = changeTurn(counter);
-            List<PictureBox> temp = new List<PictureBox>();
-            extractValues(p.Name.First(), p.Name.Last());
-            while (p.Tag.Equals("green") && !boxes.ElementAt(tileValue).Tag.Equals(changeTurn(counter)) && p.Name.Last().Equals(boxes.ElementAt(tileValue).Name.Last()))
+            tileValue--;
+            if (p.Tag.Equals("green"))
             {
-                tileValue--;
-                if (tileValue < 0 || boxes.ElementAt(tileValue).Tag.Equals("green") || boxes.ElementAt(tileValue).Tag.Equals(changeTurn(counter)))
+                while (tileValue >= 0 && board.ElementAt(tileValue).Tag.Equals(notPlayerTurn) &&
+                       board.ElementAt(tileValue).Name.Last().Equals(p.Name.Last()))
                 {
-                    break;
+                    temp.Add(board.ElementAt(tileValue));
+                    tileValue--;
                 }
-                temp.Add(boxes.ElementAt(tileValue));
-                Console.WriteLine(boxes.ElementAt(tileValue).Name);
-                Console.WriteLine(boxes.ElementAt(tileValue).Tag);
-
             }
 
-            if (temp.Any() && boxes.ElementAt(tileValue).Tag.Equals(changeTurn(counter)))
+            if (temp.Any() && board.ElementAt(tileValue).Tag.Equals(playerTurn))
             {
-                setPressed = true;
-                paint(temp, boxes, p);
+                paint();
+            }
+            else
+            {
+                temp.Clear();
             }
         }
 
-        private void checkRight(List<PictureBox> boxes, PictureBox p)
+        private void checkRight(PictureBox p, int tileValue)
         {
-            tempColor = changeTurn(counter);
-            List<PictureBox> temp = new List<PictureBox>();
-            extractValues(p.Name.First(), p.Name.Last());
-            while (tileValue < 63 &&p.Tag.Equals("green") && !boxes.ElementAt(tileValue + 1).Tag.Equals(changeTurn(counter)))
+            tileValue++;
+            while (tileValue <= 64 && p.Tag.Equals("green") &&
+                  board.ElementAt(tileValue).Tag.Equals(notPlayerTurn) &&
+                  board.ElementAt(tileValue).Name.Last().Equals(p.Name.Last()))
             {
 
+                temp.Add(board.ElementAt(tileValue));
                 tileValue++;
-                if (tileValue >= 64 || boxes.ElementAt(tileValue).Tag.Equals("green") || boxes.ElementAt(tileValue).Tag.Equals(changeTurn(counter)))
-                {
-                    break;
-                }
-                temp.Add(boxes.ElementAt(tileValue));
+
             }
-          
-            if (tileValue + 1 <= 64 && temp.Any() && boxes.ElementAt(tileValue + 1).Tag.Equals(changeTurn(counter)))
+
+            if (temp.Any() && board.ElementAt(tileValue).Tag.Equals(playerTurn))
             {
-                setPressed = true;
-                paint(temp, boxes, p);
+                paint();
+            }
+            else
+            {
+                temp.Clear();
             }
 
         }
 
-        private void checkUp(List<PictureBox> boxes, PictureBox p)
+        private void checkUp(PictureBox p, int tileValue)
         {
-            tempColor = changeTurn(counter);
-            List<PictureBox> temp = new List<PictureBox>();
-            extractValues(p.Name.First(), p.Name.Last());
-            while (tileValue >= 8 && p.Tag.Equals("green") && !boxes.ElementAt(tileValue - 8).Tag.Equals(changeTurn(counter)) && (p.Name.First().Equals(boxes.ElementAt(tileValue).Name.First())))
+            tileValue -= 8;
+            if (p.Tag.Equals("green"))
             {
-                tileValue = tileValue - 8;
-                if (tileValue <= 8 || boxes.ElementAt(tileValue).Tag.Equals("green") || boxes.ElementAt(tileValue).Tag.Equals(changeTurn(counter)))
+                while (tileValue >= 8 && p.Tag.Equals("green") && board.ElementAt(tileValue).Tag.Equals(notPlayerTurn))
                 {
-                    break;
+
+                    temp.Add(board.ElementAt(tileValue));
+                    tileValue -= 8;
                 }
-                temp.Add(boxes.ElementAt(tileValue));
-            }
-          
-            if (tileValue - 8 >= 0 && (temp.Any() && boxes.ElementAt(tileValue - 8).Tag.Equals(changeTurn(counter))))
-            {
-                setPressed = true;
-                paint(temp, boxes, p);
+
+                if (temp.Any() && board.ElementAt(tileValue).Tag.Equals(playerTurn))
+                {
+                    setPressed = true;
+                    paint();
+                }
+                else
+                {
+                    temp.Clear();
+                }
             }
         }
 
-        private void checkUpRight(List<PictureBox> boxes, PictureBox p)
+
+        private void checkUpRight(PictureBox p, int tileValue)
         {
-            tempColor = changeTurn(counter);
-            List<PictureBox> temp = new List<PictureBox>();
-            extractValues(p.Name.First(), p.Name.Last());
-            while (tileValue >= 7 && p.Tag.Equals("green") && !boxes.ElementAt(tileValue - 7).Tag.Equals(changeTurn(counter)))
+            tileValue -= 7;
+            if (p.Tag.Equals("green"))
             {
-                tileValue = tileValue - 7;
-                if (tileValue < 8 || boxes.ElementAt(tileValue).Tag.Equals("green") || boxes.ElementAt(tileValue).Tag.Equals(changeTurn(counter)))
+                while (tileValue >= 7 && p.Tag.Equals("green") && board.ElementAt(tileValue).Tag.Equals(notPlayerTurn))
                 {
-                    break;
+
+                    temp.Add(board.ElementAt(tileValue));
+                    tileValue -= 7;
                 }
-                temp.Add(boxes.ElementAt(tileValue));
-            }
 
-
-            if (tileValue - 7 >= 0 && temp.Any() && boxes.ElementAt(tileValue - 7).Tag.Equals(changeTurn(counter)))
-            {
-                setPressed = true;
-                paint(temp, boxes, p);
+                if (temp.Any() && board.ElementAt(tileValue).Tag.Equals(playerTurn))
+                {
+                    setPressed = true;
+                    paint();
+                }
+                else
+                {
+                    temp.Clear();
+                }
             }
         }
 
-        private void checkUpLeft(List<PictureBox> boxes, PictureBox p)
+
+        private void checkUpLeft(PictureBox p, int tileValue)
         {
-            tempColor = changeTurn(counter);
-            //  List<PictureBox> temp = new List<PictureBox>();
-            extractValues(p.Name.First(), p.Name.Last());
-            while (tileValue >= 9&&p.Tag.Equals("green") && !boxes.ElementAt(tileValue - 9).Tag.Equals(changeTurn(counter)))
+            tileValue -= 9;
+            if (p.Tag.Equals("green"))
             {
-                tileValue = tileValue - 9;
-                if (tileValue < 8 || boxes.ElementAt(tileValue).Tag.Equals("green") || boxes.ElementAt(tileValue).Tag.Equals(changeTurn(counter)))
+                while (tileValue >= 9 && p.Tag.Equals("green") && board.ElementAt(tileValue).Tag.Equals(notPlayerTurn))
                 {
-                    break;
+                    temp.Add(board.ElementAt(tileValue));
+                    tileValue -= 9;
                 }
-                temp.Add(boxes.ElementAt(tileValue));
-            }
-   
-            if (tileValue -9  >= 0 && temp.Any() && boxes.ElementAt(tileValue - 9).Tag.Equals(changeTurn(counter)))
-            {
-                setPressed = true;
-                paint(temp, boxes, p);
+                if (temp.Any() && board.ElementAt(tileValue).Tag.Equals(playerTurn))
+                {
+                    setPressed = true;
+                    paint();
+                }
+                else
+                {
+                    temp.Clear();
+                }
             }
         }
 
-        private void checkDown(List<PictureBox> boxes, PictureBox p)
+
+        private void checkDown(PictureBox p, int tileValue)
         {
-            tempColor = changeTurn(counter);
-            List<PictureBox> temp = new List<PictureBox>();
-            extractValues(p.Name.First(), p.Name.Last());
-            while (tileValue < 56&&p.Tag.Equals("green") && !boxes.ElementAt(tileValue + 8).Tag.Equals(changeTurn(counter)) && (p.Name.First().Equals(boxes.ElementAt(tileValue).Name.First())))
+            tileValue += 8;
+            if (p.Tag.Equals("green"))
             {
-                tileValue = tileValue + 8;
-
-                if (tileValue >= 56 || boxes.ElementAt(tileValue).Tag.Equals("green") || boxes.ElementAt(tileValue).Tag.Equals(changeTurn(counter)))
+                while (tileValue <= 56 && p.Tag.Equals("green") &&
+                  board.ElementAt(tileValue).Tag.Equals(notPlayerTurn))
                 {
-                    break;
+
+                    temp.Add(board.ElementAt(tileValue));
+                    tileValue += 8;
                 }
-                temp.Add(boxes.ElementAt(tileValue));
-            }
-            if (tileValue + 8 <= 64&&temp.Any() && boxes.ElementAt(tileValue + 8).Tag.Equals(changeTurn(counter)))
-            {
-                setPressed = true;
-                paint(temp, boxes, p);
+                if (temp.Any() && board.ElementAt(tileValue).Tag.Equals(playerTurn))
+                {
+                    setPressed = true;
+                    paint();
+                }
+                else
+                {
+                    temp.Clear();
+                }
             }
         }
 
-        private void checkDownRight(List<PictureBox> boxes, PictureBox p)
+
+        private void checkDownRight(PictureBox p, int tileValue)
         {
-            tempColor = changeTurn(counter);
-             List<PictureBox> temp = new List<PictureBox>();
-            extractValues(p.Name.First(), p.Name.Last());
-            while (tileValue < 55 && p.Tag.Equals("green") && !boxes.ElementAt(tileValue + 9).Tag.Equals(changeTurn(counter)))
+            tileValue += 9;
+            if (p.Tag.Equals("green"))
             {
-                tileValue = tileValue + 9;
-
-                if (tileValue >= 64 || boxes.ElementAt(tileValue).Tag.Equals("green") || boxes.ElementAt(tileValue).Tag.Equals(changeTurn(counter)))
+                while (tileValue <= 55 && board.ElementAt(tileValue).Tag.Equals(notPlayerTurn))
                 {
-                    break;
+                    temp.Add(board.ElementAt(tileValue));
+                    tileValue += 9;
                 }
-                temp.Add(boxes.ElementAt(tileValue));
+                if (temp.Any() && board.ElementAt(tileValue).Tag.Equals(playerTurn))
+                {
+                    setPressed = true;
+                    paint();
+                }
+                else
+                {
+                    temp.Clear();
+                }
             }
-            if (tileValue + 9 <= 64 && temp.Any() && boxes.ElementAt(tileValue + 9).Tag.Equals(changeTurn(counter)))
-            {
-                setPressed = true;
-                paint(temp, boxes, p);
-            }
-           
         }
 
-        private void checkDownLeft(List<PictureBox> boxes, PictureBox p)
+
+        private void checkDownLeft(PictureBox p, int tileValue)
         {
-            tempColor = changeTurn(counter);
-            // List<PictureBox> temp = new List<PictureBox>();
-            extractValues(p.Name.First(), p.Name.Last());
-            while (tileValue < 57 && p.Tag.Equals("green") && !boxes.ElementAt(tileValue + 7).Tag.Equals(changeTurn(counter)))
+            tileValue += 7;
+            if (p.Tag.Equals("green"))
             {
-                tileValue = tileValue + 7;
-
-                if (tileValue >= 57 || boxes.ElementAt(tileValue).Tag.Equals("green") || boxes.ElementAt(tileValue).Tag.Equals(changeTurn(counter)))
+                while (tileValue <= 49 && board.ElementAt(tileValue).Tag.Equals(notPlayerTurn))
                 {
-                    break;
+                    temp.Add(board.ElementAt(tileValue));
+                    tileValue += 7;
                 }
-                temp.Add(boxes.ElementAt(tileValue));
+                if (temp.Any() && board.ElementAt(tileValue).Tag.Equals(playerTurn))
+                {
+                    setPressed = true;
+                    paint();
+                }
+                else
+                {
+                    temp.Clear();
+                }
             }
-            if (tileValue+7 <= 64 &&temp.Any() && boxes.ElementAt(tileValue + 7).Tag.Equals(changeTurn(counter)))
-            {
-                setPressed = true;
-                paint(temp, boxes, p);
-            }
-        }
 
+        }
+        /*   public void updateBoard(List<PictureBox> temp)
+       {
+           int i = 0;
+           Console.WriteLine("HJE");
+           foreach(PictureBox pb in boxes)
+           {
+               if (pb.Tag.Equals("green"))
+               {
+                   Board[i] = 0;
+               }
+               else if (pb.Tag.Equals("white")){
+                   Board[i] = 1;
+               }
+               else if (pb.Tag.Equals("black")){
+                   Board[i] = 2;
+               }
+               i++;
+               Console.WriteLine(board[i]);
+           }
+       }
+       */
         public bool Allowed
         {
             get
@@ -369,6 +417,18 @@ namespace Othello.Model
             }
         }
 
+        public List<PictureBox> Board
+        {
+            get
+            {
+                return board;
+            }
+
+            set
+            {
+                board = value;
+            }
+        }
     }
 }
 

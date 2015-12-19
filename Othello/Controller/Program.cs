@@ -17,15 +17,7 @@ namespace Othello
         static void Main()
         {
             GameRules g = new GameRules();
-            View v = new View(g);
-            PlayerWhite pw = new PlayerWhite();
-            PlayerBlack pb = new PlayerBlack();
-            Map mp = new Map(pb,pw);
-            pw.Colour = 1;
-            pb.Colour = 2;
-            v.paint(mp.Green,pw.WhiteMarker, pb.BlackMarker);
-            
-    
+            View v = new View(g); 
             Application.Run(v);
         }
     }
