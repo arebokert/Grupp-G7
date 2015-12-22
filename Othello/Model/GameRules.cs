@@ -10,59 +10,169 @@ namespace Othello.Model
 {
     public class GameRules
     {
-        private Boolean allowed;
-        private int letterValue;
-        private int tileMultiple;
-        private int tileValue;
-        private int nextTileValue;
+        private int tileValueX;
+        private int tileValueY;
 
         private Image green;
         private Image white;
         private Image black;
 
-        private List<int> storedTiles = new List<int>();
         private string playerTurn;
         private string notPlayerTurn;
         private int counter = 1;
 
-        Form boardForm = new Form();
+        private int playerTurnInt;
+        private int notPlayerTurnInt = 0;
+        private int[,] boardArray;
+        private int[,] paintArray = new int[8, 8];
+        private int[,] paintArrayTemp;
+        private List<int> test = new List<int>();
+        private List<int[,]> paintList = new List<int[,]>();
+        private int[][] paintA = new int[8][];
+        private Boolean move;
 
-        private Boolean setPressed = false;
-        private int playerTurnInt = 0;
-        private int[] t = new int[64];
-        private List<PictureBox> temp = new List<PictureBox>();
-        private List<PictureBox> board;
+        private PictureBox[,] board = new PictureBox[8, 8];
+        private Boolean aiIsCalculating = false;
+        private AI ai;
 
-        public GameRules()
+        public GameRules(AI a)
         {
+            ai = a;
+            boardArray = new int[8, 8];
+            paintArrayTemp = new int[8, 8];
             green = Image.FromFile(@"..\\..\\Resources\\Images\\NoMarker.png");
             white = Image.FromFile(@"..\\..\\Resources\\Images\\whiteMarker.png");
             black = Image.FromFile(@"..\\..\\Resources\\Images\\BlackMarker.png");
-            Allowed = false;
-
         }
 
+
+        public void makeMove(PictureBox p)
+        {
+            //resetPaintArray();
+            changeTurn(counter);
+
+            if (!p.Name.Equals(""))
+            {
+                extractValues(p.Name.First(), p.Name.Last());
+                checkAllDirections();
+                paint();
+                paintList.Clear();
+                resetPaintArray(paintArray);
+                updateBoardArray();
+                counter++;
+                move = false;
+            }
+
+        }
+        public void checkAllDirections()
+        {
+
+            checkLeft(tileValueX, tileValueY);
+            checkRight(tileValueX, tileValueY);
+
+              checkUp(tileValueX, tileValueY);
+               checkDown(tileValueX, tileValueY);
+               checkUpRight(tileValueX, tileValueY);
+                checkUpLeft(tileValueX, tileValueY);
+                checkDownRight(tileValueX, tileValueY);
+                checkDownLeft(tileValueX, tileValueY);
+        }
+
+
+        private Boolean paint()
+        {
+            switch (playerTurn)
+            {
+                case "white":
+                    for (int i = 0; i < paintList.Count; i++)
+                    {
+                        for (int x = 0; x < 8; x++)
+                        {
+                            for (int y = 0; y < 8; y++)
+                            {
+                                if (paintArray[x, y] == 1)
+                                {
+                                    Console.WriteLine(Board[x, y].Name);
+                                    Console.WriteLine(x);
+                                    Console.WriteLine(y);
+                                    move = true;
+                                    Board[x, y].Tag = "white";
+                                    Board[x, y].Image = white;
+                                }
+                            }
+                        }
+                    }
+                    if (move)
+                    {
+                        Board[tileValueX, tileValueY].Tag = "white";
+                        Board[tileValueX, tileValueY].Image = white;
+                    }
+                    break;
+
+                case "black":
+                    for (int i = 0; i < paintList.Count; i++)
+                    {
+                        for (int x = 0; x < 8; x++)
+                        {
+                            for (int y = 0; y < 8; y++)
+                            {
+                                if (paintArray[x, y] == 1)
+                                {
+                                    move = true;
+                                    Board[x, y].Tag = "black";
+                                    Board[x, y].Image = black;
+                                }
+                            }
+                        }
+
+                    }
+                    if (move)
+                    {
+                        Board[tileValueX, tileValueY].Tag = "black";
+                        Board[tileValueX, tileValueY].Image = black;
+                        move = false;
+                    }
+
+                    break;
+            }
+
+            return true;
+        }
+
+        private void resetPaintArray(int[,] paintArrayTemp)
+        {
+            for (int x = 0; x < 8; x++)
+            {
+                for (int y = 0; y < 8; y++)
+                {
+                    paintArrayTemp[x, y] = 0;
+                }
+            }
+        }
         public void initialLoad()
         {
-            foreach (PictureBox pb in board)
+            for (int x = 0; x < 8; x++)
             {
-                if (pb.Name.Equals("d4") || pb.Name.Equals("e5"))
+                for (int y = 0; y < 8; y++)
                 {
-                    pb.Image = white;
-                    pb.Tag = "white";
+                    if (Board[x, y].Name.Equals("d4") || board[x, y].Name.Equals("e5"))
+                    {
+                        Board[x, y].Image = white;
+                        Board[x, y].Tag = "white";
+                    }
+                    else if (board[x, y].Name.Equals("d5") || board[x, y].Name.Equals("e4") || board[x, y].Name.Equals("f4"))
+                    {
+                        Board[x, y].Image = black;
+                        Board[x, y].Tag = "black";
+                    }
+                    else
+                    {
+                        Board[x, y].Image = green;
+                        Board[x, y].Tag = "green";
+                    }
                 }
-                else if (pb.Name.Contains("d5") || pb.Name.Equals("e4"))
-                {
-                    pb.Image = black;
-                    pb.Tag = "black";
-                }
-                else
-                {
-                    pb.Image = green;
-                    pb.Tag = "green";
-                }
-
             }
+            updateBoardArray();
         }
 
         private void changeTurn(int counter)
@@ -72,337 +182,406 @@ namespace Othello.Model
                 playerTurn = "white";
                 notPlayerTurn = "black";
                 playerTurnInt = 1;
+                notPlayerTurnInt = 2;
             }
             else
             {
                 playerTurn = "black";
                 notPlayerTurn = "white";
                 playerTurnInt = 2;
+                notPlayerTurnInt = 1;
             }
         }
-        public void checkIfAllowed(PictureBox p)
-        {
-            extractValues(p.Name.First(), p.Name.Last());
-            changeTurn(counter);
-            checkLeft(p, tileValue);
-            checkRight(p, tileValue);
-            checkUp(p, tileValue);
-            checkUpRight(p, tileValue);
-            checkUpLeft(p, tileValue);
-            checkDown(p, tileValue);
-            checkDownRight(p, tileValue);
-            checkDownLeft(p, tileValue);
-            if (setPressed)
-            {
-                setPressedTileColor(p);
-                counter++;
-            }
-        }
-        private Boolean paint()
-        {
-            switch (playerTurn)
-            {
-
-                case "white":
-                    foreach (PictureBox pb in temp)
-                    {
-                        pb.Tag = "white";
-                        pb.Image = white;
-                    }
-                    break;
-                case "black":
-                    foreach (PictureBox pb in temp)
-                    {
-                        pb.Tag = "black";
-                        pb.Image = black;
-
-                    }
-
-                    break;
-            }
-            setPressed = true;
-            temp.Clear();
-            return true;
-        }
-
-        private void setPressedTileColor(PictureBox pressed)
-        {
-            if (playerTurn.Equals("black"))
-            {
-                pressed.Image = black;
-                pressed.Tag = "black";
-            }
-            else if (playerTurn.Equals("white"))
-            {
-
-                pressed.Image = white;
-                pressed.Tag = "white";
-            }
-            setPressed = false;
-
-        }
-
 
         private void extractValues(char f, char l)
         {
-            tileMultiple = (int)Char.GetNumericValue(l);
+            tileValueX = (int)Char.GetNumericValue(l);
+            tileValueX--;
             switch (f)
             {
                 case 'a':
-                    letterValue = 1;
+                    tileValueY = 0;
                     break;
                 case 'b':
-                    letterValue = 2;
+                    tileValueY = 1;
                     break;
                 case 'c':
-                    letterValue = 3;
+                    tileValueY = 2;
                     break;
                 case 'd':
-                    letterValue = 4;
+                    tileValueY = 3;
                     break;
                 case 'e':
-                    letterValue = 5;
+                    tileValueY = 4;
                     break;
                 case 'f':
-                    letterValue = 6;
+                    tileValueY = 5;
                     break;
                 case 'g':
-                    letterValue = 7;
+                    tileValueY = 6;
                     break;
                 case 'h':
-                    letterValue = 8;
+                    tileValueY = 7;
                     break;
             }
-
-            tileValue = (8 * tileMultiple) - (8 - letterValue) - 1;
-            nextTileValue = tileValue;
         }
 
-        private void checkLeft(PictureBox p, int tileValue)
+        private void copyTempArrayToPaintArray(int xValue, int yValue)
         {
-            tileValue--;
-            if (p.Tag.Equals("green"))
+            for (int x = 0; x < 8; x++)
             {
-                while (tileValue >= 0 && board.ElementAt(tileValue).Tag.Equals(notPlayerTurn) &&
-                       board.ElementAt(tileValue).Name.Last().Equals(p.Name.Last()))
+                for (int y = 0; y < 8; y++)
                 {
-                    temp.Add(board.ElementAt(tileValue));
-                    tileValue--;
+                    if (paintArrayTemp[x, y] == 1)
+                    {
+                        paintArray[x, y] = 1;
+                    }
                 }
             }
-
-            if (temp.Any() && board.ElementAt(tileValue).Tag.Equals(playerTurn))
-            {
-                paint();
-            }
-            else
-            {
-                temp.Clear();
-            }
+            paintList.Add(paintArray);
+            resetPaintArray(paintArrayTemp);
         }
 
-        private void checkRight(PictureBox p, int tileValue)
+        private Boolean legalMove()
         {
-            tileValue++;
-            while (tileValue <= 64 && p.Tag.Equals("green") &&
-                  board.ElementAt(tileValue).Tag.Equals(notPlayerTurn) &&
-                  board.ElementAt(tileValue).Name.Last().Equals(p.Name.Last()))
+            for (int x = 0; x < 8; x++)
             {
-
-                temp.Add(board.ElementAt(tileValue));
-                tileValue++;
-
-            }
-
-            if (temp.Any() && board.ElementAt(tileValue).Tag.Equals(playerTurn))
-            {
-                paint();
-            }
-            else
-            {
-                temp.Clear();
-            }
-
-        }
-
-        private void checkUp(PictureBox p, int tileValue)
-        {
-            tileValue -= 8;
-            if (p.Tag.Equals("green"))
-            {
-                while (tileValue >= 8 && p.Tag.Equals("green") && board.ElementAt(tileValue).Tag.Equals(notPlayerTurn))
+                for (int y = 0; y < 8; y++)
                 {
-
-                    temp.Add(board.ElementAt(tileValue));
-                    tileValue -= 8;
+                    if (paintArrayTemp[x, y] == 2)
+                    {
+                        return true;
+                    }
                 }
+            }
+            return false; ;
+        }
 
-                if (temp.Any() && board.ElementAt(tileValue).Tag.Equals(playerTurn))
+        private void checkLeft(int xValue, int yValue)
+        {
+            int c = 0;
+            if (boardArray[xValue, yValue] == 0)
+            {
+                yValue--;
                 {
-                    setPressed = true;
-                    paint();
+                    while (yValue > 0 && boardArray[xValue, yValue] == notPlayerTurnInt)
+                    {
+                        paintArrayTemp[xValue, yValue] = 1;
+                        if (boardArray[xValue, yValue - 1] == playerTurnInt)
+                        {
+                            c++;
+                            if (c == 2)
+                            {
+                                break;
+                            }
+                            else
+                            {
+                                paintArrayTemp[xValue, yValue - 1] = 2;
+                            }
+                        }
+                        yValue--;
+                    }
+                }
+                if (legalMove())
+                {
+                    copyTempArrayToPaintArray(xValue, yValue);
                 }
                 else
                 {
-                    temp.Clear();
+                    resetPaintArray(paintArrayTemp);
                 }
             }
         }
 
-
-        private void checkUpRight(PictureBox p, int tileValue)
+        private void checkRight(int xValue, int yValue)
         {
-            tileValue -= 7;
-            if (p.Tag.Equals("green"))
+            int c = 0;
+            if (boardArray[xValue, yValue] == 0)
             {
-                while (tileValue >= 7 && p.Tag.Equals("green") && board.ElementAt(tileValue).Tag.Equals(notPlayerTurn))
+                yValue++;
                 {
-
-                    temp.Add(board.ElementAt(tileValue));
-                    tileValue -= 7;
+                    while (yValue < 7 && boardArray[xValue, yValue] == notPlayerTurnInt)
+                    {
+                        paintArrayTemp[xValue, yValue] = 1;
+                        test.Add(xValue);
+                        test.Add(yValue);
+                        if (boardArray[xValue, yValue + 1] == playerTurnInt)
+                        {
+                            c++;
+                            if (c == 2)
+                            {
+                                break;
+                            }
+                            else
+                            {
+                                paintArrayTemp[xValue, yValue + 1] = 2;
+                            }
+                        }
+                        yValue++;
+                    }
                 }
-
-                if (temp.Any() && board.ElementAt(tileValue).Tag.Equals(playerTurn))
+                if (legalMove())
                 {
-                    setPressed = true;
-                    paint();
+                    copyTempArrayToPaintArray(xValue, yValue);
                 }
                 else
                 {
-                    temp.Clear();
+                    resetPaintArray(paintArrayTemp);
                 }
             }
         }
 
 
-        private void checkUpLeft(PictureBox p, int tileValue)
+
+        private void checkUp(int xValue, int yValue)
         {
-            tileValue -= 9;
-            if (p.Tag.Equals("green"))
+            int c = 0;
+            if (boardArray[xValue, yValue] == 0)
             {
-                while (tileValue >= 9 && p.Tag.Equals("green") && board.ElementAt(tileValue).Tag.Equals(notPlayerTurn))
+                xValue--;
                 {
-                    temp.Add(board.ElementAt(tileValue));
-                    tileValue -= 9;
+                    while (xValue > 0 && boardArray[xValue, yValue] == notPlayerTurnInt)
+                    {
+                        paintArrayTemp[xValue, yValue] = 1;
+                        if (boardArray[xValue - 1, yValue] == playerTurnInt)
+                        {
+                            c++;
+                            if (c == 2)
+                            {
+                                break;
+                            }
+                            else
+                            {
+                                paintArrayTemp[xValue - 1, yValue] = 2;
+                            }
+                        }
+                        xValue--;
+                    }
                 }
-                if (temp.Any() && board.ElementAt(tileValue).Tag.Equals(playerTurn))
+                if (legalMove())
                 {
-                    setPressed = true;
-                    paint();
+                    copyTempArrayToPaintArray(xValue, yValue);
                 }
                 else
                 {
-                    temp.Clear();
+                    resetPaintArray(paintArrayTemp);
                 }
             }
         }
 
 
-        private void checkDown(PictureBox p, int tileValue)
+        private void checkDown(int xValue, int yValue)
         {
-            tileValue += 8;
-            if (p.Tag.Equals("green"))
+            int c = 0;
+            if (boardArray[xValue, yValue] == 0)
             {
-                while (tileValue <= 56 && p.Tag.Equals("green") &&
-                  board.ElementAt(tileValue).Tag.Equals(notPlayerTurn))
+                xValue++;
                 {
-
-                    temp.Add(board.ElementAt(tileValue));
-                    tileValue += 8;
+                    while (xValue < 7 && boardArray[xValue, yValue] == notPlayerTurnInt)
+                    {
+                        paintArrayTemp[xValue, yValue] = 1;
+                        if (boardArray[xValue + 1, yValue] == playerTurnInt)
+                        {
+                            c++;
+                            if (c == 2)
+                            {
+                                break;
+                            }
+                            else
+                            {
+                                paintArrayTemp[xValue + 1, yValue] = 2;
+                            }
+                        }
+                        xValue++;
+                    }
                 }
-                if (temp.Any() && board.ElementAt(tileValue).Tag.Equals(playerTurn))
+                if (legalMove())
                 {
-                    setPressed = true;
-                    paint();
+                    copyTempArrayToPaintArray(xValue, yValue);
                 }
                 else
                 {
-                    temp.Clear();
+                    resetPaintArray(paintArrayTemp);
                 }
             }
         }
 
-
-        private void checkDownRight(PictureBox p, int tileValue)
+        private void checkUpRight(int xValue, int yValue)
         {
-            tileValue += 9;
-            if (p.Tag.Equals("green"))
+            int c = 0;
+            if (boardArray[xValue, yValue] == 0)
             {
-                while (tileValue <= 55 && board.ElementAt(tileValue).Tag.Equals(notPlayerTurn))
+                yValue++;
+                xValue--;
                 {
-                    temp.Add(board.ElementAt(tileValue));
-                    tileValue += 9;
+                    while (xValue > 0 && yValue < 7 && boardArray[xValue, yValue] == notPlayerTurnInt)
+                    {
+                        paintArrayTemp[xValue, yValue] = 1;
+                        if (boardArray[xValue - 1, yValue + 1] == playerTurnInt)
+                        {
+                            c++;
+                            if (c == 2)
+                            {
+                                break;
+                            }
+                            else
+                            {
+                                paintArrayTemp[xValue - 1, yValue + 1] = 2;
+                            }
+                        }
+                        yValue++;
+                        xValue--;
+                    }
                 }
-                if (temp.Any() && board.ElementAt(tileValue).Tag.Equals(playerTurn))
+                if (legalMove())
                 {
-                    setPressed = true;
-                    paint();
+                    copyTempArrayToPaintArray(xValue, yValue);
                 }
                 else
                 {
-                    temp.Clear();
+                    resetPaintArray(paintArrayTemp);
                 }
             }
         }
 
-
-        private void checkDownLeft(PictureBox p, int tileValue)
+        private void checkUpLeft(int xValue, int yValue)
         {
-            tileValue += 7;
-            if (p.Tag.Equals("green"))
+            int c = 0;
+            if (boardArray[xValue, yValue] == 0)
             {
-                while (tileValue <= 49 && board.ElementAt(tileValue).Tag.Equals(notPlayerTurn))
+                yValue--;
+                xValue--;
                 {
-                    temp.Add(board.ElementAt(tileValue));
-                    tileValue += 7;
+                    while (xValue > 0 && yValue > 0 && boardArray[xValue, yValue] == notPlayerTurnInt)
+                    {
+                        paintArrayTemp[xValue, yValue] = 1;
+                        if (boardArray[xValue - 1, yValue - 1] == playerTurnInt)
+                        {
+                            c++;
+                            if (c == 2)
+                            {
+                                break;
+                            }
+                            else
+                            {
+                                paintArrayTemp[xValue - 1, yValue - 1] = 2;
+                            }
+                        }
+                        yValue--;
+                        xValue--;
+                    }
                 }
-                if (temp.Any() && board.ElementAt(tileValue).Tag.Equals(playerTurn))
+                if (legalMove())
                 {
-                    setPressed = true;
-                    paint();
+                    copyTempArrayToPaintArray(xValue, yValue);
                 }
                 else
                 {
-                    temp.Clear();
+                    resetPaintArray(paintArrayTemp);
                 }
             }
-
         }
-        /*   public void updateBoard(List<PictureBox> temp)
-       {
-           int i = 0;
-           Console.WriteLine("HJE");
-           foreach(PictureBox pb in boxes)
-           {
-               if (pb.Tag.Equals("green"))
-               {
-                   Board[i] = 0;
-               }
-               else if (pb.Tag.Equals("white")){
-                   Board[i] = 1;
-               }
-               else if (pb.Tag.Equals("black")){
-                   Board[i] = 2;
-               }
-               i++;
-               Console.WriteLine(board[i]);
-           }
-       }
-       */
-        public bool Allowed
+
+        private void checkDownRight(int xValue, int yValue)
         {
-            get
+            int c = 0;
+            if (boardArray[xValue, yValue] == 0)
             {
-                return allowed;
-            }
-
-            set
-            {
-                allowed = value;
+                yValue++;
+                xValue++;
+                {
+                    while (xValue < 7 && yValue < 7 && boardArray[xValue, yValue] == notPlayerTurnInt)
+                    {
+                        paintArrayTemp[xValue, yValue] = 1;
+                        if (boardArray[xValue + 1, yValue + 1] == playerTurnInt)
+                        {
+                            c++;
+                            if (c == 2)
+                            {
+                                break;
+                            }
+                            else
+                            {
+                                paintArrayTemp[xValue + 1, yValue + 1] = 2;
+                            }
+                        }
+                        yValue++;
+                        xValue++;
+                    }
+                }
+                if (legalMove())
+                {
+                    copyTempArrayToPaintArray(xValue, yValue);
+                }
+                else
+                {
+                    resetPaintArray(paintArrayTemp);
+                }
             }
         }
 
-        public List<PictureBox> Board
+        private void checkDownLeft(int xValue, int yValue)
+        {
+            int c = 0;
+            if (boardArray[xValue, yValue] == 0)
+            {
+                yValue--;
+                xValue++;
+                {
+                    while (xValue < 7 && yValue > 0 && boardArray[xValue, yValue] == notPlayerTurnInt)
+                    {
+                        paintArrayTemp[xValue, yValue] = 1;
+                        if (boardArray[xValue + 1, yValue - 1] == playerTurnInt)
+                        {
+                            c++;
+                            if (c == 2)
+                            {
+                                break;
+                            }
+                            else
+                            {
+                                paintArrayTemp[xValue + 1, yValue - 1] = 2;
+                            }
+                        }
+                        yValue--;
+                        xValue++;
+                    }
+                }
+                if (legalMove())
+                {
+                    copyTempArrayToPaintArray(xValue, yValue);
+                }
+                else
+                {
+                    resetPaintArray(paintArrayTemp);
+                }
+            }
+        }
+        private void updateBoardArray()
+        {
+            for (int x = 0; x < 8; x++)
+            {
+                for (int y = 0; y < 8; y++)
+                {
+                    if (Board[x, y].Tag.Equals("green"))
+                    {
+                        boardArray[x, y] = 0;
+                    }
+                    else if (Board[x, y].Tag.Equals("white"))
+                    {
+                        boardArray[x, y] = 1;
+                    }
+                    else if (Board[x, y].Tag.Equals("black"))
+                    {
+                        boardArray[x, y] = 2;
+                    }
+                    Console.Write(boardArray[x, y]);
+                }
+                Console.WriteLine();
+            }
+        }
+
+        public PictureBox[,] Board
         {
             get
             {
@@ -412,6 +591,19 @@ namespace Othello.Model
             set
             {
                 board = value;
+            }
+        }
+
+        public bool AiIsCalculating
+        {
+            get
+            {
+                return aiIsCalculating;
+            }
+
+            set
+            {
+                aiIsCalculating = value;
             }
         }
     }

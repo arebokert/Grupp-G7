@@ -1,0 +1,27 @@
+x = horisontalt värde
+y = vertikalt värde
+8 = konstant höjd/bredd
+
+Höger = (8*y)-(8-x)
+
+Vänster = (8*y)-(8-x)-2
+
+nedanför = (8*y)-(8-x)+8
+
+ovanför = (8*y)-(8-x)-8
+
+dvn = (8*y)-(8-x)+6
+
+dvo = (8*y)-(8-x)-10
+
+dhn = (8*y)-(8-x)+10
+
+dho = (8*y)-(8-x)-6
+
+
+bokstavens värde * siffran + 1 för varje under 8
+
+c3 = 
+(8*3)-8-3 
+
+b5 = (8*5) - (8-2)

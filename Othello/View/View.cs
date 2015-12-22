@@ -16,7 +16,7 @@ namespace Othello
     {
         private GameRules gameRule;
         string[] lines = System.IO.File.ReadAllLines(@"..\\..\\Resources\\mapInitial.txt");
-        List<PictureBox> board = new List<PictureBox>();
+        private PictureBox[,] board = new PictureBox[8, 8];
         Rectangle rect = new Rectangle(0,0,600,600);
         Rectangle small = new Rectangle(0, 0, 66, 66);
         GameRules gameRules;
@@ -25,10 +25,11 @@ namespace Othello
         { 
             InitializeComponent();
             populatePicArray(Controls);
-            board.Reverse();
+             
             gameRules = g;
             g.Board = board;
             g.initialLoad();
+            lines.Reverse();
             board = gameRules.Board;
 
         }
@@ -75,21 +76,22 @@ namespace Othello
         //Adds all PicturBoxes to the List boxes by matching Tags with content of the stringArray Lines
         private void populatePicArray(Control.ControlCollection controls)
         {
-            foreach (Control c in controls)
+          
+            for(int x =0; x<8; x++)
             {
-                if (lines.Contains(c.Name))
+                for(int y = 0; y<8; y++)
                 {
-                    board.Add((PictureBox)c);
-                   
-                }           
+                    board[x,y] = (PictureBox)Controls.Find(lines[y%8+x*8], true)[0];
+
+                }
             }
         }
 
         private void tile_MouseClick(object sender, MouseEventArgs e)
         {
             PictureBox p = (PictureBox)sender;
-            Console.WriteLine("CLICKED:  "+p.Name);
-            gameRules.checkIfAllowed(p); 
+            Console.WriteLine("CLICKED:  " + p.Name);
+            gameRules.makeMove(p); 
         }
 
     }
