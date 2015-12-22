@@ -26,7 +26,7 @@ namespace Othello.Model
         private int[,] boardArray;
         private int[,] paintArray = new int[8, 8];
         private int[,] paintArrayTemp;
-        private List<int> test = new List<int>();
+
         private List<int[,]> paintList = new List<int[,]>();
         private int[][] paintA = new int[8][];
         private Boolean move;
@@ -59,23 +59,20 @@ namespace Othello.Model
                 paintList.Clear();
                 resetPaintArray(paintArray);
                 updateBoardArray();
-                counter++;
                 move = false;
             }
 
         }
         public void checkAllDirections()
         {
-
             checkLeft(tileValueX, tileValueY);
             checkRight(tileValueX, tileValueY);
-
-              checkUp(tileValueX, tileValueY);
-               checkDown(tileValueX, tileValueY);
-               checkUpRight(tileValueX, tileValueY);
-                checkUpLeft(tileValueX, tileValueY);
-                checkDownRight(tileValueX, tileValueY);
-                checkDownLeft(tileValueX, tileValueY);
+            checkUp(tileValueX, tileValueY);
+            checkDown(tileValueX, tileValueY);
+            checkUpRight(tileValueX, tileValueY);
+            checkUpLeft(tileValueX, tileValueY);
+            checkDownRight(tileValueX, tileValueY);
+            checkDownLeft(tileValueX, tileValueY);
         }
 
 
@@ -104,6 +101,7 @@ namespace Othello.Model
                     }
                     if (move)
                     {
+                        counter++;
                         Board[tileValueX, tileValueY].Tag = "white";
                         Board[tileValueX, tileValueY].Image = white;
                     }
@@ -124,15 +122,14 @@ namespace Othello.Model
                                 }
                             }
                         }
-
                     }
                     if (move)
                     {
+                        counter++;
                         Board[tileValueX, tileValueY].Tag = "black";
                         Board[tileValueX, tileValueY].Image = black;
                         move = false;
                     }
-
                     break;
             }
 
@@ -254,7 +251,7 @@ namespace Othello.Model
                     }
                 }
             }
-            return false; ;
+            return false; 
         }
 
         private void checkLeft(int xValue, int yValue)
@@ -303,8 +300,6 @@ namespace Othello.Model
                     while (yValue < 7 && boardArray[xValue, yValue] == notPlayerTurnInt)
                     {
                         paintArrayTemp[xValue, yValue] = 1;
-                        test.Add(xValue);
-                        test.Add(yValue);
                         if (boardArray[xValue, yValue + 1] == playerTurnInt)
                         {
                             c++;
