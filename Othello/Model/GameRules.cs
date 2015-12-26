@@ -12,58 +12,47 @@ namespace Othello.Model
     {
         private int tileValueX;
         private int tileValueY;
-
         private Image green;
         private Image white;
         private Image black;
-
         private string playerTurn;
         private string notPlayerTurn;
         private int counter = 1;
+        private int moveScore;
 
         private int playerTurnInt;
         private int notPlayerTurnInt = 0;
         private int[,] boardArray;
         private int[,] paintArray = new int[8, 8];
         private int[,] paintArrayTemp;
-
         private List<int[,]> paintList = new List<int[,]>();
-        private int[][] paintA = new int[8][];
         private Boolean move;
-
         private PictureBox[,] board = new PictureBox[8, 8];
-        private Boolean aiIsCalculating = false;
-        private AI ai;
 
-        public GameRules(AI a)
+        public GameRules()
         {
-            ai = a;
-            boardArray = new int[8, 8];
+            BoardArray = new int[8, 8];
             paintArrayTemp = new int[8, 8];
             green = Image.FromFile(@"..\\..\\Resources\\Images\\NoMarker.png");
             white = Image.FromFile(@"..\\..\\Resources\\Images\\whiteMarker.png");
             black = Image.FromFile(@"..\\..\\Resources\\Images\\BlackMarker.png");
         }
 
-
         public void makeMove(PictureBox p)
         {
-            //resetPaintArray();
             changeTurn(counter);
-
             if (!p.Name.Equals(""))
             {
                 extractValues(p.Name.First(), p.Name.Last());
-                checkAllDirections();
+                checkAllDirections(tileValueX, tileValueY);
                 paint();
                 paintList.Clear();
-                resetPaintArray(paintArray);
+                resetPaintArray(PaintArray);
                 updateBoardArray();
                 move = false;
             }
-
         }
-        public void checkAllDirections()
+        public void checkAllDirections(int tileValueX, int tileValueY)
         {
             checkLeft(tileValueX, tileValueY);
             checkRight(tileValueX, tileValueY);
@@ -74,6 +63,7 @@ namespace Othello.Model
             checkDownRight(tileValueX, tileValueY);
             checkDownLeft(tileValueX, tileValueY);
         }
+
 
 
         private Boolean paint()
@@ -87,7 +77,7 @@ namespace Othello.Model
                         {
                             for (int y = 0; y < 8; y++)
                             {
-                                if (paintArray[x, y] == 1)
+                                if (PaintArray[x, y] == 1)
                                 {
                                     Console.WriteLine(Board[x, y].Name);
                                     Console.WriteLine(x);
@@ -114,7 +104,7 @@ namespace Othello.Model
                         {
                             for (int y = 0; y < 8; y++)
                             {
-                                if (paintArray[x, y] == 1)
+                                if (PaintArray[x, y] == 1)
                                 {
                                     move = true;
                                     Board[x, y].Tag = "black";
@@ -146,6 +136,7 @@ namespace Othello.Model
                 }
             }
         }
+
         public void initialLoad()
         {
             for (int x = 0; x < 8; x++)
@@ -231,11 +222,12 @@ namespace Othello.Model
                 {
                     if (paintArrayTemp[x, y] == 1)
                     {
-                        paintArray[x, y] = 1;
+                        PaintArray[x, y] = 1;
+                        MoveScore++;
                     }
                 }
             }
-            paintList.Add(paintArray);
+            paintList.Add(PaintArray);
             resetPaintArray(paintArrayTemp);
         }
 
@@ -251,20 +243,20 @@ namespace Othello.Model
                     }
                 }
             }
-            return false; 
+            return false;
         }
 
         private void checkLeft(int xValue, int yValue)
         {
             int c = 0;
-            if (boardArray[xValue, yValue] == 0)
+            if (BoardArray[xValue, yValue] == 0)
             {
                 yValue--;
                 {
-                    while (yValue > 0 && boardArray[xValue, yValue] == notPlayerTurnInt)
+                    while (yValue > 0 && BoardArray[xValue, yValue] == notPlayerTurnInt)
                     {
                         paintArrayTemp[xValue, yValue] = 1;
-                        if (boardArray[xValue, yValue - 1] == playerTurnInt)
+                        if (BoardArray[xValue, yValue - 1] == playerTurnInt)
                         {
                             c++;
                             if (c == 2)
@@ -293,14 +285,14 @@ namespace Othello.Model
         private void checkRight(int xValue, int yValue)
         {
             int c = 0;
-            if (boardArray[xValue, yValue] == 0)
+            if (BoardArray[xValue, yValue] == 0)
             {
                 yValue++;
                 {
-                    while (yValue < 7 && boardArray[xValue, yValue] == notPlayerTurnInt)
+                    while (yValue < 7 && BoardArray[xValue, yValue] == notPlayerTurnInt)
                     {
                         paintArrayTemp[xValue, yValue] = 1;
-                        if (boardArray[xValue, yValue + 1] == playerTurnInt)
+                        if (BoardArray[xValue, yValue + 1] == playerTurnInt)
                         {
                             c++;
                             if (c == 2)
@@ -326,19 +318,17 @@ namespace Othello.Model
             }
         }
 
-
-
         private void checkUp(int xValue, int yValue)
         {
             int c = 0;
-            if (boardArray[xValue, yValue] == 0)
+            if (BoardArray[xValue, yValue] == 0)
             {
                 xValue--;
                 {
-                    while (xValue > 0 && boardArray[xValue, yValue] == notPlayerTurnInt)
+                    while (xValue > 0 && BoardArray[xValue, yValue] == notPlayerTurnInt)
                     {
                         paintArrayTemp[xValue, yValue] = 1;
-                        if (boardArray[xValue - 1, yValue] == playerTurnInt)
+                        if (BoardArray[xValue - 1, yValue] == playerTurnInt)
                         {
                             c++;
                             if (c == 2)
@@ -364,18 +354,17 @@ namespace Othello.Model
             }
         }
 
-
         private void checkDown(int xValue, int yValue)
         {
             int c = 0;
-            if (boardArray[xValue, yValue] == 0)
+            if (BoardArray[xValue, yValue] == 0)
             {
                 xValue++;
                 {
-                    while (xValue < 7 && boardArray[xValue, yValue] == notPlayerTurnInt)
+                    while (xValue < 7 && BoardArray[xValue, yValue] == notPlayerTurnInt)
                     {
                         paintArrayTemp[xValue, yValue] = 1;
-                        if (boardArray[xValue + 1, yValue] == playerTurnInt)
+                        if (BoardArray[xValue + 1, yValue] == playerTurnInt)
                         {
                             c++;
                             if (c == 2)
@@ -404,15 +393,15 @@ namespace Othello.Model
         private void checkUpRight(int xValue, int yValue)
         {
             int c = 0;
-            if (boardArray[xValue, yValue] == 0)
+            if (BoardArray[xValue, yValue] == 0)
             {
                 yValue++;
                 xValue--;
                 {
-                    while (xValue > 0 && yValue < 7 && boardArray[xValue, yValue] == notPlayerTurnInt)
+                    while (xValue > 0 && yValue < 7 && BoardArray[xValue, yValue] == notPlayerTurnInt)
                     {
                         paintArrayTemp[xValue, yValue] = 1;
-                        if (boardArray[xValue - 1, yValue + 1] == playerTurnInt)
+                        if (BoardArray[xValue - 1, yValue + 1] == playerTurnInt)
                         {
                             c++;
                             if (c == 2)
@@ -442,15 +431,15 @@ namespace Othello.Model
         private void checkUpLeft(int xValue, int yValue)
         {
             int c = 0;
-            if (boardArray[xValue, yValue] == 0)
+            if (BoardArray[xValue, yValue] == 0)
             {
                 yValue--;
                 xValue--;
                 {
-                    while (xValue > 0 && yValue > 0 && boardArray[xValue, yValue] == notPlayerTurnInt)
+                    while (xValue > 0 && yValue > 0 && BoardArray[xValue, yValue] == notPlayerTurnInt)
                     {
                         paintArrayTemp[xValue, yValue] = 1;
-                        if (boardArray[xValue - 1, yValue - 1] == playerTurnInt)
+                        if (BoardArray[xValue - 1, yValue - 1] == playerTurnInt)
                         {
                             c++;
                             if (c == 2)
@@ -480,15 +469,15 @@ namespace Othello.Model
         private void checkDownRight(int xValue, int yValue)
         {
             int c = 0;
-            if (boardArray[xValue, yValue] == 0)
+            if (BoardArray[xValue, yValue] == 0)
             {
                 yValue++;
                 xValue++;
                 {
-                    while (xValue < 7 && yValue < 7 && boardArray[xValue, yValue] == notPlayerTurnInt)
+                    while (xValue < 7 && yValue < 7 && BoardArray[xValue, yValue] == notPlayerTurnInt)
                     {
                         paintArrayTemp[xValue, yValue] = 1;
-                        if (boardArray[xValue + 1, yValue + 1] == playerTurnInt)
+                        if (BoardArray[xValue + 1, yValue + 1] == playerTurnInt)
                         {
                             c++;
                             if (c == 2)
@@ -518,15 +507,15 @@ namespace Othello.Model
         private void checkDownLeft(int xValue, int yValue)
         {
             int c = 0;
-            if (boardArray[xValue, yValue] == 0)
+            if (BoardArray[xValue, yValue] == 0)
             {
                 yValue--;
                 xValue++;
                 {
-                    while (xValue < 7 && yValue > 0 && boardArray[xValue, yValue] == notPlayerTurnInt)
+                    while (xValue < 7 && yValue > 0 && BoardArray[xValue, yValue] == notPlayerTurnInt)
                     {
                         paintArrayTemp[xValue, yValue] = 1;
-                        if (boardArray[xValue + 1, yValue - 1] == playerTurnInt)
+                        if (BoardArray[xValue + 1, yValue - 1] == playerTurnInt)
                         {
                             c++;
                             if (c == 2)
@@ -552,6 +541,7 @@ namespace Othello.Model
                 }
             }
         }
+
         private void updateBoardArray()
         {
             for (int x = 0; x < 8; x++)
@@ -560,17 +550,17 @@ namespace Othello.Model
                 {
                     if (Board[x, y].Tag.Equals("green"))
                     {
-                        boardArray[x, y] = 0;
+                        BoardArray[x, y] = 0;
                     }
                     else if (Board[x, y].Tag.Equals("white"))
                     {
-                        boardArray[x, y] = 1;
+                        BoardArray[x, y] = 1;
                     }
                     else if (Board[x, y].Tag.Equals("black"))
                     {
-                        boardArray[x, y] = 2;
+                        BoardArray[x, y] = 2;
                     }
-                    Console.Write(boardArray[x, y]);
+                    Console.Write(BoardArray[x, y]);
                 }
                 Console.WriteLine();
             }
@@ -589,16 +579,42 @@ namespace Othello.Model
             }
         }
 
-        public bool AiIsCalculating
+        public int[,] BoardArray
         {
             get
             {
-                return aiIsCalculating;
+                return boardArray;
             }
 
             set
             {
-                aiIsCalculating = value;
+                boardArray = value;
+            }
+        }
+
+        public int[,] PaintArray
+        {
+            get
+            {
+                return paintArray;
+            }
+
+            set
+            {
+                paintArray = value;
+            }
+        }
+
+        public int MoveScore
+        {
+            get
+            {
+                return moveScore;
+            }
+
+            set
+            {
+                moveScore = value;
             }
         }
     }
