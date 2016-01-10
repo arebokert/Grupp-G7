@@ -17,11 +17,13 @@ namespace Othello.Model
         private Image black;
         private string playerTurn;
         private string notPlayerTurn;
-        private int counter = 1;
+        private int counter = 0;
         private int moveScore;
 
-        private int playerTurnInt;
-        private int notPlayerTurnInt = 0;
+        private int legalMoveCounter = 0;
+
+        private int playerTurnInt = 1;
+        private int notPlayerTurnInt = 2;
         private int[,] boardArray;
         private int[,] paintArray = new int[8, 8];
         private int[,] paintArrayTemp;
@@ -32,7 +34,7 @@ namespace Othello.Model
         public GameRules()
         {
             BoardArray = new int[8, 8];
-            paintArrayTemp = new int[8, 8];
+            PaintArrayTemp = new int[8, 8];
             green = Image.FromFile(@"..\\..\\Resources\\Images\\NoMarker.png");
             white = Image.FromFile(@"..\\..\\Resources\\Images\\whiteMarker.png");
             black = Image.FromFile(@"..\\..\\Resources\\Images\\BlackMarker.png");
@@ -40,7 +42,8 @@ namespace Othello.Model
 
         public void makeMove(PictureBox p)
         {
-            changeTurn(counter);
+
+          
             if (!p.Name.Equals(""))
             {
                 extractValues(p.Name.First(), p.Name.Last());
@@ -50,10 +53,16 @@ namespace Othello.Model
                 resetPaintArray(PaintArray);
                 updateBoardArray();
                 move = false;
+                changeTurn(counter);
             }
         }
-        public void checkAllDirections(int tileValueX, int tileValueY)
+        public Boolean checkAllDirections(int tileValueX, int tileValueY)
         {
+            legalMoveCounter = 0;
+            changeTurn(counter);
+          //  resetPaintArray(PaintArrayTemp);
+          //  paintList.Clear();
+            MoveScore = 0;
             checkLeft(tileValueX, tileValueY);
             checkRight(tileValueX, tileValueY);
             checkUp(tileValueX, tileValueY);
@@ -62,9 +71,37 @@ namespace Othello.Model
             checkUpLeft(tileValueX, tileValueY);
             checkDownRight(tileValueX, tileValueY);
             checkDownLeft(tileValueX, tileValueY);
+             countScore();
+            if(legalMoveCounter > 0)
+            {
+                return true;   
+            }
+               
+            return false;
+           
+            
+
         }
 
-
+        private void countScore()
+        {
+            MoveScore = 0;
+            for (int i = 0; i < paintList.Count; i++)
+            {
+                for (int x = 0; x < 8; x++)
+                {
+                    for (int y = 0; y < 8; y++)
+                    {
+                        if (PaintArray[x, y] == 1)
+                        {
+                            MoveScore++;
+                        }
+                    }
+                }
+            }
+        }
+            
+        
 
         private Boolean paint()
         {
@@ -126,7 +163,7 @@ namespace Othello.Model
             return true;
         }
 
-        private void resetPaintArray(int[,] paintArrayTemp)
+        public void resetPaintArray(int[,] paintArrayTemp)
         {
             for (int x = 0; x < 8; x++)
             {
@@ -148,7 +185,7 @@ namespace Othello.Model
                         Board[x, y].Image = white;
                         Board[x, y].Tag = "white";
                     }
-                    else if (board[x, y].Name.Equals("d5") || board[x, y].Name.Equals("e4") || board[x, y].Name.Equals("f4"))
+                    else if (board[x, y].Name.Equals("d5") || board[x, y].Name.Equals("e4"))
                     {
                         Board[x, y].Image = black;
                         Board[x, y].Tag = "black";
@@ -165,18 +202,18 @@ namespace Othello.Model
 
         private void changeTurn(int counter)
         {
-            if (counter % 2 == 1)
+            if (counter % 2 == 0)
             {
                 playerTurn = "white";
                 notPlayerTurn = "black";
-                playerTurnInt = 1;
+                PlayerTurnInt = 1;
                 notPlayerTurnInt = 2;
             }
             else
             {
                 playerTurn = "black";
                 notPlayerTurn = "white";
-                playerTurnInt = 2;
+                PlayerTurnInt = 2;
                 notPlayerTurnInt = 1;
             }
         }
@@ -220,10 +257,10 @@ namespace Othello.Model
             {
                 for (int y = 0; y < 8; y++)
                 {
-                    if (paintArrayTemp[x, y] == 1)
+                    if (PaintArrayTemp[x, y] == 1)
                     {
                         PaintArray[x, y] = 1;
-                        MoveScore++;
+
                     }
                 }
             }
@@ -237,8 +274,9 @@ namespace Othello.Model
             {
                 for (int y = 0; y < 8; y++)
                 {
-                    if (paintArrayTemp[x, y] == 2)
+                    if (PaintArrayTemp[x, y] == 2)
                     {
+                        legalMoveCounter++;
                         return true;
                     }
                 }
@@ -255,8 +293,8 @@ namespace Othello.Model
                 {
                     while (yValue > 0 && BoardArray[xValue, yValue] == notPlayerTurnInt)
                     {
-                        paintArrayTemp[xValue, yValue] = 1;
-                        if (BoardArray[xValue, yValue - 1] == playerTurnInt)
+                        PaintArrayTemp[xValue, yValue] = 1;
+                        if (BoardArray[xValue, yValue - 1] == PlayerTurnInt)
                         {
                             c++;
                             if (c == 2)
@@ -265,7 +303,7 @@ namespace Othello.Model
                             }
                             else
                             {
-                                paintArrayTemp[xValue, yValue - 1] = 2;
+                                PaintArrayTemp[xValue, yValue - 1] = 2;
                             }
                         }
                         yValue--;
@@ -274,10 +312,11 @@ namespace Othello.Model
                 if (legalMove())
                 {
                     copyTempArrayToPaintArray(xValue, yValue);
+                    Console.WriteLine("left");
                 }
                 else
                 {
-                    resetPaintArray(paintArrayTemp);
+                    resetPaintArray(PaintArrayTemp);
                 }
             }
         }
@@ -291,8 +330,8 @@ namespace Othello.Model
                 {
                     while (yValue < 7 && BoardArray[xValue, yValue] == notPlayerTurnInt)
                     {
-                        paintArrayTemp[xValue, yValue] = 1;
-                        if (BoardArray[xValue, yValue + 1] == playerTurnInt)
+                        PaintArrayTemp[xValue, yValue] = 1;
+                        if (BoardArray[xValue, yValue + 1] == PlayerTurnInt)
                         {
                             c++;
                             if (c == 2)
@@ -301,7 +340,7 @@ namespace Othello.Model
                             }
                             else
                             {
-                                paintArrayTemp[xValue, yValue + 1] = 2;
+                                PaintArrayTemp[xValue, yValue + 1] = 2;
                             }
                         }
                         yValue++;
@@ -310,10 +349,11 @@ namespace Othello.Model
                 if (legalMove())
                 {
                     copyTempArrayToPaintArray(xValue, yValue);
+                    Console.WriteLine("right");
                 }
                 else
                 {
-                    resetPaintArray(paintArrayTemp);
+                    resetPaintArray(PaintArrayTemp);
                 }
             }
         }
@@ -327,8 +367,8 @@ namespace Othello.Model
                 {
                     while (xValue > 0 && BoardArray[xValue, yValue] == notPlayerTurnInt)
                     {
-                        paintArrayTemp[xValue, yValue] = 1;
-                        if (BoardArray[xValue - 1, yValue] == playerTurnInt)
+                        PaintArrayTemp[xValue, yValue] = 1;
+                        if (BoardArray[xValue - 1, yValue] == PlayerTurnInt)
                         {
                             c++;
                             if (c == 2)
@@ -337,7 +377,7 @@ namespace Othello.Model
                             }
                             else
                             {
-                                paintArrayTemp[xValue - 1, yValue] = 2;
+                                PaintArrayTemp[xValue - 1, yValue] = 2;
                             }
                         }
                         xValue--;
@@ -346,10 +386,11 @@ namespace Othello.Model
                 if (legalMove())
                 {
                     copyTempArrayToPaintArray(xValue, yValue);
+                    Console.WriteLine("up");
                 }
                 else
                 {
-                    resetPaintArray(paintArrayTemp);
+                    resetPaintArray(PaintArrayTemp);
                 }
             }
         }
@@ -363,8 +404,8 @@ namespace Othello.Model
                 {
                     while (xValue < 7 && BoardArray[xValue, yValue] == notPlayerTurnInt)
                     {
-                        paintArrayTemp[xValue, yValue] = 1;
-                        if (BoardArray[xValue + 1, yValue] == playerTurnInt)
+                        PaintArrayTemp[xValue, yValue] = 1;
+                        if (BoardArray[xValue + 1, yValue] == PlayerTurnInt)
                         {
                             c++;
                             if (c == 2)
@@ -373,7 +414,7 @@ namespace Othello.Model
                             }
                             else
                             {
-                                paintArrayTemp[xValue + 1, yValue] = 2;
+                                PaintArrayTemp[xValue + 1, yValue] = 2;
                             }
                         }
                         xValue++;
@@ -382,10 +423,11 @@ namespace Othello.Model
                 if (legalMove())
                 {
                     copyTempArrayToPaintArray(xValue, yValue);
+                    Console.WriteLine("down");
                 }
                 else
                 {
-                    resetPaintArray(paintArrayTemp);
+                    resetPaintArray(PaintArrayTemp);
                 }
             }
         }
@@ -398,10 +440,10 @@ namespace Othello.Model
                 yValue++;
                 xValue--;
                 {
-                    while (xValue > 0 && yValue < 7 && BoardArray[xValue, yValue] == notPlayerTurnInt)
+                    while (xValue > 0 && yValue < 8 && BoardArray[xValue, yValue] == notPlayerTurnInt)
                     {
-                        paintArrayTemp[xValue, yValue] = 1;
-                        if (BoardArray[xValue - 1, yValue + 1] == playerTurnInt)
+                        PaintArrayTemp[xValue, yValue] = 1;
+                        if (BoardArray[xValue - 1, yValue + 1] == PlayerTurnInt)
                         {
                             c++;
                             if (c == 2)
@@ -410,7 +452,7 @@ namespace Othello.Model
                             }
                             else
                             {
-                                paintArrayTemp[xValue - 1, yValue + 1] = 2;
+                                PaintArrayTemp[xValue - 1, yValue + 1] = 2;
                             }
                         }
                         yValue++;
@@ -420,10 +462,11 @@ namespace Othello.Model
                 if (legalMove())
                 {
                     copyTempArrayToPaintArray(xValue, yValue);
+                    Console.WriteLine("upRight");
                 }
                 else
                 {
-                    resetPaintArray(paintArrayTemp);
+                    resetPaintArray(PaintArrayTemp);
                 }
             }
         }
@@ -438,8 +481,8 @@ namespace Othello.Model
                 {
                     while (xValue > 0 && yValue > 0 && BoardArray[xValue, yValue] == notPlayerTurnInt)
                     {
-                        paintArrayTemp[xValue, yValue] = 1;
-                        if (BoardArray[xValue - 1, yValue - 1] == playerTurnInt)
+                        PaintArrayTemp[xValue, yValue] = 1;
+                        if (BoardArray[xValue - 1, yValue - 1] == PlayerTurnInt)
                         {
                             c++;
                             if (c == 2)
@@ -448,7 +491,7 @@ namespace Othello.Model
                             }
                             else
                             {
-                                paintArrayTemp[xValue - 1, yValue - 1] = 2;
+                                PaintArrayTemp[xValue - 1, yValue - 1] = 2;
                             }
                         }
                         yValue--;
@@ -458,10 +501,11 @@ namespace Othello.Model
                 if (legalMove())
                 {
                     copyTempArrayToPaintArray(xValue, yValue);
+                    Console.WriteLine("upLeft");
                 }
                 else
                 {
-                    resetPaintArray(paintArrayTemp);
+                    resetPaintArray(PaintArrayTemp);
                 }
             }
         }
@@ -476,8 +520,8 @@ namespace Othello.Model
                 {
                     while (xValue < 7 && yValue < 7 && BoardArray[xValue, yValue] == notPlayerTurnInt)
                     {
-                        paintArrayTemp[xValue, yValue] = 1;
-                        if (BoardArray[xValue + 1, yValue + 1] == playerTurnInt)
+                        PaintArrayTemp[xValue, yValue] = 1;
+                        if (BoardArray[xValue + 1, yValue + 1] == PlayerTurnInt)
                         {
                             c++;
                             if (c == 2)
@@ -486,7 +530,7 @@ namespace Othello.Model
                             }
                             else
                             {
-                                paintArrayTemp[xValue + 1, yValue + 1] = 2;
+                                PaintArrayTemp[xValue + 1, yValue + 1] = 2;
                             }
                         }
                         yValue++;
@@ -496,10 +540,11 @@ namespace Othello.Model
                 if (legalMove())
                 {
                     copyTempArrayToPaintArray(xValue, yValue);
+                    Console.WriteLine("downRight");
                 }
                 else
                 {
-                    resetPaintArray(paintArrayTemp);
+                    resetPaintArray(PaintArrayTemp);
                 }
             }
         }
@@ -514,8 +559,8 @@ namespace Othello.Model
                 {
                     while (xValue < 7 && yValue > 0 && BoardArray[xValue, yValue] == notPlayerTurnInt)
                     {
-                        paintArrayTemp[xValue, yValue] = 1;
-                        if (BoardArray[xValue + 1, yValue - 1] == playerTurnInt)
+                        PaintArrayTemp[xValue, yValue] = 1;
+                        if (BoardArray[xValue + 1, yValue - 1] == PlayerTurnInt)
                         {
                             c++;
                             if (c == 2)
@@ -524,7 +569,7 @@ namespace Othello.Model
                             }
                             else
                             {
-                                paintArrayTemp[xValue + 1, yValue - 1] = 2;
+                                PaintArrayTemp[xValue + 1, yValue - 1] = 2;
                             }
                         }
                         yValue--;
@@ -534,10 +579,11 @@ namespace Othello.Model
                 if (legalMove())
                 {
                     copyTempArrayToPaintArray(xValue, yValue);
+                    Console.WriteLine("DownLeft");
                 }
                 else
                 {
-                    resetPaintArray(paintArrayTemp);
+                    resetPaintArray(PaintArrayTemp);
                 }
             }
         }
@@ -615,6 +661,32 @@ namespace Othello.Model
             set
             {
                 moveScore = value;
+            }
+        }
+
+        public int PlayerTurnInt
+        {
+            get
+            {
+                return playerTurnInt;
+            }
+
+            set
+            {
+                playerTurnInt = value;
+            }
+        }
+
+        public int[,] PaintArrayTemp
+        {
+            get
+            {
+                return paintArrayTemp;
+            }
+
+            set
+            {
+                paintArrayTemp = value;
             }
         }
     }

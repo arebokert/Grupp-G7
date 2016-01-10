@@ -13,13 +13,18 @@ namespace Othello.Model
         private int[,] greenTiles;
 
         private List<int> compareList;
-
+        private List<int> t;
+        private List<int[]> coordinates;
+        private List<int[,]> paintArrays;
         private int score;
         private int[,] boardArray;
         private int[] aiPressedTile;
         private PictureBox aiTile;
         private GameRules gameRules;
-
+        private int[,] paintArrayTemp;
+        private Timer timer1;
+        private int xCoord;
+        private int yCoord;
 
         public int[,] BoardArray
         {
@@ -36,51 +41,134 @@ namespace Othello.Model
 
         public AI(GameRules g)
         {
+            InitTimer();
             greenTiles = new int[8, 8];
             aiPressedTile = new int[2];
+            compareList = new List<int>();
+            paintArrayTemp = new int[8,8];
+            paintArrays = new List<int[,]>();
+            t = new List<int>();
+            coordinates = new List<int[]>();
             score = 0;
             gameRules = g;
         }
 
-
         public void aiTurn()
         {
-            getAllGreenTiles();
-            compare();
+            score = 0;
+           getAllGreenTiles();
+            gameRules.resetPaintArray(gameRules.PaintArray);
             gameRules.makeMove(aiTile);
         }
 
         public void getAllGreenTiles()
         {
-            for (int x = 0; x < 7; x++)
+            for (int x = 0; x < 8; x++)
             {
-                for (int y = 0; y < 7; y++)
+                for (int y = 0; y < 8; y++)
                 {
                     if (gameRules.BoardArray[x, y] == 0)
                     {
-                        gameRules.checkAllDirections(x, y);
-                        compareList.Add(x);
-                        compareList.Add(y);
-                        compareList.Add(gameRules.MoveScore);
+                        if (gameRules.checkAllDirections(x, y))
+                        {
+                            int[] tempCoords = new int[2];
+                            tempCoords[0] = x;
+                            tempCoords[1] = y;
+                            coordinates.Add(tempCoords);
+                            t.Add(x);
+                            t.Add(y);
+                            copyArray();
+                            storePaintArray();
+                        }
                     }
                 }
             }
+            compareScore();
         }
 
-        private void compare()
+        private void copyArray()
         {
-            for (int i = 2; i < compareList.Count - 3; i += 3)
+            for(int x = 0; x < 8; x++)
             {
-                if (score <= compareList.ElementAt(i))
+                for(int y = 0; y<8; y++)
                 {
-                    score = compareList.ElementAt(i);
-                    aiPressedTile[0] = compareList.ElementAt(i - 2);
-                    aiPressedTile[1] = compareList.ElementAt(i - 1);
+                    paintArrayTemp[x, y] = gameRules.PaintArrayTemp[x, y];
                 }
             }
-            aiTile = gameRules.Board[aiPressedTile[0], aiPressedTile[1]];
         }
-        
+        public void storePaintArray()
+        {
+            int[,] temp = new int[8, 8];
+            for(int x = 0; x < 8; x++)
+            {
+                for(int y = 0; y < 8; y++)
+                {
+                    if(paintArrayTemp[x,y] == 1)
+                    {
+                        temp[x, y] = 1;
+                    }
+                    else
+                    {
+                        temp[x, y] = 0;
+                    }
+                }
+            }
+            paintArrays.Add(temp);
+
+        }
+
+        public void compareScore()
+        {
+            int tempScore = 0;
+            int[,] tempArray = new int[8, 8];
+            int[] tempCoordinates = new int[2];
+            int tempX = 0;
+            int tempY = 0;
+            for (int i = 0; i < paintArrays.Count; i++)
+            {
+                tempCoordinates = coordinates[i];
+                tempArray = paintArrays[i];
+                for(int x = 0; x<8; x++)
+                {
+                    for(int y = 0; y < 8; y++)
+                    {
+
+                        if (tempArray[x,y] == 1)
+                        {
+                            tempScore++;
+                        }
+                    }
+                }
+                if (tempScore >= score)
+                {
+                    score = tempScore;
+                    tempX = tempCoordinates[0];
+                    tempY = tempCoordinates[1];
+                }
+            }
+            xCoord = tempX;
+            yCoord = tempY;
+            aiTile = gameRules.Board[xCoord, yCoord];
+        }
+
+        public void InitTimer()
+        {
+            timer1 = new Timer();
+            timer1.Tick += new EventHandler(timer1_Tick);
+            timer1.Interval = 2000;
+            timer1.Start();
+        }
+
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            if (gameRules.PlayerTurnInt == 2)
+          {
+                aiTurn();
+           }
+
+        }
+
+
 
     }
 }

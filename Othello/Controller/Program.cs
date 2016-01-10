@@ -16,10 +16,11 @@ namespace Othello
         [STAThread]
         static void Main()
         { 
-            AI ai = new AI();
-            GameRules g = new GameRules(ai);
-            View v = new View(g);
             
+            GameRules g = new GameRules();
+            View v = new View(g);
+            AI ai = new AI(g);
+
             Application.Run(v);
         }
     }
