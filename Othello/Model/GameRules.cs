@@ -16,7 +16,6 @@ namespace Othello.Model
         private Image white;
         private Image black;
         private string playerTurn;
-        private string notPlayerTurn;
         private int counter = 0;
         private int moveScore;
 
@@ -24,6 +23,11 @@ namespace Othello.Model
 
         private int playerTurnInt = 1;
         private int notPlayerTurnInt = 2;
+
+        private int blackMarker = 2;
+        private int whiteMarker = 1;
+        private int greenMarker = 0;
+
         private int[,] boardArray;
         private int[,] paintArray = new int[8, 8];
         private int[,] paintArrayTemp;
@@ -42,26 +46,26 @@ namespace Othello.Model
 
         public void makeMove(PictureBox p)
         {
-
-          
             if (!p.Name.Equals(""))
             {
                 extractValues(p.Name.First(), p.Name.Last());
                 checkAllDirections(tileValueX, tileValueY);
-                paint();
+                paint(playerTurn);
                 paintList.Clear();
                 resetPaintArray(PaintArray);
                 updateBoardArray();
                 move = false;
-                changeTurn(counter);
+                changeTurn(Counter);
+                if (checkIfGameOver())
+                {
+                    Console.WriteLine("GameOver");
+                }
             }
         }
         public Boolean checkAllDirections(int tileValueX, int tileValueY)
         {
             legalMoveCounter = 0;
-            changeTurn(counter);
-          //  resetPaintArray(PaintArrayTemp);
-          //  paintList.Clear();
+            changeTurn(Counter);
             MoveScore = 0;
             checkLeft(tileValueX, tileValueY);
             checkRight(tileValueX, tileValueY);
@@ -71,15 +75,15 @@ namespace Othello.Model
             checkUpLeft(tileValueX, tileValueY);
             checkDownRight(tileValueX, tileValueY);
             checkDownLeft(tileValueX, tileValueY);
-             countScore();
-            if(legalMoveCounter > 0)
+            countScore();
+            if (legalMoveCounter > 0)
             {
-                return true;   
+                return true;
             }
-               
+
             return false;
-           
-            
+
+
 
         }
 
@@ -100,64 +104,43 @@ namespace Othello.Model
                 }
             }
         }
-            
-        
 
-        private Boolean paint()
+        private Boolean paint(String player)
         {
-            switch (playerTurn)
+            Image tempImage;
+            if (player == "white")
             {
-                case "white":
-                    for (int i = 0; i < paintList.Count; i++)
-                    {
-                        for (int x = 0; x < 8; x++)
-                        {
-                            for (int y = 0; y < 8; y++)
-                            {
-                                if (PaintArray[x, y] == 1)
-                                {
-                                    Console.WriteLine(Board[x, y].Name);
-                                    Console.WriteLine(x);
-                                    Console.WriteLine(y);
-                                    move = true;
-                                    Board[x, y].Tag = "white";
-                                    Board[x, y].Image = white;
-                                }
-                            }
-                        }
-                    }
-                    if (move)
-                    {
-                        counter++;
-                        Board[tileValueX, tileValueY].Tag = "white";
-                        Board[tileValueX, tileValueY].Image = white;
-                    }
-                    break;
+                tempImage = white;
 
-                case "black":
-                    for (int i = 0; i < paintList.Count; i++)
+            }
+            else
+            {
+                tempImage = black;
+            }
+            for (int i = 0; i < paintList.Count; i++)
+            {
+                for (int x = 0; x < 8; x++)
+                {
+                    for (int y = 0; y < 8; y++)
                     {
-                        for (int x = 0; x < 8; x++)
+                        if (PaintArray[x, y] == 1)
                         {
-                            for (int y = 0; y < 8; y++)
-                            {
-                                if (PaintArray[x, y] == 1)
-                                {
-                                    move = true;
-                                    Board[x, y].Tag = "black";
-                                    Board[x, y].Image = black;
-                                }
-                            }
+                            Console.WriteLine(Board[x, y].Name);
+                            Console.WriteLine(x);
+                            Console.WriteLine(y);
+                            move = true;
+                            Board[x, y].Tag = player;
+                            Board[x, y].Image = tempImage;
+
                         }
                     }
-                    if (move)
-                    {
-                        counter++;
-                        Board[tileValueX, tileValueY].Tag = "black";
-                        Board[tileValueX, tileValueY].Image = black;
-                        move = false;
-                    }
-                    break;
+                }
+            }
+            if (move)
+            {
+                Counter++;
+                Board[tileValueX, tileValueY].Tag = player;
+                Board[tileValueX, tileValueY].Image = tempImage;
             }
 
             return true;
@@ -205,16 +188,16 @@ namespace Othello.Model
             if (counter % 2 == 0)
             {
                 playerTurn = "white";
-                notPlayerTurn = "black";
-                PlayerTurnInt = 1;
-                notPlayerTurnInt = 2;
+                //   notPlayerTurn = "black";
+                PlayerTurnInt = WhiteMarker;
+                notPlayerTurnInt = blackMarker;
             }
             else
             {
                 playerTurn = "black";
-                notPlayerTurn = "white";
-                PlayerTurnInt = 2;
-                notPlayerTurnInt = 1;
+                //   notPlayerTurn = "white";
+                PlayerTurnInt = blackMarker;
+                notPlayerTurnInt = WhiteMarker;
             }
         }
 
@@ -260,7 +243,6 @@ namespace Othello.Model
                     if (PaintArrayTemp[x, y] == 1)
                     {
                         PaintArray[x, y] = 1;
-
                     }
                 }
             }
@@ -312,7 +294,6 @@ namespace Othello.Model
                 if (legalMove())
                 {
                     copyTempArrayToPaintArray(xValue, yValue);
-                    Console.WriteLine("left");
                 }
                 else
                 {
@@ -440,7 +421,7 @@ namespace Othello.Model
                 yValue++;
                 xValue--;
                 {
-                    while (xValue > 0 && yValue < 8 && BoardArray[xValue, yValue] == notPlayerTurnInt)
+                    while (xValue > 0 && yValue < 7 && BoardArray[xValue, yValue] == notPlayerTurnInt)
                     {
                         PaintArrayTemp[xValue, yValue] = 1;
                         if (BoardArray[xValue - 1, yValue + 1] == PlayerTurnInt)
@@ -596,20 +577,49 @@ namespace Othello.Model
                 {
                     if (Board[x, y].Tag.Equals("green"))
                     {
-                        BoardArray[x, y] = 0;
+                        BoardArray[x, y] = greenMarker;
                     }
                     else if (Board[x, y].Tag.Equals("white"))
                     {
-                        BoardArray[x, y] = 1;
+                        BoardArray[x, y] = WhiteMarker;
                     }
                     else if (Board[x, y].Tag.Equals("black"))
                     {
-                        BoardArray[x, y] = 2;
+                        BoardArray[x, y] = blackMarker;
                     }
                     Console.Write(BoardArray[x, y]);
                 }
                 Console.WriteLine();
             }
+
+        }
+
+        private Boolean checkIfGameOver()
+        {
+            int gameOverCounter = 0;
+            for (int i = 0; i < 1; i++)
+            {
+                changeTurn(i);
+                for (int x = 0; x < 8; x++)
+                {
+                    for (int y = 0; y < 8; y++)
+                    {
+                        if (!checkAllDirections(x, y))
+                        {
+                            gameOverCounter++;
+                        }
+                    }
+                }
+            }
+            paintList.Clear();
+            resetPaintArray(PaintArray);
+            resetPaintArray(PaintArrayTemp);
+            if (gameOverCounter == 2)
+            {
+
+                return true;
+            }
+            return false;
         }
 
         public PictureBox[,] Board
@@ -687,6 +697,32 @@ namespace Othello.Model
             set
             {
                 paintArrayTemp = value;
+            }
+        }
+
+        public int Counter
+        {
+            get
+            {
+                return counter;
+            }
+
+            set
+            {
+                counter = value;
+            }
+        }
+
+        public int WhiteMarker
+        {
+            get
+            {
+                return whiteMarker;
+            }
+
+            set
+            {
+                whiteMarker = value;
             }
         }
     }

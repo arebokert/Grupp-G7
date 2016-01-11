@@ -25,10 +25,9 @@ namespace Othello
         { 
             InitializeComponent();
             populatePicArray(Controls);
-             
             gameRules = g;
-            g.Board = board;
-            g.initialLoad();
+            gameRules.Board = board;
+            gameRules.initialLoad();
             lines.Reverse();
             board = gameRules.Board;
 
@@ -89,10 +88,21 @@ namespace Othello
 
         private void tile_MouseClick(object sender, MouseEventArgs e)
         {
-            PictureBox p = (PictureBox)sender;
-            Console.WriteLine("CLICKED:  " + p.Name);
-            gameRules.makeMove(p); 
+            if(gameRules.PlayerTurnInt == gameRules.WhiteMarker)
+            {
+                PictureBox p = (PictureBox)sender;
+                gameRules.makeMove(p);
+            }
+            else
+            {
+                Console.WriteLine("Not your turn, please wait");
+            }
+
         }
 
+        private void resetGame(object sender, EventArgs e)
+        {
+            gameRules.initialLoad();
+        }
     }
 }

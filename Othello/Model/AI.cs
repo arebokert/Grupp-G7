@@ -10,10 +10,8 @@ namespace Othello.Model
     public class AI
     {
         //   private GameRules gameRules;
-        private int[,] greenTiles;
 
-        private List<int> compareList;
-        private List<int> t;
+        private int[,] greenTiles;
         private List<int[]> coordinates;
         private List<int[,]> paintArrays;
         private int score;
@@ -44,10 +42,8 @@ namespace Othello.Model
             InitTimer();
             greenTiles = new int[8, 8];
             aiPressedTile = new int[2];
-            compareList = new List<int>();
             paintArrayTemp = new int[8,8];
             paintArrays = new List<int[,]>();
-            t = new List<int>();
             coordinates = new List<int[]>();
             score = 0;
             gameRules = g;
@@ -56,7 +52,7 @@ namespace Othello.Model
         public void aiTurn()
         {
             score = 0;
-           getAllGreenTiles();
+            getAllGreenTiles();
             gameRules.resetPaintArray(gameRules.PaintArray);
             gameRules.makeMove(aiTile);
         }
@@ -75,8 +71,6 @@ namespace Othello.Model
                             tempCoords[0] = x;
                             tempCoords[1] = y;
                             coordinates.Add(tempCoords);
-                            t.Add(x);
-                            t.Add(y);
                             copyArray();
                             storePaintArray();
                         }
@@ -146,6 +140,11 @@ namespace Othello.Model
                     tempY = tempCoordinates[1];
                 }
             }
+            if(score == 0)
+            {
+                Console.WriteLine("AI GAME OVER");
+               // gameRules.Counter = gameRules.Counter + 1;
+            }
             xCoord = tempX;
             yCoord = tempY;
             aiTile = gameRules.Board[xCoord, yCoord];
@@ -155,7 +154,7 @@ namespace Othello.Model
         {
             timer1 = new Timer();
             timer1.Tick += new EventHandler(timer1_Tick);
-            timer1.Interval = 2000;
+            timer1.Interval = 1500;
             timer1.Start();
         }
 
@@ -164,11 +163,7 @@ namespace Othello.Model
             if (gameRules.PlayerTurnInt == 2)
           {
                 aiTurn();
-           }
-
+          }
         }
-
-
-
     }
 }

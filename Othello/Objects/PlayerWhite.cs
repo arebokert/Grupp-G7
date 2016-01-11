@@ -7,25 +7,11 @@ using System.Threading.Tasks;
 
 namespace Othello
 {
-    class PlayerWhite : Player
-    {
-        private Image whiteMarker;
+    class PlayerWhite : Marker
+    {       
         public PlayerWhite()
         {
-             WhiteMarker = Image.FromFile(@"..\\..\\Resources\\Images\\whiteMarker.png");
-        }
-
-        public Image WhiteMarker
-        {
-            get
-            {
-                return whiteMarker;
-            }
-
-            set
-            {
-                whiteMarker = value;
-            }
+            Colour = 1;   
         }
     }
 }

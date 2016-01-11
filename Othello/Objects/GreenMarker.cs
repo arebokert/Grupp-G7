@@ -1,17 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Othello
+namespace Othello.Objects
 {
-    class PlayerBlack : Marker
+    class GreenMarker : Marker
     {
-        public PlayerBlack()
+        public GreenMarker()
         {
-            Colour = 1;
-        }
+            Colour = 0;
+        } 
     }
 }

@@ -92,6 +92,10 @@
             this.c8 = new System.Windows.Forms.PictureBox();
             this.b8 = new System.Windows.Forms.PictureBox();
             this.a8 = new System.Windows.Forms.PictureBox();
+            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.score = new System.Windows.Forms.TextBox();
+            this.button1 = new System.Windows.Forms.Button();
+            this.panel1 = new System.Windows.Forms.Panel();
             ((System.ComponentModel.ISupportInitialize)(this.a1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.b1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.c1)).BeginInit();
@@ -156,6 +160,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.c8)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.b8)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.a8)).BeginInit();
+            this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // a1
@@ -865,12 +870,48 @@
             this.a8.Tag = "a8";
             this.a8.MouseClick += new System.Windows.Forms.MouseEventHandler(this.tile_MouseClick);
             // 
+            // textBox1
+            // 
+            this.textBox1.Location = new System.Drawing.Point(6, 38);
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(109, 20);
+            this.textBox1.TabIndex = 66;
+            // 
+            // score
+            // 
+            this.score.Location = new System.Drawing.Point(6, 12);
+            this.score.Name = "score";
+            this.score.Size = new System.Drawing.Size(109, 20);
+            this.score.TabIndex = 67;
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(122, 12);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.TabIndex = 68;
+            this.button1.Text = "Reset game";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.resetGame);
+            // 
+            // panel1
+            // 
+            this.panel1.BackColor = System.Drawing.Color.White;
+            this.panel1.Controls.Add(this.button1);
+            this.panel1.Controls.Add(this.textBox1);
+            this.panel1.Controls.Add(this.score);
+            this.panel1.Location = new System.Drawing.Point(16, 581);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(200, 61);
+            this.panel1.TabIndex = 69;
+            // 
             // View
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Black;
-            this.ClientSize = new System.Drawing.Size(577, 606);
+            this.ClientSize = new System.Drawing.Size(576, 645);
+            this.Controls.Add(this.panel1);
             this.Controls.Add(this.h8);
             this.Controls.Add(this.g8);
             this.Controls.Add(this.f8);
@@ -1002,6 +1043,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.c8)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.b8)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.a8)).EndInit();
+            this.panel1.ResumeLayout(false);
+            this.panel1.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -1071,5 +1114,9 @@
         private System.Windows.Forms.PictureBox b8;
         private System.Windows.Forms.PictureBox a8;
         private System.Windows.Forms.PictureBox a7;
+        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox score;
+        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Panel panel1;
     }
 }
