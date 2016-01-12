@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Othello.Objects;
 
 namespace Othello
 {
@@ -15,11 +16,13 @@ namespace Othello
         /// </summary>
         [STAThread]
         static void Main()
-        { 
-            
-            GameRules g = new GameRules();
-            View v = new View(g);
-            AI ai = new AI(g);
+        {
+
+            Board b = new Board();
+            GameLogic g = new GameLogic(b);
+            GameRules gr = new GameRules(g, b);
+            View v = new View(gr, b, g);
+            AI ai = new AI(gr, b,g);
 
             Application.Run(v);
         }

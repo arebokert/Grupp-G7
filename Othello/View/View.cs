@@ -9,28 +9,34 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Othello.Objects;
 
 namespace Othello
 {
     public partial class View : Form
     {
-        private GameRules gameRule;
         string[] lines = System.IO.File.ReadAllLines(@"..\\..\\Resources\\mapInitial.txt");
-        private PictureBox[,] board = new PictureBox[8, 8];
+        private PictureBox[,] boardPictureBox;
         Rectangle rect = new Rectangle(0,0,600,600);
         Rectangle small = new Rectangle(0, 0, 66, 66);
         GameRules gameRules;
+        GameLogic gameLogic;
+        Board board;
+        private string gameScore;
 
-        public View(GameRules g)
-        { 
+        public View(GameRules gr, Board b,GameLogic gl)
+        {
+            boardPictureBox = new PictureBox[8, 8];
+            board = b;
+            gameRules = gr;
+            gameLogic = gl;
             InitializeComponent();
             populatePicArray(Controls);
-            gameRules = g;
-            gameRules.Board = board;
-            gameRules.initialLoad();
+            board.BoardPictureBox = boardPictureBox;
+            gameLogic.initialLoad();
             lines.Reverse();
-            board = gameRules.Board;
-
+            boardPictureBox = board.BoardPictureBox;
+            textBox1.Text += gameLogic.GameScore;
         }
 
         private void pictureBox1_Paint(object sender, PaintEventArgs e)
@@ -38,49 +44,16 @@ namespace Othello
             e.Graphics.FillRectangle(new SolidBrush(Color.Black), rect);
         }
 
- 
-        internal GameRules GameRule
-        {
-            get
-            {
-                return gameRule;
-            }
 
-            set
-            {
-                gameRule = value;
-            }
-        }
-
-        private void a3_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void a7_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void h8_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void g1_Click(object sender, EventArgs e)
-        {
-
-        }
 
         //Adds all PicturBoxes to the List boxes by matching Tags with content of the stringArray Lines
         private void populatePicArray(Control.ControlCollection controls)
         {
-          
             for(int x =0; x<8; x++)
             {
                 for(int y = 0; y<8; y++)
                 {
-                    board[x,y] = (PictureBox)Controls.Find(lines[y%8+x*8], true)[0];
+                    boardPictureBox[x,y] = (PictureBox)Controls.Find(lines[y%8+x*8], true)[0];
 
                 }
             }
@@ -88,7 +61,7 @@ namespace Othello
 
         private void tile_MouseClick(object sender, MouseEventArgs e)
         {
-            if(gameRules.PlayerTurnInt == gameRules.WhiteMarker)
+            if(gameLogic.PlayerTurnInt == board.WhiteMarker)
             {
                 PictureBox p = (PictureBox)sender;
                 gameRules.makeMove(p);
@@ -97,12 +70,27 @@ namespace Othello
             {
                 Console.WriteLine("Not your turn, please wait");
             }
-
+            textBox1.Text = gameScore;
         }
 
         private void resetGame(object sender, EventArgs e)
         {
-            gameRules.initialLoad();
+            gameLogic.initialLoad();
+            button2.Show();
         }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            gameLogic.restoreSavedGame();
+            button2.Hide();
+        }
+
+        public void scoreChanged(String score)
+        {
+            textBox1.Text = score;
+        }
+
+
+
     }
 }

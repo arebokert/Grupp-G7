@@ -96,6 +96,7 @@
             this.score = new System.Windows.Forms.TextBox();
             this.button1 = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.button2 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.a1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.b1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.c1)).BeginInit();
@@ -238,7 +239,6 @@
             this.g1.TabIndex = 8;
             this.g1.TabStop = false;
             this.g1.Tag = "g1";
-            this.g1.Click += new System.EventHandler(this.g1_Click);
             this.g1.MouseClick += new System.Windows.Forms.MouseEventHandler(this.tile_MouseClick);
             // 
             // h1
@@ -778,7 +778,6 @@
             this.a7.TabIndex = 50;
             this.a7.TabStop = false;
             this.a7.Tag = "a7";
-            this.a7.Click += new System.EventHandler(this.a7_Click);
             this.a7.MouseClick += new System.Windows.Forms.MouseEventHandler(this.tile_MouseClick);
             // 
             // h8
@@ -790,7 +789,6 @@
             this.h8.TabIndex = 65;
             this.h8.TabStop = false;
             this.h8.Tag = "h8";
-            this.h8.Click += new System.EventHandler(this.h8_Click);
             this.h8.MouseClick += new System.Windows.Forms.MouseEventHandler(this.tile_MouseClick);
             // 
             // g8
@@ -897,13 +895,24 @@
             // panel1
             // 
             this.panel1.BackColor = System.Drawing.Color.White;
+            this.panel1.Controls.Add(this.button2);
             this.panel1.Controls.Add(this.button1);
             this.panel1.Controls.Add(this.textBox1);
             this.panel1.Controls.Add(this.score);
             this.panel1.Location = new System.Drawing.Point(16, 581);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(200, 61);
+            this.panel1.Size = new System.Drawing.Size(529, 61);
             this.panel1.TabIndex = 69;
+            // 
+            // button2
+            // 
+            this.button2.Location = new System.Drawing.Point(222, 12);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(120, 23);
+            this.button2.TabIndex = 70;
+            this.button2.Text = "Restore last session";
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
             // View
             // 
@@ -1118,5 +1127,6 @@
         private System.Windows.Forms.TextBox score;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Button button2;
     }
 }

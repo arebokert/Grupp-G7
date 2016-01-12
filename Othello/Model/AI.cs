@@ -4,13 +4,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Othello.Objects;
 
 namespace Othello.Model
 {
     public class AI
     {
         //   private GameRules gameRules;
-
+        Board board;
+        GameLogic gameLogic;
         private int[,] greenTiles;
         private List<int[]> coordinates;
         private List<int[,]> paintArrays;
@@ -37,23 +39,25 @@ namespace Othello.Model
             }
         }
 
-        public AI(GameRules g)
+        public AI(GameRules gr,Board b,GameLogic g)
         {
             InitTimer();
+            board = b;
             greenTiles = new int[8, 8];
             aiPressedTile = new int[2];
             paintArrayTemp = new int[8,8];
             paintArrays = new List<int[,]>();
             coordinates = new List<int[]>();
             score = 0;
-            gameRules = g;
+            gameRules = gr;
+            gameLogic = g;
         }
 
         public void aiTurn()
         {
             score = 0;
             getAllGreenTiles();
-            gameRules.resetPaintArray(gameRules.PaintArray);
+            gameLogic.resetPaintArray(gameLogic.PaintArray);
             gameRules.makeMove(aiTile);
         }
 
@@ -63,7 +67,7 @@ namespace Othello.Model
             {
                 for (int y = 0; y < 8; y++)
                 {
-                    if (gameRules.BoardArray[x, y] == 0)
+                    if (board.BoardArray[x, y] == 0)
                     {
                         if (gameRules.checkAllDirections(x, y))
                         {
@@ -79,17 +83,18 @@ namespace Othello.Model
             }
             compareScore();
         }
-
+        
         private void copyArray()
         {
             for(int x = 0; x < 8; x++)
             {
                 for(int y = 0; y<8; y++)
                 {
-                    paintArrayTemp[x, y] = gameRules.PaintArrayTemp[x, y];
+                    paintArrayTemp[x, y] = gameLogic.PaintArrayTemp[x, y];
                 }
             }
         }
+
         public void storePaintArray()
         {
             int[,] temp = new int[8, 8];
@@ -142,12 +147,12 @@ namespace Othello.Model
             }
             if(score == 0)
             {
-                Console.WriteLine("AI GAME OVER");
+
                // gameRules.Counter = gameRules.Counter + 1;
             }
             xCoord = tempX;
             yCoord = tempY;
-            aiTile = gameRules.Board[xCoord, yCoord];
+            aiTile = board.BoardPictureBox[xCoord, yCoord];
         }
 
         public void InitTimer()
@@ -160,7 +165,7 @@ namespace Othello.Model
 
         private void timer1_Tick(object sender, EventArgs e)
         {
-            if (gameRules.PlayerTurnInt == 2)
+            if (gameLogic.PlayerTurnInt == board.BlackMarker)
           {
                 aiTurn();
           }

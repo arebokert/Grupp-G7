@@ -22,6 +22,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>ExtendedCorrectnessRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -46,14 +47,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="LINQ\Linq.cs" />
+    <Compile Include="Linq\SaveBoard.cs" />
     <Compile Include="Model\AI.cs" />
+    <Compile Include="Model\GameLogic.cs" />
     <Compile Include="Model\GameRules.cs" />
-    <Compile Include="Model\Map.cs" />
-    <Compile Include="Objects\GreenMarker.cs" />
-    <Compile Include="Objects\Marker.cs" />
-    <Compile Include="Objects\PlayerBlack.cs" />
-    <Compile Include="Objects\PlayerWhite.cs" />
+    <Compile Include="Objects\Board.cs" />
     <Compile Include="Controller\Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="View\View.cs">
@@ -88,7 +86,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="LINQ\savedBoard.xml" />
+    <Content Include="Linq\savedBoard.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
