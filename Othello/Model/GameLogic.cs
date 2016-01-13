@@ -275,6 +275,7 @@ namespace Othello.Model
             return false;
         }
         */
+
         private void storeBoardInXml()
         {
             saveBoard.storeBoard(board.BoardArray, counter);
