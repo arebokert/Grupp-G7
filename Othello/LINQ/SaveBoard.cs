@@ -57,8 +57,9 @@ namespace Othello.Linq
         {
             int[,] savedBoard = new int[8, 8];
 
-            IEnumerable<XElement> blacks = from el in doc.Elements("black") select el;
-            IEnumerable<XElement> whites = from el in doc.Elements("white") select el;
+            IEnumerable<XElement> board = from el in doc.Elements("board") select el;
+            IEnumerable<XElement> blacks = from el in board.Elements("black") select el;
+            IEnumerable<XElement> whites = from el in board.Elements("white") select el;
 
             foreach(XElement el in blacks)
             {
@@ -74,32 +75,7 @@ namespace Othello.Linq
                 savedBoard[xCoord, yCoord] = 1;
             }
 
-            counter = Int32.Parse(doc.Element("counter").Value);
-
-            /*
-            foreach (XElement element in doc.Elements("board").DescendantNodes())
-            {
-                listOfXElements.Add(element);
-            }
-            
-
-            for (int i = 0; i < listOfXElements.Count; i++)
-            {      
-                if ((listOfXElements[i].Name) == "white")
-                {
-                    savedBoard[Int32.Parse(listOfXElements[i].FirstAttribute.Value), Int32.Parse(listOfXElements[i].LastAttribute.Value)] = 1;
-                }
-                else if ((listOfXElements[i].Name) == "black")
-                {
-                    savedBoard[Int32.Parse(listOfXElements[i].FirstAttribute.Value), Int32.Parse(listOfXElements[i].LastAttribute.Value)] = 2;
-                }
-                else if(listOfXElements[i].Name == "counter")
-                {
-                    Counter = Int32.Parse(listOfXElements[i].FirstAttribute.Value);
-                }
-            }
-            */
-
+            counter = Int32.Parse(doc.Element("board").Element("counter").Attribute("counter").Value);
             return savedBoard;
         }
     }
