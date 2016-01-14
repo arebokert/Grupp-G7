@@ -57,11 +57,32 @@ namespace Othello.Linq
         public int[,] restoreSavedGame()
         {
             int[,] savedBoard = new int[8, 8];
-            List<XElement> listOfXElements = new List<XElement>();
+
+            IEnumerable<XElement> blacks = from el in doc.Elements("black") select el;
+            IEnumerable<XElement> whites = from el in doc.Elements("white") select el;
+
+            foreach(XElement el in blacks)
+            {
+                int xCoord = Int32.Parse(el.Attribute("xCoord").Value);
+                int yCoord = Int32.Parse(el.Attribute("yCoord").Value);
+                savedBoard[xCoord, yCoord] = 2;
+            }
+
+            foreach (XElement el in whites)
+            {
+                int xCoord = Int32.Parse(el.Attribute("xCoord").Value);
+                int yCoord = Int32.Parse(el.Attribute("yCoord").Value);
+                savedBoard[xCoord, yCoord] = 1;
+            }
+
+            counter = Int32.Parse(doc.Element("counter").Value);
+
+            /*
             foreach (XElement element in doc.Elements("board").DescendantNodes())
             {
                 listOfXElements.Add(element);
             }
+            
 
             for (int i = 0; i < listOfXElements.Count; i++)
             {      
@@ -78,6 +99,8 @@ namespace Othello.Linq
                     Counter = Int32.Parse(listOfXElements[i].FirstAttribute.Value);
                 }
             }
+            */
+
             return savedBoard;
         }
     }
