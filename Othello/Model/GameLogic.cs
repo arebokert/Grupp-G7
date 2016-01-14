@@ -39,9 +39,9 @@ namespace Othello.Model
             paint(tileClicked);
             paintList.Clear();
             resetPaintArray(PaintArray);
-            //storeBoardInXml();
-           // board.BoardArray = saveBoard.restoreSavedGame();
-          //  Counter = saveBoard.Counter;
+            storeBoardInXml();
+            board.BoardArray = saveBoard.restoreSavedGame();
+            Counter = saveBoard.Counter;
             changeTurn(Counter);
         }
 
