@@ -58,8 +58,9 @@ namespace Othello.Linq
         {
             int[,] savedBoard = new int[8, 8];
 
-            IEnumerable<XElement> blacks = from el in doc.Elements("black") select el;
-            IEnumerable<XElement> whites = from el in doc.Elements("white") select el;
+            IEnumerable<XElement> board = from el in doc.Elements("board") select el;
+            IEnumerable<XElement> blacks = from el in board.Elements("black") select el;
+            IEnumerable<XElement> whites = from el in board.Elements("white") select el;
 
             foreach(XElement el in blacks)
             {
@@ -75,7 +76,7 @@ namespace Othello.Linq
                 savedBoard[xCoord, yCoord] = 1;
             }
 
-            counter = Int32.Parse(doc.Element("counter").Value);
+            counter = Int32.Parse(doc.Element("board").Element("counter").Attribute("counter").Value);
             return savedBoard;
         }
     }
