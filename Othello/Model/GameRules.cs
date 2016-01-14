@@ -32,7 +32,6 @@ namespace Othello.Model
         {
             gameLogic.LegalMoveCounter = 0;
             gameLogic.changeTurn(gameLogic.Counter);
-            gameLogic.MoveScore = 0;
             checkLeft(tileValueX, tileValueY);
             checkRight(tileValueX, tileValueY);
             checkUp(tileValueX, tileValueY);
@@ -41,7 +40,6 @@ namespace Othello.Model
             checkUpLeft(tileValueX, tileValueY);
             checkDownRight(tileValueX, tileValueY);
             checkDownLeft(tileValueX, tileValueY);
-            gameLogic.countScore();
             if (gameLogic.LegalMoveCounter > 0)
             {
                 return true;
@@ -49,17 +47,17 @@ namespace Othello.Model
             return false;
         }
 
-        private void checkLeft(int xValue, int yValue)
+        private void checkLeft(int column, int row)
         {
             int c = 0;
-            if (board.BoardArray[xValue, yValue] == board.GreenMarker)
+            if (board.BoardArray[column, row] == board.GreenMarker)
             {
-                yValue--;
+                row--;
                 {
-                    while (yValue > 0 && board.BoardArray[xValue, yValue] == gameLogic.NotPlayerTurnInt)
+                    while (row > 0 && board.BoardArray[column, row] == gameLogic.NotPlayerTurnInt)
                     {
-                        gameLogic.PaintArrayTemp[xValue, yValue] = 1;
-                        if (board.BoardArray[xValue, yValue - 1] == gameLogic.PlayerTurnInt)
+                        gameLogic.PaintArrayTemp[column, row] = 1;
+                        if (board.BoardArray[column, row - 1] == gameLogic.PlayerTurnInt)
                         {
                             c++;
                             if (c == 2)
@@ -68,13 +66,13 @@ namespace Othello.Model
                             }
                             else
                             {
-                                gameLogic.PaintArrayTemp[xValue, yValue - 1] = 2;
+                                gameLogic.PaintArrayTemp[column, row - 1] = 2;
                             }
                         }
-                        yValue--;
+                        row--;
                     }
                 }
-                gameLogic.legalMove(xValue, yValue);
+                gameLogic.legalMove(column, row);
             }
         }
 

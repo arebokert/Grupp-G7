@@ -44,8 +44,6 @@ namespace Othello
             e.Graphics.FillRectangle(new SolidBrush(Color.Black), rect);
         }
 
-
-
         //Adds all PicturBoxes to the List boxes by matching Tags with content of the stringArray Lines
         private void populatePicArray(Control.ControlCollection controls)
         {
@@ -76,13 +74,13 @@ namespace Othello
         private void resetGame(object sender, EventArgs e)
         {
             gameLogic.initialLoad();
-            button2.Show();
+            restoreGame.Show();
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
             gameLogic.restoreSavedGame();
-            button2.Hide();
+            restoreGame.Hide();
         }
 
         public void scoreChanged(String score)

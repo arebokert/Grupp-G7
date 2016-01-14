@@ -57,6 +57,7 @@ namespace Othello.Model
         {
             score = 0;
             getAllGreenTiles();
+            compareScore();
             gameLogic.resetPaintArray(gameLogic.PaintArray);
             gameRules.makeMove(aiTile);
         }
@@ -81,7 +82,7 @@ namespace Othello.Model
                     }
                 }
             }
-            compareScore();
+
         }
         
         private void copyArray()
@@ -113,7 +114,6 @@ namespace Othello.Model
                 }
             }
             paintArrays.Add(temp);
-
         }
 
         public void compareScore()

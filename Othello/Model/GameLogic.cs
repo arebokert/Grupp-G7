@@ -6,7 +6,7 @@ using Othello.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using  Othello.Objects;
+using Othello.Objects;
 
 namespace Othello.Model
 
@@ -18,7 +18,6 @@ namespace Othello.Model
         private SaveBoard saveBoard = new SaveBoard();
         private string playerTurn;
         private int counter;
-        private int moveScore;
         private int legalMoveCounter = 0;
         private int playerTurnInt = 1;
         private int notPlayerTurnInt = 2;
@@ -26,11 +25,10 @@ namespace Othello.Model
         private int[,] paintArray = new int[8, 8];
         private int[,] paintArrayTemp;
         private List<int[,]> paintList = new List<int[,]>();
-        private Boolean move;
         private Board board;
 
         public GameLogic(Board b)
-        { 
+        {
             Counter = 0;
             board = b;
             PaintArrayTemp = new int[8, 8];
@@ -45,30 +43,12 @@ namespace Othello.Model
             storeBoardInXml();
             board.BoardArray = saveBoard.restoreSavedGame();
             Counter = saveBoard.Counter;
-            move = false;
             changeTurn(Counter);
-        }
-
-        public void countScore()
-        {
-            MoveScore = 0;
-            for (int i = 0; i < paintList.Count; i++)
-            {
-                for (int x = 0; x < 8; x++)
-                {
-                    for (int y = 0; y < 8; y++)
-                    {
-                        if (PaintArray[x, y] == 1)
-                        {
-                            MoveScore++;
-                        }
-                    }
-                }
-            }
         }
 
         private Boolean paint(String player)
         {
+            bool move = false;
             Image tempImage;
             if (player == "white")
             {
@@ -79,19 +59,17 @@ namespace Othello.Model
             {
                 tempImage = board.Black;
             }
-            for (int i = 0; i < paintList.Count; i++)
-            {
-                for (int x = 0; x < 8; x++)
-                {
-                    for (int y = 0; y < 8; y++)
-                    {
-                        if (PaintArray[x, y] == 1)
-                        {
-                            move = true;
-                            board.BoardPictureBox[x, y].Tag = player;
-                            board.BoardPictureBox[x, y].Image = tempImage;
 
-                        }
+            for (int x = 0; x < 8; x++)
+            {
+                for (int y = 0; y < 8; y++)
+                {
+                    if (PaintArray[x, y] == 1)
+                    {
+                        move = true;
+                        board.BoardPictureBox[x, y].Tag = player;
+                        board.BoardPictureBox[x, y].Image = tempImage;
+
                     }
                 }
             }
@@ -246,35 +224,35 @@ namespace Othello.Model
             }
         }
 
-     /*   private Boolean checkIfGameOver()
-        {
-            int gameOverCounter = 0;
-            for (int i = 0; i < 1; i++)
-            {
-                changeTurn(i);
-                for (int x = 0; x < 8; x++)
-                {
-                    for (int y = 0; y < 8; y++)
-                    {
-                        if (checkAllDirections(x, y))
-                        {
-                            gameOverCounter++;
-                        }
-                    }
-                }
-            }
-            
-            paintList.Clear();
-            resetPaintArray(PaintArray);
-            resetPaintArray(PaintArrayTemp);
-            if (gameOverCounter == 2)
-            {
+        /*   private Boolean checkIfGameOver()
+           {
+               int gameOverCounter = 0;
+               for (int i = 0; i < 1; i++)
+               {
+                   changeTurn(i);
+                   for (int x = 0; x < 8; x++)
+                   {
+                       for (int y = 0; y < 8; y++)
+                       {
+                           if (checkAllDirections(x, y))
+                           {
+                               gameOverCounter++;
+                           }
+                       }
+                   }
+               }
 
-                return true;
-            }
-            return false;
-        }
-        */
+               paintList.Clear();
+               resetPaintArray(PaintArray);
+               resetPaintArray(PaintArrayTemp);
+               if (gameOverCounter == 2)
+               {
+
+                   return true;
+               }
+               return false;
+           }
+           */
 
         private void storeBoardInXml()
         {
@@ -313,15 +291,15 @@ namespace Othello.Model
             string score = "";
             int blackScore = 0;
             int whiteScore = 0; ;
-            for(int x = 0; x < 8;x++)
+            for (int x = 0; x < 8; x++)
             {
-                for(int y= 0; y < 8; y++)
+                for (int y = 0; y < 8; y++)
                 {
                     if (board.BoardArray[x, y] == board.BlackMarker)
                     {
                         blackScore++;
                     }
-                    else if(board.BoardArray[x, y] == board.WhiteMarker)
+                    else if (board.BoardArray[x, y] == board.WhiteMarker)
                     {
                         whiteScore++;
                     }
@@ -329,7 +307,7 @@ namespace Othello.Model
             }
             score = ("White score: " + whiteScore + " " + "Black score: " + blackScore);
             Action<string> onNewScore = GameScore;
-            if(onNewScore  != null)
+            if (onNewScore != null)
             {
                 onNewScore(score);
             }
@@ -346,19 +324,6 @@ namespace Othello.Model
             set
             {
                 paintArray = value;
-            }
-        }
-
-        public int MoveScore
-        {
-            get
-            {
-                return moveScore;
-            }
-
-            set
-            {
-                moveScore = value;
             }
         }
 

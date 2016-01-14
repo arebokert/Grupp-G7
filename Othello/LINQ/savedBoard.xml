@@ -1,40 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <board>
-  <white xCoord="2" yCoord="2" />
-  <white xCoord="2" yCoord="5" />
-  <white xCoord="2" yCoord="6" />
-  <white xCoord="2" yCoord="7" />
-  <white xCoord="3" yCoord="2" />
   <white xCoord="3" yCoord="3" />
-  <white xCoord="3" yCoord="4" />
-  <black xCoord="3" yCoord="5" />
-  <black xCoord="3" yCoord="6" />
-  <black xCoord="3" yCoord="7" />
-  <white xCoord="4" yCoord="0" />
-  <white xCoord="4" yCoord="1" />
-  <white xCoord="4" yCoord="2" />
+  <black xCoord="3" yCoord="4" />
   <white xCoord="4" yCoord="3" />
-  <black xCoord="4" yCoord="4" />
+  <white xCoord="4" yCoord="4" />
   <black xCoord="4" yCoord="5" />
-  <black xCoord="4" yCoord="6" />
-  <black xCoord="4" yCoord="7" />
-  <white xCoord="5" yCoord="2" />
-  <black xCoord="5" yCoord="3" />
+  <white xCoord="5" yCoord="3" />
   <black xCoord="5" yCoord="4" />
-  <black xCoord="5" yCoord="5" />
   <black xCoord="5" yCoord="6" />
-  <black xCoord="5" yCoord="7" />
-  <black xCoord="6" yCoord="0" />
-  <white xCoord="6" yCoord="1" />
-  <white xCoord="6" yCoord="2" />
-  <black xCoord="6" yCoord="3" />
-  <black xCoord="6" yCoord="4" />
-  <black xCoord="6" yCoord="5" />
-  <black xCoord="6" yCoord="6" />
-  <black xCoord="6" yCoord="7" />
-  <white xCoord="7" yCoord="0" />
-  <white xCoord="7" yCoord="2" />
-  <black xCoord="7" yCoord="4" />
-  <black xCoord="7" yCoord="6" />
-  <counter counter="32" />
+  <black xCoord="7" yCoord="7" />
+  <black xCoord="3" yCoord="4" />
+  <counter counter="4" />
 </board>

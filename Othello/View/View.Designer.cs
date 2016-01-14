@@ -96,7 +96,7 @@
             this.score = new System.Windows.Forms.TextBox();
             this.button1 = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.button2 = new System.Windows.Forms.Button();
+            this.restoreGame = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.a1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.b1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.c1)).BeginInit();
@@ -895,7 +895,7 @@
             // panel1
             // 
             this.panel1.BackColor = System.Drawing.Color.White;
-            this.panel1.Controls.Add(this.button2);
+            this.panel1.Controls.Add(this.restoreGame);
             this.panel1.Controls.Add(this.button1);
             this.panel1.Controls.Add(this.textBox1);
             this.panel1.Controls.Add(this.score);
@@ -904,15 +904,15 @@
             this.panel1.Size = new System.Drawing.Size(529, 61);
             this.panel1.TabIndex = 69;
             // 
-            // button2
+            // restoreGame
             // 
-            this.button2.Location = new System.Drawing.Point(222, 12);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(120, 23);
-            this.button2.TabIndex = 70;
-            this.button2.Text = "Restore last session";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
+            this.restoreGame.Location = new System.Drawing.Point(222, 12);
+            this.restoreGame.Name = "restoreGame";
+            this.restoreGame.Size = new System.Drawing.Size(120, 23);
+            this.restoreGame.TabIndex = 70;
+            this.restoreGame.Text = "Restore last session";
+            this.restoreGame.UseVisualStyleBackColor = true;
+            this.restoreGame.Click += new System.EventHandler(this.button2_Click);
             // 
             // View
             // 
@@ -1127,6 +1127,6 @@
         private System.Windows.Forms.TextBox score;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button restoreGame;
     }
 }
