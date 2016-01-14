@@ -34,31 +34,20 @@ namespace Othello.Model
             PaintArrayTemp = new int[8, 8];
         }
 
-        public void doLogic()
+        public void doLogic(int[] tileClicked)
         {
-            paint(PlayerTurn);
+            paint(tileClicked);
             paintList.Clear();
             resetPaintArray(PaintArray);
-            updateBoardArray();
-            storeBoardInXml();
-            board.BoardArray = saveBoard.restoreSavedGame();
-            Counter = saveBoard.Counter;
+            //storeBoardInXml();
+           // board.BoardArray = saveBoard.restoreSavedGame();
+          //  Counter = saveBoard.Counter;
             changeTurn(Counter);
         }
 
-        private Boolean paint(String player)
+        private Boolean paint(int[] tileClicked)
         {
             bool move = false;
-            Image tempImage;
-            if (player == "white")
-            {
-                tempImage = board.White;
-
-            }
-            else
-            {
-                tempImage = board.Black;
-            }
 
             for (int x = 0; x < 8; x++)
             {
@@ -67,17 +56,15 @@ namespace Othello.Model
                     if (PaintArray[x, y] == 1)
                     {
                         move = true;
-                        board.BoardPictureBox[x, y].Tag = player;
-                        board.BoardPictureBox[x, y].Image = tempImage;
-
+                        board.BoardArray[x, y]= playerTurnInt;
                     }
                 }
             }
             if (move)
             {
                 Counter++;
-                board.BoardPictureBox[TileValueX, TileValueY].Tag = player;
-                board.BoardPictureBox[TileValueX, TileValueY].Image = tempImage;
+                Console.WriteLine(Counter);
+                board.BoardArray[tileClicked[0], tileClicked[1]]=playerTurnInt;
             }
             return true;
         }
@@ -93,32 +80,6 @@ namespace Othello.Model
             }
         }
 
-        public void initialLoad()
-        {
-            for (int x = 0; x < 8; x++)
-            {
-                for (int y = 0; y < 8; y++)
-                {
-                    if (board.BoardPictureBox[x, y].Name.Equals("d4") || board.BoardPictureBox[x, y].Name.Equals("e5"))
-                    {
-                        board.BoardPictureBox[x, y].Image = board.White;
-                        board.BoardPictureBox[x, y].Tag = "white";
-                    }
-                    else if (board.BoardPictureBox[x, y].Name.Equals("d5") || board.BoardPictureBox[x, y].Name.Equals("e4"))
-                    {
-                        board.BoardPictureBox[x, y].Image = board.Black;
-                        board.BoardPictureBox[x, y].Tag = "black";
-                    }
-                    else
-                    {
-                        board.BoardPictureBox[x, y].Image = board.Green;
-                        board.BoardPictureBox[x, y].Tag = "green";
-                    }
-                }
-            }
-            updateBoardArray();
-        }
-
         public void changeTurn(int counter)
         {
             if (counter % 2 == 0)
@@ -132,39 +93,6 @@ namespace Othello.Model
                 PlayerTurn = "black";
                 PlayerTurnInt = board.BlackMarker;
                 NotPlayerTurnInt = board.WhiteMarker;
-            }
-        }
-
-        public void extractValues(char f, char l)
-        {
-            TileValueX = (int)Char.GetNumericValue(l);
-            TileValueX--;
-            switch (f)
-            {
-                case 'a':
-                    TileValueY = 0;
-                    break;
-                case 'b':
-                    TileValueY = 1;
-                    break;
-                case 'c':
-                    TileValueY = 2;
-                    break;
-                case 'd':
-                    TileValueY = 3;
-                    break;
-                case 'e':
-                    TileValueY = 4;
-                    break;
-                case 'f':
-                    TileValueY = 5;
-                    break;
-                case 'g':
-                    TileValueY = 6;
-                    break;
-                case 'h':
-                    TileValueY = 7;
-                    break;
             }
         }
 
@@ -202,27 +130,6 @@ namespace Othello.Model
             return false;
         }
 
-        private void updateBoardArray()
-        {
-            for (int x = 0; x < 8; x++)
-            {
-                for (int y = 0; y < 8; y++)
-                {
-                    if (board.BoardPictureBox[x, y].Tag.Equals("green"))
-                    {
-                        board.BoardArray[x, y] = board.GreenMarker;
-                    }
-                    else if (board.BoardPictureBox[x, y].Tag.Equals("white"))
-                    {
-                        board.BoardArray[x, y] = board.WhiteMarker;
-                    }
-                    else if (board.BoardPictureBox[x, y].Tag.Equals("black"))
-                    {
-                        board.BoardArray[x, y] = board.BlackMarker;
-                    }
-                }
-            }
-        }
 
         /*   private Boolean checkIfGameOver()
            {

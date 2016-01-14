@@ -25,6 +25,7 @@ namespace Othello.Linq
                 counter = value;
             }
         }
+
         public SaveBoard()
         {
             doc = XDocument.Load(@Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName + "\\Linq\\savedBoard.xml");

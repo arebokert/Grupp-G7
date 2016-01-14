@@ -1,14 +1,4 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <board>
-  <white xCoord="3" yCoord="3" />
-  <black xCoord="3" yCoord="4" />
-  <white xCoord="4" yCoord="3" />
-  <white xCoord="4" yCoord="4" />
-  <black xCoord="4" yCoord="5" />
-  <white xCoord="5" yCoord="3" />
-  <black xCoord="5" yCoord="4" />
-  <black xCoord="5" yCoord="6" />
-  <black xCoord="7" yCoord="7" />
-  <black xCoord="3" yCoord="4" />
-  <counter counter="4" />
+  <counter counter="0" />
 </board>

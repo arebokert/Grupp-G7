@@ -23,8 +23,9 @@ namespace Othello.Model
         private GameRules gameRules;
         private int[,] paintArrayTemp;
         private Timer timer1;
-        private int xCoord;
-        private int yCoord;
+      //  private int xCoord;
+        //private int yCoord;
+        private int[] tileClicked;
 
         public int[,] BoardArray
         {
@@ -43,6 +44,7 @@ namespace Othello.Model
         {
             InitTimer();
             board = b;
+            tileClicked = new int[2];
             greenTiles = new int[8, 8];
             aiPressedTile = new int[2];
             paintArrayTemp = new int[8,8];
@@ -59,7 +61,7 @@ namespace Othello.Model
             getAllGreenTiles();
             compareScore();
             gameLogic.resetPaintArray(gameLogic.PaintArray);
-            gameRules.makeMove(aiTile);
+            gameRules.makeMove(tileClicked);
         }
 
         public void getAllGreenTiles()
@@ -127,12 +129,12 @@ namespace Othello.Model
             {
                 tempCoordinates = coordinates[i];
                 tempArray = paintArrays[i];
-                for(int x = 0; x<8; x++)
+                for (int x = 0; x < 8; x++)
                 {
-                    for(int y = 0; y < 8; y++)
+                    for (int y = 0; y < 8; y++)
                     {
 
-                        if (tempArray[x,y] == 1)
+                        if (tempArray[x, y] == 1)
                         {
                             tempScore++;
                         }
@@ -145,14 +147,14 @@ namespace Othello.Model
                     tempY = tempCoordinates[1];
                 }
             }
-            if(score == 0)
+            if (score == 0)
             {
 
-               // gameRules.Counter = gameRules.Counter + 1;
+                // gameRules.Counter = gameRules.Counter + 1;
             }
-            xCoord = tempX;
-            yCoord = tempY;
-            aiTile = board.BoardPictureBox[xCoord, yCoord];
+            tileClicked[0] = tempX;
+            tileClicked[1] = tempY;
+            aiTile = board.BoardPictureBox[tileClicked[0], tileClicked[1]];
         }
 
         public void InitTimer()

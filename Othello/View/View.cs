@@ -33,7 +33,8 @@ namespace Othello
             InitializeComponent();
             populatePicArray(Controls);
             board.BoardPictureBox = boardPictureBox;
-            gameLogic.initialLoad();
+            initialLoad();
+            //updateBoardArray();
             lines.Reverse();
             boardPictureBox = board.BoardPictureBox;
             textBox1.Text += gameLogic.GameScore;
@@ -61,8 +62,10 @@ namespace Othello
         {
             if(gameLogic.PlayerTurnInt == board.WhiteMarker)
             {
+               
                 PictureBox p = (PictureBox)sender;
-                gameRules.makeMove(p);
+                gameRules.makeMove(extractValues(p.Name.First(), p.Name.Last()));
+                updateBoardArray();
             }
             else
             {
@@ -73,7 +76,7 @@ namespace Othello
 
         private void resetGame(object sender, EventArgs e)
         {
-            gameLogic.initialLoad();
+          //  gameLogic.initialLoad();
             restoreGame.Show();
         }
 
@@ -88,7 +91,96 @@ namespace Othello
             textBox1.Text = score;
         }
 
+        private int[] extractValues(char f, char l)
+        {
+            //Index at 0 is row, index at 1 is column
+            int[] clickedTile = new int[2];
+            clickedTile[0] = (int)Char.GetNumericValue(l);
+            clickedTile[0]--;
+            switch (f)
+            {
+                case 'a':
+                    clickedTile[1] = 0;
+                    break;
+                case 'b':
+                    clickedTile[1] = 1;
+                    break;
+                case 'c':
+                    clickedTile[1] = 2;
+                    break;
+                case 'd':
+                    clickedTile[1] = 3;
+                    break;
+                case 'e':
+                    clickedTile[1] = 4;
+                    break;
+                case 'f':
+                    clickedTile[1] = 5;
+                    break;
+                case 'g':
+                    clickedTile[1] = 6;
+                    break;
+                case 'h':
+                    clickedTile[1] = 7;
+                    break;
+            }
+            return clickedTile;
+        }
 
+        private void updateBoardArray()
+        {
+            for (int x = 0; x < 8; x++)
+            {
+                for (int y = 0; y < 8; y++)
+                {
+                    if (board.BoardArray[x, y] == board.GreenMarker)
+                    {
+                        board.BoardPictureBox[x, y].Tag.Equals("green");
+                        board.BoardPictureBox[x, y].Image = board.Green;
+                    }
+                    else if (board.BoardArray[x, y] == board.WhiteMarker)
+                    {
+                        board.BoardPictureBox[x, y].Tag.Equals("white");
+                        board.BoardPictureBox[x, y].Image = board.White;
+                    }
+                    else if (board.BoardArray[x, y] == board.BlackMarker)
+                    {
+                        board.BoardPictureBox[x, y].Tag.Equals("black");
+                        board.BoardPictureBox[x, y].Image = board.Black;
 
+                    }
+                }
+            }
+        }
+
+        public void initialLoad()
+        {
+            for (int x = 0; x < 8; x++)
+            {
+                for (int y = 0; y < 8; y++)
+                {
+                    if (board.BoardPictureBox[x, y].Name.Equals("d4") || board.BoardPictureBox[x, y].Name.Equals("e5"))
+                    {
+                        board.BoardPictureBox[x, y].Image = board.White;
+                        board.BoardPictureBox[x, y].Tag = "white";
+                        board.BoardArray[x,y] = 1;
+                    }
+                    else if (board.BoardPictureBox[x, y].Name.Equals("d5") || board.BoardPictureBox[x, y].Name.Equals("e4"))
+                    {
+                        board.BoardPictureBox[x, y].Image = board.Black;
+                        board.BoardPictureBox[x, y].Tag = "black";
+                        board.BoardArray[x, y] = 2;
+                    }
+                    else
+                    {
+                        board.BoardPictureBox[x, y].Image = board.Green;
+                        board.BoardPictureBox[x, y].Tag = "green";
+                        board.BoardArray[x, y] = 0;
+                    }
+                }
+            }
+            // updateBoardArray();
+        }
+        
     }
 }
