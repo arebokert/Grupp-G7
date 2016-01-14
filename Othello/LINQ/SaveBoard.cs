@@ -76,31 +76,6 @@ namespace Othello.Linq
             }
 
             counter = Int32.Parse(doc.Element("counter").Value);
-
-            /*
-            foreach (XElement element in doc.Elements("board").DescendantNodes())
-            {
-                listOfXElements.Add(element);
-            }
-            
-
-            for (int i = 0; i < listOfXElements.Count; i++)
-            {      
-                if ((listOfXElements[i].Name) == "white")
-                {
-                    savedBoard[Int32.Parse(listOfXElements[i].FirstAttribute.Value), Int32.Parse(listOfXElements[i].LastAttribute.Value)] = 1;
-                }
-                else if ((listOfXElements[i].Name) == "black")
-                {
-                    savedBoard[Int32.Parse(listOfXElements[i].FirstAttribute.Value), Int32.Parse(listOfXElements[i].LastAttribute.Value)] = 2;
-                }
-                else if(listOfXElements[i].Name == "counter")
-                {
-                    Counter = Int32.Parse(listOfXElements[i].FirstAttribute.Value);
-                }
-            }
-            */
-
             return savedBoard;
         }
     }
