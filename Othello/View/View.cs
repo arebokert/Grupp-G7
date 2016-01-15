@@ -82,13 +82,14 @@ namespace Othello
 
         private void resetGame(object sender, EventArgs e)
         {
-          //  gameLogic.initialLoad();
+            initialLoad();
             restoreGame.Show();
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
             gameLogic.restoreSavedGame();
+            updateBoardArray();
             restoreGame.Hide();
         }
 
@@ -184,8 +185,6 @@ namespace Othello
                     }
                 }
             }
-            // updateBoardArray();
         }
-        
     }
 }

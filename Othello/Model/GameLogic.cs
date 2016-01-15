@@ -41,8 +41,6 @@ namespace Othello.Model
             paintList.Clear();
             resetPaintArray(PaintArray);
             storeBoardInXml();
-            //board.BoardArray = saveBoard.restoreSavedGame();
-            //Counter = saveBoard.Counter;
             changeTurn(Counter);
         }
 
@@ -69,7 +67,6 @@ namespace Othello.Model
             if (move)
             {
                 Counter++;
-                Console.WriteLine(Counter);
                 board.BoardArray[tileClicked[0], tileClicked[1]]=playerTurnInt;
             }
             return true;
@@ -174,31 +171,7 @@ namespace Othello.Model
 
         public void restoreSavedGame()
         {
-            board.BoardArray = saveBoard.restoreSavedGame();
-            /*
-            for (int x = 0; x < 8; x++)
-            {
-                for (int y = 0; y < 8; y++)
-                {
-                    if (board.BoardArray[x, y] == board.WhiteMarker)
-                    {
-                        board.BoardPictureBox[x, y].Image = board.White;
-                        board.BoardPictureBox[x, y].Tag = "white";
-                    }
-                    else if (board.BoardArray[x, y] == board.BlackMarker)
-                    {
-                        board.BoardPictureBox[x, y].Image = board.Black;
-                        board.BoardPictureBox[x, y].Tag = "black";
-                    }
-                    else
-                    {
-                        board.BoardPictureBox[x, y].Image = board.Green;
-                        board.BoardPictureBox[x, y].Tag = "green";
-                    }
-                }
-            }
-            */
-            
+            board.BoardArray = saveBoard.restoreSavedGame();         
             Counter = saveBoard.Counter;
         }
 
