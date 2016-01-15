@@ -40,6 +40,12 @@ namespace Othello
             textBox1.Text += gameLogic.GameScore;
         }
 
+        public void boardArrayChanged(int[,] newArray)
+        {
+            board.BoardArray = newArray;
+            updateBoardArray();
+        }
+
         private void pictureBox1_Paint(object sender, PaintEventArgs e)
         {
             e.Graphics.FillRectangle(new SolidBrush(Color.Black), rect);
@@ -135,19 +141,18 @@ namespace Othello
                 {
                     if (board.BoardArray[x, y] == board.GreenMarker)
                     {
-                        board.BoardPictureBox[x, y].Tag.Equals("green");
-                        board.BoardPictureBox[x, y].Image = board.Green;
+                        Image green = Image.FromFile(@"..\\..\\Resources\\Images\\NoMarker.png");
+                        board.BoardPictureBox[x, y].Image = green;
                     }
                     else if (board.BoardArray[x, y] == board.WhiteMarker)
                     {
-                        board.BoardPictureBox[x, y].Tag.Equals("white");
-                        board.BoardPictureBox[x, y].Image = board.White;
+                        Image white = Image.FromFile(@"..\\..\\Resources\\Images\\whiteMarker.png");
+                        board.BoardPictureBox[x, y].Image = white;
                     }
                     else if (board.BoardArray[x, y] == board.BlackMarker)
                     {
-                        board.BoardPictureBox[x, y].Tag.Equals("black");
-                        board.BoardPictureBox[x, y].Image = board.Black;
-
+                        Image black = Image.FromFile(@"..\\..\\Resources\\Images\\BlackMarker.png");
+                        board.BoardPictureBox[x, y].Image = black;
                     }
                 }
             }
