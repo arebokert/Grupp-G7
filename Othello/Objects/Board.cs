@@ -16,7 +16,6 @@ namespace Othello.Objects
         private Image green;
         private Image white;
         private Image black;
-        private PictureBox[,] boardPictureBox;
         private int[,] boardArray;
         public Board()
         {
@@ -24,25 +23,9 @@ namespace Othello.Objects
             White = Image.FromFile(@"..\\..\\Resources\\Images\\whiteMarker.png");
             Black = Image.FromFile(@"..\\..\\Resources\\Images\\BlackMarker.png");
             BlackMarker = 2;
-            WhiteMarker = 1;
-            GreenMarker = 0;
-            BoardPictureBox = new PictureBox[8, 8];
+            WhiteMarker = 1;           GreenMarker = 0;
             BoardArray = new int[8, 8];
         }
-
-        public PictureBox[,] BoardPictureBox
-        {
-            get
-            {
-                return boardPictureBox;
-            }
-
-            set
-            {
-                boardPictureBox = value;
-            }
-        }
-
         public int[,] BoardArray
         {
             get

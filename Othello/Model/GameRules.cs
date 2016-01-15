@@ -11,7 +11,7 @@ namespace Othello.Model
     {
         Board board;
         GameLogic gameLogic;
-        public GameRules(GameLogic g,Board b)
+        public GameRules(GameLogic g, Board b)
         {
             board = b;
             gameLogic = g;
@@ -20,13 +20,11 @@ namespace Othello.Model
 
         public void makeMove(int[] tileClicked)
         {
-            Console.WriteLine(gameLogic.PlayerTurn);
+            checkAllDirections(tileClicked[0], tileClicked[1]);
+            gameLogic.doLogic(tileClicked);
 
-               // gameLogic.extractValues(p.Name.First(), p.Name.Last());
-                checkAllDirections(tileClicked[0], tileClicked[1]);
-                gameLogic.doLogic(tileClicked);
-            
         }
+
         public Boolean checkAllDirections(int column, int row)
         {
             gameLogic.LegalMoveCounter = 0;

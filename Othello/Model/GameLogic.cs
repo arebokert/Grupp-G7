@@ -21,9 +21,9 @@ namespace Othello.Model
         private int legalMoveCounter = 0;
         private int playerTurnInt = 1;
         private int notPlayerTurnInt = 2;
-        private string gameScore = "";
         private int[,] paintArray = new int[8, 8];
         private int[,] paintArrayTemp;
+        private int yourTurn;
         private List<int[,]> paintList = new List<int[,]>();
         private Board board;
 
@@ -133,37 +133,6 @@ namespace Othello.Model
             return false;
         }
 
-
-        /*   private Boolean checkIfGameOver()
-           {
-               int gameOverCounter = 0;
-               for (int i = 0; i < 1; i++)
-               {
-                   changeTurn(i);
-                   for (int x = 0; x < 8; x++)
-                   {
-                       for (int y = 0; y < 8; y++)
-                       {
-                           if (checkAllDirections(x, y))
-                           {
-                               gameOverCounter++;
-                           }
-                       }
-                   }
-               }
-
-               paintList.Clear();
-               resetPaintArray(PaintArray);
-               resetPaintArray(PaintArrayTemp);
-               if (gameOverCounter == 2)
-               {
-
-                   return true;
-               }
-               return false;
-           }
-           */
-
         private void storeBoardInXml()
         {
             saveBoard.storeBoard(board.BoardArray, counter);
@@ -175,9 +144,8 @@ namespace Othello.Model
             Counter = saveBoard.Counter;
         }
 
-        private string currentScore()
+        public string currentScore()
         {
-            string score = "";
             int blackScore = 0;
             int whiteScore = 0; ;
             for (int x = 0; x < 8; x++)
@@ -194,12 +162,7 @@ namespace Othello.Model
                     }
                 }
             }
-            score = ("White score: " + whiteScore + " " + "Black score: " + blackScore);
-            Action<string> onNewScore = GameScore;
-            if (onNewScore != null)
-            {
-                onNewScore(score);
-            }
+           string score = ("White score: " + whiteScore + " " + "Black score: " + blackScore);
             return score;
         }
 
@@ -320,7 +283,18 @@ namespace Othello.Model
             }
         }
 
-        public Action<string> GameScore { get; set; }
+        public int YourTurn
+        {
+            get
+            {
+                return yourTurn;
+            }
+
+            set
+            {
+                yourTurn = value;
+            }
+        }
     }
 }
 

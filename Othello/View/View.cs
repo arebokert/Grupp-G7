@@ -17,12 +17,13 @@ namespace Othello
     {
         string[] lines = System.IO.File.ReadAllLines(@"..\\..\\Resources\\mapInitial.txt");
         private PictureBox[,] boardPictureBox;
+        private int yourTurn;
+        private string currentScore;
         Rectangle rect = new Rectangle(0,0,600,600);
         Rectangle small = new Rectangle(0, 0, 66, 66);
         GameRules gameRules;
         GameLogic gameLogic;
         Board board;
-        private string gameScore;
 
         public View(GameRules gr, Board b,GameLogic gl)
         {
@@ -31,15 +32,14 @@ namespace Othello
             gameRules = gr;
             gameLogic = gl;
             InitializeComponent();
-            populatePicArray(Controls);
-            board.BoardPictureBox = boardPictureBox;
-            initialLoad();
-            //updateBoardArray();
-            lines.Reverse();
-            boardPictureBox = board.BoardPictureBox;
-            textBox1.Text += gameLogic.GameScore;
         }
 
+        private void newGame()
+        {
+            populatePicArray(Controls);
+            initialLoad();
+            lines.Reverse();
+        }
         public void boardArrayChanged(int[,] newArray)
         {
             board.BoardArray = newArray;
@@ -66,7 +66,7 @@ namespace Othello
 
         private void tile_MouseClick(object sender, MouseEventArgs e)
         {
-            if(gameLogic.PlayerTurnInt == board.WhiteMarker)
+            if(gameLogic.PlayerTurnInt == yourTurn)
             {
                
                 PictureBox p = (PictureBox)sender;
@@ -77,13 +77,16 @@ namespace Othello
             {
                 Console.WriteLine("Not your turn, please wait");
             }
-            textBox1.Text = gameScore;
         }
 
         private void resetGame(object sender, EventArgs e)
         {
             initialLoad();
+            gameLogic.Counter = 0;
+            gameLogic.changeTurn(gameLogic.Counter);
             restoreGame.Show();
+            currentScore = gameLogic.currentScore();
+            score.Text = currentScore;
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -91,11 +94,6 @@ namespace Othello
             gameLogic.restoreSavedGame();
             updateBoardArray();
             restoreGame.Hide();
-        }
-
-        public void scoreChanged(String score)
-        {
-            textBox1.Text = score;
         }
 
         private int[] extractValues(char f, char l)
@@ -143,17 +141,17 @@ namespace Othello
                     if (board.BoardArray[x, y] == board.GreenMarker)
                     {
                         Image green = Image.FromFile(@"..\\..\\Resources\\Images\\NoMarker.png");
-                        board.BoardPictureBox[x, y].Image = green;
+                        boardPictureBox[x, y].Image = green;
                     }
                     else if (board.BoardArray[x, y] == board.WhiteMarker)
                     {
                         Image white = Image.FromFile(@"..\\..\\Resources\\Images\\whiteMarker.png");
-                        board.BoardPictureBox[x, y].Image = white;
+                        boardPictureBox[x, y].Image = white;
                     }
                     else if (board.BoardArray[x, y] == board.BlackMarker)
                     {
                         Image black = Image.FromFile(@"..\\..\\Resources\\Images\\BlackMarker.png");
-                        board.BoardPictureBox[x, y].Image = black;
+                        boardPictureBox[x, y].Image = black;
                     }
                 }
             }
@@ -165,26 +163,48 @@ namespace Othello
             {
                 for (int y = 0; y < 8; y++)
                 {
-                    if (board.BoardPictureBox[x, y].Name.Equals("d4") || board.BoardPictureBox[x, y].Name.Equals("e5"))
+                    if (boardPictureBox[x, y].Name.Equals("d4") || boardPictureBox[x, y].Name.Equals("e5"))
                     {
-                        board.BoardPictureBox[x, y].Image = board.White;
-                        board.BoardPictureBox[x, y].Tag = "white";
+                        boardPictureBox[x, y].Image = board.White;
+                        boardPictureBox[x, y].Tag = "white";
                         board.BoardArray[x,y] = 1;
                     }
-                    else if (board.BoardPictureBox[x, y].Name.Equals("d5") || board.BoardPictureBox[x, y].Name.Equals("e4"))
+                    else if (boardPictureBox[x, y].Name.Equals("d5") || boardPictureBox[x, y].Name.Equals("e4"))
                     {
-                        board.BoardPictureBox[x, y].Image = board.Black;
-                        board.BoardPictureBox[x, y].Tag = "black";
+                        boardPictureBox[x, y].Image = board.Black;
+                        boardPictureBox[x, y].Tag = "black";
                         board.BoardArray[x, y] = 2;
                     }
                     else
                     {
-                        board.BoardPictureBox[x, y].Image = board.Green;
-                        board.BoardPictureBox[x, y].Tag = "green";
+                        boardPictureBox[x, y].Image = board.Green;
+                        boardPictureBox[x, y].Tag = "green";
                         board.BoardArray[x, y] = 0;
                     }
                 }
             }
+        }
+
+        private void WhiteButton_Click(object sender, EventArgs e)
+        {
+            yourTurn = board.WhiteMarker;
+            gameLogic.YourTurn = board.BlackMarker;
+            buttonPanel.Hide();
+            newGame();
+        }
+
+        private void BlackButton_Click(object sender, EventArgs e)
+        {
+            yourTurn = board.BlackMarker;
+            gameLogic.YourTurn = board.WhiteMarker;
+            buttonPanel.Hide();
+            newGame();
+        }
+
+        private void updateScore_Click(object sender, EventArgs e)
+        {
+            currentScore = gameLogic.currentScore();
+            score.Text = currentScore;
         }
     }
 }

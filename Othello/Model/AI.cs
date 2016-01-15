@@ -23,7 +23,7 @@ namespace Othello.Model
         private GameRules gameRules;
         private int[,] paintArrayTemp;
         private Timer timer1;
-      //  private int xCoord;
+        //  private int xCoord;
         //private int yCoord;
         private int[] tileClicked;
 
@@ -40,14 +40,14 @@ namespace Othello.Model
             }
         }
 
-        public AI(GameRules gr,Board b,GameLogic g)
+        public AI(GameRules gr, Board b, GameLogic g)
         {
             InitTimer();
             board = b;
             tileClicked = new int[2];
             greenTiles = new int[8, 8];
             aiPressedTile = new int[2];
-            paintArrayTemp = new int[8,8];
+            paintArrayTemp = new int[8, 8];
             paintArrays = new List<int[,]>();
             coordinates = new List<int[]>();
             score = 0;
@@ -62,6 +62,9 @@ namespace Othello.Model
             compareScore();
             gameLogic.resetPaintArray(gameLogic.PaintArray);
             gameRules.makeMove(tileClicked);
+
+
+
         }
 
         public void getAllGreenTiles()
@@ -86,12 +89,12 @@ namespace Othello.Model
             }
 
         }
-        
+
         private void copyArray()
         {
-            for(int x = 0; x < 8; x++)
+            for (int x = 0; x < 8; x++)
             {
-                for(int y = 0; y<8; y++)
+                for (int y = 0; y < 8; y++)
                 {
                     paintArrayTemp[x, y] = gameLogic.PaintArrayTemp[x, y];
                 }
@@ -101,11 +104,11 @@ namespace Othello.Model
         public void storePaintArray()
         {
             int[,] temp = new int[8, 8];
-            for(int x = 0; x < 8; x++)
+            for (int x = 0; x < 8; x++)
             {
-                for(int y = 0; y < 8; y++)
+                for (int y = 0; y < 8; y++)
                 {
-                    if(paintArrayTemp[x,y] == 1)
+                    if (paintArrayTemp[x, y] == 1)
                     {
                         temp[x, y] = 1;
                     }
@@ -147,30 +150,24 @@ namespace Othello.Model
                     tempY = tempCoordinates[1];
                 }
             }
-            if (score == 0)
-            {
-
-                // gameRules.Counter = gameRules.Counter + 1;
-            }
-            tileClicked[0] = tempX;
-            tileClicked[1] = tempY;
-            aiTile = board.BoardPictureBox[tileClicked[0], tileClicked[1]];
+                tileClicked[0] = tempX;
+                tileClicked[1] = tempY;
         }
 
         public void InitTimer()
         {
             timer1 = new Timer();
             timer1.Tick += new EventHandler(timer1_Tick);
-            timer1.Interval = 1500;
+            timer1.Interval = 1;
             timer1.Start();
         }
 
         private void timer1_Tick(object sender, EventArgs e)
         {
-            if (gameLogic.PlayerTurnInt == board.BlackMarker)
-          {
+            if (gameLogic.PlayerTurnInt == gameLogic.YourTurn)
+            {
                 aiTurn();
-          }
+            }
         }
     }
 }
