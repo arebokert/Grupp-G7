@@ -15,7 +15,7 @@ namespace Othello.Model
     {
         private int tileValueX;
         private int tileValueY;
-        private SaveBoard saveBoard = new SaveBoard();
+        private SaveBoard saveBoard;
         private string playerTurn;
         private int counter;
         private int legalMoveCounter = 0;
@@ -27,11 +27,12 @@ namespace Othello.Model
         private List<int[,]> paintList = new List<int[,]>();
         private Board board;
 
-        public GameLogic(Board b)
+        public GameLogic(Board b, SaveBoard s)
         {
             Counter = 0;
             board = b;
             PaintArrayTemp = new int[8, 8];
+            saveBoard = s;
         }
 
         public void doLogic(int[] tileClicked)
@@ -40,10 +41,15 @@ namespace Othello.Model
             paintList.Clear();
             resetPaintArray(PaintArray);
             storeBoardInXml();
-            board.BoardArray = saveBoard.restoreSavedGame();
-            Counter = saveBoard.Counter;
+            //board.BoardArray = saveBoard.restoreSavedGame();
+            //Counter = saveBoard.Counter;
             changeTurn(Counter);
         }
+
+        public void boardArrayChanged(int[,] newArray)
+        {
+            board.BoardArray = newArray;
+        } 
 
         private Boolean paint(int[] tileClicked)
         {
@@ -169,6 +175,7 @@ namespace Othello.Model
         public void restoreSavedGame()
         {
             board.BoardArray = saveBoard.restoreSavedGame();
+            /*
             for (int x = 0; x < 8; x++)
             {
                 for (int y = 0; y < 8; y++)
@@ -190,6 +197,8 @@ namespace Othello.Model
                     }
                 }
             }
+            */
+            
             Counter = saveBoard.Counter;
         }
 
