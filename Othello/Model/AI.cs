@@ -158,7 +158,7 @@ namespace Othello.Model
         {
             timer1 = new Timer();
             timer1.Tick += new EventHandler(timer1_Tick);
-            timer1.Interval = 1;
+            timer1.Interval = 2000;
             timer1.Start();
         }
 
