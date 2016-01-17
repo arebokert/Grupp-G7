@@ -26,8 +26,10 @@ namespace Othello
             View v = new View(gr, b, g);
             AI ai = new AI(gr, b,g);
 
+            g.onTurnChange += ai.playerTurnChanged;
             s.onBoardChange += g.boardArrayChanged;
             s.onBoardChange += v.boardArrayChanged;
+            g.onScoreChange += v.scoreChanged;
 
             Application.Run(v);
         }

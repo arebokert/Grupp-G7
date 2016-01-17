@@ -19,11 +19,12 @@ namespace Othello.Model
         private string playerTurn;
         private int counter;
         private int legalMoveCounter = 0;
-        private int playerTurnInt = 1;
+        private int playerTurnInt = 0;
         private int notPlayerTurnInt = 2;
         private int[,] paintArray = new int[8, 8];
         private int[,] paintArrayTemp;
         private int yourTurn;
+        private string currentScore;
         private List<int[,]> paintList = new List<int[,]>();
         private Board board;
 
@@ -41,6 +42,8 @@ namespace Othello.Model
             paintList.Clear();
             resetPaintArray(PaintArray);
             storeBoardInXml();
+            restoreSavedGame();
+            CurrentScore = calcCurrentScore();
             changeTurn(Counter);
         }
 
@@ -142,9 +145,10 @@ namespace Othello.Model
         {
             board.BoardArray = saveBoard.restoreSavedGame();         
             Counter = saveBoard.Counter;
+            CurrentScore = calcCurrentScore();
         }
 
-        public string currentScore()
+        public string calcCurrentScore()
         {
             int blackScore = 0;
             int whiteScore = 0; ;
@@ -163,7 +167,40 @@ namespace Othello.Model
                 }
             }
            string score = ("White score: " + whiteScore + " " + "Black score: " + blackScore);
-            return score;
+           return score;
+        }
+
+        public Action<int> onTurnChange
+        {
+            get;
+            set;
+        }
+
+        public Action<string> onScoreChange
+        {
+            get;
+            set;
+        }
+
+        public string CurrentScore
+        {
+            get
+            {
+                return currentScore;
+            }
+
+            set
+            {
+                if (currentScore != value)
+                {
+                    currentScore = value;
+                    Action<string> localOnChange = onScoreChange;
+                    if (localOnChange != null)
+                    {
+                        localOnChange(value);
+                    }
+                }
+            }
         }
 
         public int[,] PaintArray
@@ -188,7 +225,15 @@ namespace Othello.Model
 
             set
             {
-                playerTurnInt = value;
+                if (playerTurnInt != value)
+                {
+                    playerTurnInt = value;
+                    Action<int> localOnChange = onTurnChange;
+                    if (localOnChange != null)
+                    {
+                        localOnChange(value);
+                    }
+                }
             }
         }
 

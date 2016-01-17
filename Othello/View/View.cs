@@ -39,6 +39,7 @@ namespace Othello
             populatePicArray(Controls);
             initialLoad();
             lines.Reverse();
+            gameLogic.PlayerTurnInt = 1;
         }
         public void boardArrayChanged(int[,] newArray)
         {
@@ -85,7 +86,7 @@ namespace Othello
             gameLogic.Counter = 0;
             gameLogic.changeTurn(gameLogic.Counter);
             restoreGame.Show();
-            currentScore = gameLogic.currentScore();
+            currentScore = gameLogic.calcCurrentScore();
             score.Text = currentScore;
         }
 
@@ -203,8 +204,13 @@ namespace Othello
 
         private void updateScore_Click(object sender, EventArgs e)
         {
-            currentScore = gameLogic.currentScore();
-            score.Text = currentScore;
+            //currentScore = gameLogic.currentScore();
+            //score.Text = currentScore;
+        }
+
+        public void scoreChanged(string newScore)
+        {
+            score.Text = newScore;
         }
     }
 }

@@ -22,7 +22,7 @@ namespace Othello.Model
         private PictureBox aiTile;
         private GameRules gameRules;
         private int[,] paintArrayTemp;
-        private Timer timer1;
+        private Timer roundTimer;
         //  private int xCoord;
         //private int yCoord;
         private int[] tileClicked;
@@ -154,14 +154,29 @@ namespace Othello.Model
                 tileClicked[1] = tempY;
         }
 
-        public void InitTimer()
+        public void playerTurnChanged(int turn)
         {
-            timer1 = new Timer();
-            timer1.Tick += new EventHandler(timer1_Tick);
-            timer1.Interval = 2000;
-            timer1.Start();
+            if (turn == gameLogic.YourTurn)
+            {
+                roundTimer.Start();
+            }
         }
 
+        private void roundTimer_tick(object sender, EventArgs e)
+        {
+            aiTurn();
+            roundTimer.Stop();
+        }
+
+        
+        public void InitTimer()
+        {
+            roundTimer = new Timer();
+            roundTimer.Interval = 1000;
+            roundTimer.Tick += new EventHandler(roundTimer_tick);
+        }
+
+        /*
         private void timer1_Tick(object sender, EventArgs e)
         {
             if (gameLogic.PlayerTurnInt == gameLogic.YourTurn)
@@ -169,5 +184,7 @@ namespace Othello.Model
                 aiTurn();
             }
         }
+        */
+        
     }
 }

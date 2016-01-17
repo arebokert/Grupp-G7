@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
@@ -15,6 +16,7 @@ namespace Othello.Linq
         private int[,] boardArray;
         private FileSystemWatcher watcher;
         private static Object locker = new Object();
+        private string file = "savedBoard.xml";
 
         public int Counter
         {
@@ -31,16 +33,17 @@ namespace Othello.Linq
 
         public SaveBoard()
         {
-            doc = XDocument.Load(@Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName + "\\Linq\\savedBoard.xml");
-            watcher = new FileSystemWatcher(@Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName + "\\Linq");
+            doc = XDocument.Load(file);
+            watcher = new FileSystemWatcher(".");
             watcher.NotifyFilter = NotifyFilters.LastWrite;
-            watcher.Filter = "savedBoard.xml";
+            watcher.Filter = file;
             watcher.Changed += new FileSystemEventHandler(OnChanged);
             watcher.EnableRaisingEvents = true;
         }
 
         public void storeBoard(int[,] boardArray, int counter)
         {
+
             doc.Element("board").RemoveAll();
             for (int x = 0; x < 8; x++)
             {
@@ -58,24 +61,44 @@ namespace Othello.Linq
             }
 
             doc.Element("board").Add(new XElement("counter", new XAttribute("counter", counter)));
-            doc.Save(@Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName + "\\Linq\\savedBoard.xml");
+            Mutex mutexSave = new Mutex(false, file);
+            try
+            {
+                mutexSave.WaitOne();
+                doc.Save(file);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Savefile already in use, skipping save.");
+            }
+            finally
+            {
+                mutexSave.ReleaseMutex();
+            }
         }
 
         public int[,] restoreSavedGame()
-        {
+        {   
             bool failed = true;
+            Mutex mutex = new Mutex(false, file);
             while (failed)
             {
                 try
                 {
-                    doc = XDocument.Load(@Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName + "\\Linq\\savedBoard.xml");
+                    mutex.WaitOne();
+                    doc = XDocument.Load(file);
                     failed = false;
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine("Savefile already in use, skipping load.");
+                    Console.WriteLine("Savefile already in use, retrying load.");
+                }
+                finally
+                {
+                    mutex.ReleaseMutex();
                 }
             }
+
             int[,] savedBoard = new int[8, 8];
 
             IEnumerable<XElement> board = from el in doc.Elements("board") select el;
