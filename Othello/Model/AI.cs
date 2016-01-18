@@ -10,45 +10,25 @@ namespace Othello.Model
 {
     public class AI
     {
-        //   private GameRules gameRules;
-        Board board;
-        GameLogic gameLogic;
-        private int[,] greenTiles;
-        private List<int[]> coordinates;
-        private List<int[,]> paintArrays;
-        private int score;
-        private int[,] boardArray;
-        private int[] aiPressedTile;
-        private PictureBox aiTile;
+        private Board board;
+        private GameLogic gameLogic;
         private GameRules gameRules;
-        private int[,] paintArrayTemp;
+        private List<int[]> coordinates;
+        private List<int[,]> listOfCurrentCheckTilesToChange;
+        private int score;
+        private int[] aiPressedTile;
+        private int[,] currentCheckTilesToChange;
         private Timer roundTimer;
-        //  private int xCoord;
-        //private int yCoord;
         private int[] tileClicked;
-
-        public int[,] BoardArray
-        {
-            get
-            {
-                return boardArray;
-            }
-
-            set
-            {
-                boardArray = value;
-            }
-        }
 
         public AI(GameRules gr, Board b, GameLogic g)
         {
             InitTimer();
             board = b;
             tileClicked = new int[2];
-            greenTiles = new int[8, 8];
             aiPressedTile = new int[2];
-            paintArrayTemp = new int[8, 8];
-            paintArrays = new List<int[,]>();
+            currentCheckTilesToChange = new int[8, 8];
+            listOfCurrentCheckTilesToChange = new List<int[,]>();
             coordinates = new List<int[]>();
             score = 0;
             gameRules = gr;
@@ -60,65 +40,61 @@ namespace Othello.Model
             score = 0;
             getAllGreenTiles();
             compareScore();
-            gameLogic.resetPaintArray(gameLogic.PaintArray);
+            gameLogic.CurrentRoundTilesToChange = new int[8,8];
             gameRules.makeMove(tileClicked);
-
-
-
         }
 
         public void getAllGreenTiles()
         {
-            for (int x = 0; x < 8; x++)
+            for (int row = 0; row < 8; row++)
             {
-                for (int y = 0; y < 8; y++)
+                for (int column = 0; column < 8; column++)
                 {
-                    if (board.BoardArray[x, y] == 0)
+                    if (board.BoardArray[row, column] == 0)
                     {
-                        if (gameRules.checkAllDirections(x, y))
+                        if (gameRules.checkAllDirections(row, column))
                         {
                             int[] tempCoords = new int[2];
-                            tempCoords[0] = x;
-                            tempCoords[1] = y;
+                            tempCoords[0] = row;
+                            tempCoords[1] = column;
                             coordinates.Add(tempCoords);
                             copyArray();
-                            storePaintArray();
+                            storeCheckedTiles();
                         }
                     }
                 }
             }
-
         }
 
         private void copyArray()
         {
-            for (int x = 0; x < 8; x++)
+            for (int row = 0; row < 8; row++)
             {
                 for (int y = 0; y < 8; y++)
                 {
-                    paintArrayTemp[x, y] = gameLogic.PaintArrayTemp[x, y];
+                    currentCheckTilesToChange[row, y] = gameLogic.CurrentCheckTilesToChange[row, y];
                 }
             }
         }
 
-        public void storePaintArray()
+        public void storeCheckedTiles()
         {
             int[,] temp = new int[8, 8];
-            for (int x = 0; x < 8; x++)
+            for (int row = 0; row < 8; row++)
             {
-                for (int y = 0; y < 8; y++)
+                for (int column = 0; column < 8; column++)
                 {
-                    if (paintArrayTemp[x, y] == 1)
+                    if (currentCheckTilesToChange[row, column] == 1)
                     {
-                        temp[x, y] = 1;
+                        temp[row, column] = 1;
                     }
                     else
                     {
-                        temp[x, y] = 0;
+                        temp[row, column] = 0;
                     }
                 }
             }
-            paintArrays.Add(temp);
+            listOfCurrentCheckTilesToChange.Add(temp);
         }
 
         public void compareScore()
@@ -126,18 +102,18 @@ namespace Othello.Model
             int tempScore = 0;
             int[,] tempArray = new int[8, 8];
             int[] tempCoordinates = new int[2];
-            int tempX = 0;
-            int tempY = 0;
-            for (int i = 0; i < paintArrays.Count; i++)
+            int tempRow = 0;
+            int tempColumn = 0;
+            for (int i = 0; i < listOfCurrentCheckTilesToChange.Count; i++)
             {
                 tempCoordinates = coordinates[i];
-                tempArray = paintArrays[i];
-                for (int x = 0; x < 8; x++)
+                tempArray = listOfCurrentCheckTilesToChange[i];
+                for (int row = 0; row < 8; row++)
                 {
-                    for (int y = 0; y < 8; y++)
+                    for (int column = 0; column < 8; column++)
                     {
 
-                        if (tempArray[x, y] == 1)
+                        if (tempArray[row, column] == 1)
                         {
                             tempScore++;
                         }
@@ -146,17 +122,17 @@ namespace Othello.Model
                 if (tempScore >= score)
                 {
                     score = tempScore;
-                    tempX = tempCoordinates[0];
-                    tempY = tempCoordinates[1];
+                    tempRow = tempCoordinates[0];
+                    tempColumn = tempCoordinates[1];
                 }
             }
-                tileClicked[0] = tempX;
-                tileClicked[1] = tempY;
+                tileClicked[0] = tempRow;
+                tileClicked[1] = tempColumn;
         }
 
-        public void playerTurnChanged(int turn)
+        public void switcherChanged(int switcher)
         {
-            if (turn == gameLogic.YourTurn)
+            if (gameLogic.PlayerTurnInt == gameLogic.YourTurn)
             {
                 roundTimer.Start();
             }
@@ -167,7 +143,6 @@ namespace Othello.Model
             aiTurn();
             roundTimer.Stop();
         }
-
         
         public void InitTimer()
         {
@@ -175,16 +150,5 @@ namespace Othello.Model
             roundTimer.Interval = 1000;
             roundTimer.Tick += new EventHandler(roundTimer_tick);
         }
-
-        /*
-        private void timer1_Tick(object sender, EventArgs e)
-        {
-            if (gameLogic.PlayerTurnInt == gameLogic.YourTurn)
-            {
-                aiTurn();
-            }
-        }
-        */
-        
     }
 }

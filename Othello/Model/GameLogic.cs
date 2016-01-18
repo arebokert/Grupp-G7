@@ -1,139 +1,135 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
 using Othello.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 using Othello.Objects;
+using System.Windows.Forms;
 
 namespace Othello.Model
 
 {
     public class GameLogic
     {
-        private int tileValueX;
-        private int tileValueY;
         private SaveBoard saveBoard;
+        private Board board;
         private string playerTurn;
         private int counter;
         private int legalMoveCounter = 0;
         private int playerTurnInt = 0;
         private int notPlayerTurnInt = 2;
-        private int[,] paintArray = new int[8, 8];
-        private int[,] paintArrayTemp;
+        private int[,] currentRoundTilesToChange;
+        private int[,] currentCheckTilesToChange;
         private int yourTurn;
+        private int blackScore;
+        private int whiteScore;
         private string currentScore;
-        private List<int[,]> paintList = new List<int[,]>();
-        private Board board;
+        private Boolean[] gameOverCheck;
+        private Boolean gameOver;
+        private int switcher;
 
         public GameLogic(Board b, SaveBoard s)
         {
             Counter = 0;
             board = b;
-            PaintArrayTemp = new int[8, 8];
             saveBoard = s;
+            GameOverCheck= new Boolean[]{false,false };
+            gameOver = false;
+            CurrentRoundTilesToChange = new int[8, 8];
+            CurrentCheckTilesToChange = new int[8, 8];
         }
 
         public void doLogic(int[] tileClicked)
         {
-            paint(tileClicked);
-            paintList.Clear();
-            resetPaintArray(PaintArray);
+            flipTiles(tileClicked);
+            CurrentRoundTilesToChange = new int[8, 8];
             storeBoardInXml();
             restoreSavedGame();
-            CurrentScore = calcCurrentScore();
+            CurrentScore = calculateCurrentScore();
             changeTurn(Counter);
         }
 
         public void boardArrayChanged(int[,] newArray)
         {
             board.BoardArray = newArray;
-        } 
+        }
 
-        private Boolean paint(int[] tileClicked)
+        private Boolean flipTiles(int[] tileClicked)
         {
             bool move = false;
 
-            for (int x = 0; x < 8; x++)
+            for (int row = 0; row < 8; row++)
             {
-                for (int y = 0; y < 8; y++)
+                for (int column = 0; column < 8; column++)
                 {
-                    if (PaintArray[x, y] == 1)
+                    if (CurrentRoundTilesToChange[row, column] == 1)
                     {
                         move = true;
-                        board.BoardArray[x, y]= playerTurnInt;
+                        board.BoardArray[row, column] = playerTurnInt;
                     }
                 }
             }
             if (move)
             {
                 Counter++;
-                board.BoardArray[tileClicked[0], tileClicked[1]]=playerTurnInt;
+                board.BoardArray[tileClicked[0], tileClicked[1]] = playerTurnInt;
             }
             return true;
         }
 
-        public void resetPaintArray(int[,] paintArrayTemp)
-        {
-            for (int x = 0; x < 8; x++)
-            {
-                for (int y = 0; y < 8; y++)
-                {
-                    paintArrayTemp[x, y] = 0;
-                }
-            }
-        }
-
         public void changeTurn(int counter)
-        {
+        {   
             if (counter % 2 == 0)
             {
                 PlayerTurn = "white";
                 PlayerTurnInt = board.WhiteMarker;
                 NotPlayerTurnInt = board.BlackMarker;
+                Switcher++;
             }
             else
             {
                 PlayerTurn = "black";
                 PlayerTurnInt = board.BlackMarker;
                 NotPlayerTurnInt = board.WhiteMarker;
-            }
+                Switcher++;
+            }   
         }
 
-        private void copyTempArrayToPaintArray(int xValue, int yValue)
+        private void copyCheckedTilesToRound(int selectedRow, int selectedColumn)
         {
-            for (int x = 0; x < 8; x++)
+            for (int row = 0; row < 8; row++)
             {
-                for (int y = 0; y < 8; y++)
+                for (int column = 0; column < 8; column++)
                 {
-                    if (PaintArrayTemp[x, y] == 1)
+                    if (CurrentCheckTilesToChange[row, column] == 1)
                     {
-                        PaintArray[x, y] = 1;
+                        CurrentRoundTilesToChange[row, column] = 1;
                     }
                 }
             }
-            paintList.Add(PaintArray);
-            resetPaintArray(paintArrayTemp);
+            currentCheckTilesToChange = new int[8, 8];
         }
 
-        public Boolean legalMove(int xValue, int yValue)
+        public Boolean legalMove(int selectedRow, int selectedColumn)
         {
-            for (int x = 0; x < 8; x++)
+            for (int row = 0; row < 8; row++)
             {
-                for (int y = 0; y < 8; y++)
+                for (int column = 0; column < 8; column++)
                 {
-                    if (PaintArrayTemp[x, y] == 2)
+                    if (CurrentCheckTilesToChange[row, column] == 2)
                     {
                         LegalMoveCounter++;
-                        copyTempArrayToPaintArray(xValue, yValue);
+                        copyCheckedTilesToRound(selectedRow, selectedColumn);
                         return true;
                     }
                 }
             }
-            resetPaintArray(PaintArrayTemp);
+            CurrentCheckTilesToChange = new int[8, 8];
             return false;
+        }
+
+        public void gameIsOver()
+        {
+            board.BoardArray = new int[8, 8];
+            GameOver = true;
+            GameOver = false;
         }
 
         private void storeBoardInXml()
@@ -143,34 +139,63 @@ namespace Othello.Model
 
         public void restoreSavedGame()
         {
-            board.BoardArray = saveBoard.restoreSavedGame();         
+            board.BoardArray = saveBoard.restoreSavedGame();
             Counter = saveBoard.Counter;
-            CurrentScore = calcCurrentScore();
+            CurrentScore = calculateCurrentScore();
         }
 
-        public string calcCurrentScore()
+        public string calculateCurrentScore()
         {
-            int blackScore = 0;
-            int whiteScore = 0; ;
-            for (int x = 0; x < 8; x++)
+            blackScore = 0;
+            whiteScore = 0;
+            for (int row = 0; row < 8; row++)
             {
-                for (int y = 0; y < 8; y++)
+                for (int column = 0; column < 8; column++)
                 {
-                    if (board.BoardArray[x, y] == board.BlackMarker)
+                    if (board.BoardArray[row, column] == board.BlackMarker)
                     {
                         blackScore++;
                     }
-                    else if (board.BoardArray[x, y] == board.WhiteMarker)
+                    else if (board.BoardArray[row, column] == board.WhiteMarker)
                     {
                         whiteScore++;
                     }
                 }
             }
-           string score = ("White score: " + whiteScore + " " + "Black score: " + blackScore);
-           return score;
+
+
+            string score = ("White score: " + whiteScore + " " + "Black score: " + blackScore);
+            return score;
+        }
+
+        public string winner()
+        {
+            if (whiteScore < blackScore)
+            {
+                return ("Black is the winner!");
+            }
+            else if (whiteScore > blackScore)
+            {
+                return ("White is the winner!");
+            }
+            else
+            {
+                return ("Draw!");
+            }
+        }
+
+        private void roundTimer_tick(object sender, EventArgs e)
+        {
+            Switcher++;
         }
 
         public Action<int> onTurnChange
+        {
+            get;
+            set;
+        }
+
+        public Action<Boolean> onGameOverChange
         {
             get;
             set;
@@ -180,6 +205,30 @@ namespace Othello.Model
         {
             get;
             set;
+        }
+
+        public Action<int> onSwitcherChange
+        {
+            get;
+            set;
+        }
+
+        public int Switcher
+        {
+            get
+            {
+                return switcher;
+            }
+
+            set
+            {
+                    switcher = value;
+                    Action<int> localOnChange = onSwitcherChange;
+                    if (localOnChange != null)
+                    {
+                        localOnChange(value);
+                    }
+            }
         }
 
         public string CurrentScore
@@ -200,19 +249,6 @@ namespace Othello.Model
                         localOnChange(value);
                     }
                 }
-            }
-        }
-
-        public int[,] PaintArray
-        {
-            get
-            {
-                return paintArray;
-            }
-
-            set
-            {
-                paintArray = value;
             }
         }
 
@@ -237,16 +273,29 @@ namespace Othello.Model
             }
         }
 
-        public int[,] PaintArrayTemp
+        public int[,] CurrentCheckTilesToChange
         {
             get
             {
-                return paintArrayTemp;
+                return currentCheckTilesToChange;
             }
 
             set
             {
-                paintArrayTemp = value;
+                currentCheckTilesToChange = value;
+            }
+        }
+
+        public int[,] CurrentRoundTilesToChange
+        {
+            get
+            {
+                return currentRoundTilesToChange;
+            }
+
+            set
+            {
+                currentRoundTilesToChange = value;
             }
         }
 
@@ -259,7 +308,7 @@ namespace Othello.Model
 
             set
             {
-                counter = value;
+                    counter = value;
             }
         }
 
@@ -273,32 +322,6 @@ namespace Othello.Model
             set
             {
                 legalMoveCounter = value;
-            }
-        }
-
-        public int TileValueX
-        {
-            get
-            {
-                return tileValueX;
-            }
-
-            set
-            {
-                tileValueX = value;
-            }
-        }
-
-        public int TileValueY
-        {
-            get
-            {
-                return tileValueY;
-            }
-
-            set
-            {
-                tileValueY = value;
             }
         }
 
@@ -338,6 +361,40 @@ namespace Othello.Model
             set
             {
                 yourTurn = value;
+            }
+        }
+
+        public bool[] GameOverCheck
+        {
+            get
+            {
+                return gameOverCheck;
+            }
+
+            set
+            {
+                gameOverCheck = value;
+            }
+        }
+
+        public bool GameOver
+        {
+            get
+            {
+                return gameOver;
+            }
+
+            set
+            {
+                if (gameOver != value)
+                {
+                    gameOver = value;
+                    Action<Boolean> localOnChange = onGameOverChange;
+                    if (localOnChange != null)
+                    {
+                        localOnChange(value);
+                    }
+                }
             }
         }
     }

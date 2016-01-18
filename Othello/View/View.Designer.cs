@@ -96,12 +96,13 @@
             this.score = new System.Windows.Forms.TextBox();
             this.button1 = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.updateScore = new System.Windows.Forms.Button();
             this.restoreGame = new System.Windows.Forms.Button();
             this.WhiteButton = new System.Windows.Forms.Button();
             this.BlackButton = new System.Windows.Forms.Button();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.buttonPanel = new System.Windows.Forms.Panel();
+            this.label1 = new System.Windows.Forms.Label();
+            this.button2 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.a1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.b1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.c1)).BeginInit();
@@ -876,48 +877,39 @@
             // 
             // score
             // 
-            this.score.Location = new System.Drawing.Point(49, 12);
+            this.score.Location = new System.Drawing.Point(199, 6);
             this.score.Name = "score";
             this.score.Size = new System.Drawing.Size(281, 20);
             this.score.TabIndex = 67;
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(360, 9);
+            this.button1.Location = new System.Drawing.Point(199, 35);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(120, 23);
+            this.button1.Size = new System.Drawing.Size(139, 23);
             this.button1.TabIndex = 68;
             this.button1.Text = "Reset game";
             this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.resetGame);
+            this.button1.Click += new System.EventHandler(this.resetButton);
             // 
             // panel1
             // 
             this.panel1.BackColor = System.Drawing.Color.White;
-            this.panel1.Controls.Add(this.updateScore);
+            this.panel1.Controls.Add(this.button2);
+            this.panel1.Controls.Add(this.label1);
             this.panel1.Controls.Add(this.restoreGame);
             this.panel1.Controls.Add(this.button1);
             this.panel1.Controls.Add(this.score);
-            this.panel1.Location = new System.Drawing.Point(16, 581);
+            this.panel1.Location = new System.Drawing.Point(44, 581);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(529, 61);
+            this.panel1.Size = new System.Drawing.Size(488, 61);
             this.panel1.TabIndex = 69;
-            // 
-            // updateScore
-            // 
-            this.updateScore.Location = new System.Drawing.Point(49, 36);
-            this.updateScore.Name = "updateScore";
-            this.updateScore.Size = new System.Drawing.Size(281, 21);
-            this.updateScore.TabIndex = 71;
-            this.updateScore.Text = "update score";
-            this.updateScore.UseVisualStyleBackColor = true;
-            this.updateScore.Click += new System.EventHandler(this.updateScore_Click);
             // 
             // restoreGame
             // 
-            this.restoreGame.Location = new System.Drawing.Point(360, 35);
+            this.restoreGame.Location = new System.Drawing.Point(344, 35);
             this.restoreGame.Name = "restoreGame";
-            this.restoreGame.Size = new System.Drawing.Size(120, 23);
+            this.restoreGame.Size = new System.Drawing.Size(136, 23);
             this.restoreGame.TabIndex = 70;
             this.restoreGame.Text = "Restore last session";
             this.restoreGame.UseVisualStyleBackColor = true;
@@ -955,8 +947,27 @@
             this.buttonPanel.Controls.Add(this.WhiteButton);
             this.buttonPanel.Location = new System.Drawing.Point(-2, -2);
             this.buttonPanel.Name = "buttonPanel";
-            this.buttonPanel.Size = new System.Drawing.Size(579, 654);
+            this.buttonPanel.Size = new System.Drawing.Size(579, 653);
             this.buttonPanel.TabIndex = 73;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(3, 6);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(35, 13);
+            this.label1.TabIndex = 71;
+            this.label1.Text = "label1";
+            // 
+            // button2
+            // 
+            this.button2.Location = new System.Drawing.Point(3, 35);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(113, 23);
+            this.button2.TabIndex = 72;
+            this.button2.Text = "Poke opponent";
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.pokeOpponent);
             // 
             // View
             // 
@@ -1032,7 +1043,7 @@
             this.Controls.Add(this.a1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Name = "View";
-            this.Text = "View";
+            this.Text = "Othello";
             ((System.ComponentModel.ISupportInitialize)(this.a1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.b1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.c1)).EndInit();
@@ -1177,6 +1188,7 @@
         private System.Windows.Forms.Button BlackButton;
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
         private System.Windows.Forms.Panel buttonPanel;
-        private System.Windows.Forms.Button updateScore;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Button button2;
     }
 }

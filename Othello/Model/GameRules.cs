@@ -17,108 +17,127 @@ namespace Othello.Model
             gameLogic = g;
         }
 
+        public void playerTurnChanged(int turn)
+        {
+            if (checkIfAnyAvailableMove())
+            {
+                gameLogic.GameOverCheck[gameLogic.PlayerTurnInt - 1] = false;
+                gameLogic.GameOverCheck[gameLogic.NotPlayerTurnInt - 1] = false;
+            }
+            else
+            {
+                gameLogic.GameOverCheck[gameLogic.PlayerTurnInt - 1] = true;
+                if (gameLogic.GameOverCheck[gameLogic.PlayerTurnInt - 1] && gameLogic.GameOverCheck[gameLogic.NotPlayerTurnInt - 1])
+                {
+                    gameLogic.gameIsOver();
+                }
+                else
+                {
+                    gameLogic.Counter++;
+                    gameLogic.changeTurn(gameLogic.Counter);
+                }
+            }
+        }
 
         public void makeMove(int[] tileClicked)
         {
             checkAllDirections(tileClicked[0], tileClicked[1]);
             gameLogic.doLogic(tileClicked);
-
         }
 
-        public Boolean checkAllDirections(int column, int row)
+        public Boolean checkAllDirections(int row, int column)
         {
+            gameLogic.Switcher++;
             gameLogic.LegalMoveCounter = 0;
             gameLogic.changeTurn(gameLogic.Counter);
-            checkMove(column, row, -1, 0, "left");
-            checkMove(column, row, 1, 0, "right"); 
-            checkMove(column, row, 0, -1, "up"); 
-            checkMove(column, row, 0, 1, "down"); 
-            checkMove(column, row, -1, -1, "upLeft"); 
-            checkMove(column, row, 1, -1, "upRight");
-            checkMove(column, row, 1, 1, "downRight");
-            checkMove(column, row, -1, 1, "downLeft");
-
+            checkMove(row, column, -1, 0, "left");
+            checkMove(row, column, 1, 0, "right");
+            checkMove(row, column, 0, -1, "up");
+            checkMove(row, column, 0, 1, "down");
+            checkMove(row, column, -1, -1, "upLeft");
+            checkMove(row, column, 1, -1, "upRight");
+            checkMove(row, column, 1, 1, "downRight");
+            checkMove(row, column, -1, 1, "downLeft");
             if (gameLogic.LegalMoveCounter > 0)
             {
                 return true;
             }
             return false;
         }
-        private Boolean condition(string direction, int column, int row)
+        private Boolean condition(string direction, int row, int column)
         {
             switch (direction)
             {
                 case "up":
-                    if (column > 0)
-                    {
-                        return true;
-                    }
-                    break;
-                case "down":
-                    if (column < 7)
-                    {
-                        return true;
-                    }
-                    break;
-
-                case "left":
                     if (row > 0)
                     {
                         return true;
                     }
                     break;
-
-                case "right":
+                case "down":
                     if (row < 7)
                     {
                         return true;
                     }
                     break;
 
+                case "left":
+                    if (column > 0)
+                    {
+                        return true;
+                    }
+                    break;
+
+                case "right":
+                    if (column < 7)
+                    {
+                        return true;
+                    }
+                    break;
+
                 case "upRight":
-                    if (row < 7 && column > 0)
+                    if (column < 7 && row > 0)
                     {
                         return true;
                     }
                     break;
 
                 case "upLeft":
-                    if (row > 0 && column > 0)
+                    if (column > 0 && row > 0)
                     {
                         return true;
                     }
                     break;
 
                 case "downLeft":
-                    if (row > 0 && column < 7)
+                    if (column > 0 && row < 7)
                     {
                         return true;
                     }
                     break;
 
                 case "downRight":
-                    if (row < 7 && column < 7)
+                    if (column < 7 && row < 7)
                     {
                         return true;
                     }
                     break;
             }
-
             return false;
-            //row > 0 && row < 7 && column > 0 && column < 7 && board.BoardArray[column, row]
         }
-        private void checkMove(int column, int row, int rowDirection, int columnDirection, string direction)
+
+        private void checkMove(int row, int column, int columnDirection, int rowDirection, string direction)
         {
             int c = 0;
-            if (board.BoardArray[column, row] == board.GreenMarker)
+            if (board.BoardArray[row, column] == board.GreenMarker)
             {
-                row += rowDirection;
                 column += columnDirection;
-                while (condition(direction, column, row) && board.BoardArray[column, row] == gameLogic.NotPlayerTurnInt)
+                row += rowDirection;
+                while (condition(direction, row, column) && board.BoardArray[row, column] == gameLogic.NotPlayerTurnInt)
                 {
-                    gameLogic.PaintArrayTemp[column, row] = 1;
+                    gameLogic.CurrentCheckTilesToChange[row, column] = 1;
 
-                    if (board.BoardArray[column + columnDirection, row + rowDirection] == gameLogic.PlayerTurnInt)
+                    if (board.BoardArray[row + rowDirection, column + columnDirection] == gameLogic.PlayerTurnInt)
                     {
                         c++;
                         if (c == 2)
@@ -127,14 +146,36 @@ namespace Othello.Model
                         }
                         else
                         {
-                            gameLogic.PaintArrayTemp[column + columnDirection, row + rowDirection] = 2;
+                            gameLogic.CurrentCheckTilesToChange[row + rowDirection, column + columnDirection] = 2;
                         }
                     }
-                    row += rowDirection;
                     column += columnDirection;
+                    row += rowDirection;
                 }
-                gameLogic.legalMove(column, row);
+                gameLogic.legalMove(row, column);
             }
+        }
+
+        private Boolean checkIfAnyAvailableMove()
+        {
+            for (int row = 0; row < 8; row++)
+            {
+                for (int column = 0; column < 8; column++)
+                {
+                    if (board.BoardArray[row, column] == 0)
+                    {
+                        if (checkAllDirections(row, column))
+                        {
+                            gameLogic.CurrentCheckTilesToChange = new int[8, 8];
+                            gameLogic.CurrentRoundTilesToChange = new int[8, 8];
+                            return true;
+                        }
+                    }
+                }
+            }
+            gameLogic.CurrentCheckTilesToChange = new int[8, 8];
+            gameLogic.CurrentRoundTilesToChange = new int[8, 8];
+            return false;
         }
     }
 }

@@ -43,19 +43,18 @@ namespace Othello.Linq
 
         public void storeBoard(int[,] boardArray, int counter)
         {
-
             doc.Element("board").RemoveAll();
-            for (int x = 0; x < 8; x++)
+            for (int row = 0; row < 8; row++)
             {
-                for (int y = 0; y < 8; y++)
+                for (int column = 0; column < 8; column++)
                 {
-                    if (boardArray[x, y] == 1)
+                    if (boardArray[row, column] == 1)
                     {
-                        doc.Element("board").Add(new XElement("white", new XAttribute("xCoord", x), new XAttribute("yCoord", y)));
+                        doc.Element("board").Add(new XElement("white", new XAttribute("xCoord", row), new XAttribute("yCoord", column)));
                     }
-                    else if (boardArray[x, y] == 2)
+                    else if (boardArray[row, column] == 2)
                     {
-                        doc.Element("board").Add(new XElement("black", new XAttribute("xCoord", x), new XAttribute("yCoord", y)));
+                        doc.Element("board").Add(new XElement("black", new XAttribute("xCoord", row), new XAttribute("yCoord", column)));
                     }
                 }
             }
@@ -133,25 +132,6 @@ namespace Othello.Linq
             {
                 watcher.EnableRaisingEvents = true;
             }
-        }
-
-        public bool ContentEquals(int[,] arr, int[,] other)
-        {
-            if (arr != null && other != null) {
-                for (int i = 0; i < 8; i++)
-                {
-                    for (int j = 0; j < 8; j++)
-                    {
-                        if (arr[i, j] != other[i, j])
-                        {
-                            return false;
-                        }
-                    }
-                }
-            } else {
-                return false;
-            }
-            return true;
         }
 
         public Action<int[,]> onBoardChange
